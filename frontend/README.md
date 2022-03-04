@@ -1,3 +1,3 @@
 특화 프로젝트 2반 E206
 
-init
+dev-front init
