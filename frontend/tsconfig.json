@@ -18,8 +18,9 @@
     // import @로 처리
     "baseUrl": ".",
     "paths": {
-      "@libs/*": ["libs/*"],
-      "@components/*": ["components/*"]
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@styles/*": ["styles/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
