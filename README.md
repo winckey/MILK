@@ -14,7 +14,7 @@ https://app.gather.town/invite?token=bC7Xh_YMUj5g5XuaeKS9Nz0DGRKjfbPB
 
 ### 3) 와이어프레임
 
-https://www.figma.com/file/yzMITG4FImr7vpR39WA4qD/%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84?node-id=10%3A7
+https://www.figma.com/file/nLlnGmyGkDzllxzNs9MAiU/%EC%9A%B0%EB%A6%AC%EC%9D%98-%EC%A7%84%EC%A7%9C-%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84-%E3%85%8E-%E3%85%8E?node-id=6%3A151
 
 ### 4) 기능명세서 & API 명세서
 
