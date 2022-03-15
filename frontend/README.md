@@ -67,5 +67,3 @@ npm i web3
 ```bash
 npm i @metamask/detect-provider
 ```
-
-dsf
