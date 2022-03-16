@@ -14,8 +14,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-
-    // import @로 처리
     "baseUrl": ".",
     "paths": {
       "@components/*": ["components/*"],
