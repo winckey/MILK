@@ -1,5 +1,8 @@
 module.exports = {
-  content: ["./pages/**/*.{js,jsx,ts,tsx}", "./component/**/*.{js,jsx,ts,tsx}"], // tailwind 적용할 경로 지정
+  content: [
+    "./pages/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
+  ], // tailwind 적용할 경로 지정
   theme: {
     extend: {
       colors: {
