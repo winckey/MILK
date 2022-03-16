@@ -6,13 +6,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        openseaGray: "#707A83", // opensea 회색 글씨
+        lightBg: "#F5F5F5", // 밝은 배경
+        darkBg: "#2A2A2E", // 어두운 배경
         gold: "#C19A77",
-        openseaGray: "#707A83",
         lightGold: "#DAC2A9",
         ourBlack: "#222222",
       },
     },
   },
-  darkMode: false, // media: 컴퓨터 환경설정, class: 토글, false: 사용 안 함
+  darkMode: "media", // media: 컴퓨터 환경설정, class: 토글
   plugins: [require("@tailwindcss/forms")],
 };
