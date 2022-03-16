@@ -8,6 +8,8 @@ module.exports = {
       colors: {
         gold: "#C19A77",
         openseaGray: "#707A83",
+        lightGold: "#DAC2A9",
+        ourBlack: "#222222",
       },
     },
   },
