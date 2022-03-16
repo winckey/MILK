@@ -10,16 +10,16 @@ const Brand: NextPage = () => {
       </div>
       <div className="p-[52px]">
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-rows-10 grid-flow-col gap-8">
-            <div className="bg-blue-500 row-start-2 row-span-2 h-[400px]"></div>
-            <div className="bg-blue-500 row-start-4 row-span-2 h-[400px]"></div>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 md:grid-rows-10 md:grid-flow-col gap-8">
+            <div className="bg-blue-500 md:row-start-2 md:row-span-2 h-[400px]"></div>
+            <div className="bg-blue-500 md:row-start-4 md:row-span-2 h-[400px]"></div>
 
-            <div className="bg-blue-500 row-end-3 row-span-2 h-[400px]"></div>
-            <div className="bg-blue-500 row-start-3 row-span-2 h-[400px]"></div>
-            <div className="bg-blue-500 row-start-5 row-span-2 h-[400px]"></div>
+            <div className="bg-blue-500 md:row-end-3 md:row-span-2 h-[400px]"></div>
+            <div className="bg-blue-500 md:row-start-3 md:row-span-2 h-[400px]"></div>
+            <div className="bg-blue-500 md:row-start-5 md:row-span-2 h-[400px]"></div>
 
-            <div className="bg-blue-500 row-start-2 row-span-2 h-[400px]"></div>
-            <div className="bg-blue-500 row-start-4 row-span-2 h-[400px]"></div>
+            <div className="bg-blue-500 md:row-start-2 md:row-span-2 h-[400px]"></div>
+            <div className="bg-blue-500 md:row-start-4 md:row-span-2 h-[400px]"></div>
           </div>
         </div>
       </div>
