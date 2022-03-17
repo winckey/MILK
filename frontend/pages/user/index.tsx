@@ -5,7 +5,7 @@ const User: NextPage = () => {
     <div className="pb-20">
       <div>
         {/* 메인 사진 */}
-        <div className="h-[220px] overflow-hidden shadow-2xl">
+        <div className="h-[220px] overflow-hidden bg-[#e5e8eb] shadow-2xl">
           <div className="h-[600px] w-full max-h-full max-w-full">
             <img
               src="https://lh3.googleusercontent.com/Vw6MpADIga_ZwmXOmclK87L8ax6pI_DylBcn-69kcr1Uhgw5Ij2RvXJD2MFJ0VarfIGeoFZw7NvpGLePX3e2VMztvg7XCQDNo12dLQ=h600"
