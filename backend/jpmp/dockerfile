@@ -2,7 +2,7 @@ FROM openjdk:11
 
 VOLUME ["/doimage", "/doimage"]
 
-ARG JAR_FILE=build/libs/pjt_server-1.0.0-RELEASE.jar
+ARG JAR_FILE=build/libs/jpmp-1.0.0-RELEASE.jar
 
 COPY ${JAR_FILE} app.jar
 
