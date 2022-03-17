@@ -6,7 +6,7 @@ export default function Navbar() {
         bg-ourBlack  drop-shadow-xl
      "
     >
-      <div className="max-w-6xl mx-auto px-5 sm:px-6 ">
+      <div className="max-w-full mx-16 px-5 sm:px-6 ">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Site branding */}
           <div className="flex-shrink-0 mr-4">
@@ -28,7 +28,7 @@ export default function Navbar() {
                 </a>
               </li>
               <li>
-                <a className=" btn-sm py-2 px-4 bg-gradient-to-r from-gold to-openseaGray text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-75 shadow hover:shadow-lg ">
+                <a className=" btn-sm py-2 px-4 bg-gradient-to-r from-gold to-lightGold text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-75 shadow hover:shadow-lg ">
                   회원가입
                 </a>
               </li>
