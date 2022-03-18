@@ -2,10 +2,10 @@ import type { NextPage } from "next";
 
 const User: NextPage = () => {
   return (
-    <div>
-      {/* 메인 사진 */}
+    <div className="pb-20">
       <div>
-        <div className="h-[220px] overflow-hidden shadow-2xl">
+        {/* 메인 사진 */}
+        <div className="h-[220px] overflow-hidden bg-[#e5e8eb] shadow-2xl">
           <div className="h-[600px] w-full max-h-full max-w-full">
             <img
               src="https://lh3.googleusercontent.com/Vw6MpADIga_ZwmXOmclK87L8ax6pI_DylBcn-69kcr1Uhgw5Ij2RvXJD2MFJ0VarfIGeoFZw7NvpGLePX3e2VMztvg7XCQDNo12dLQ=h600"
@@ -15,7 +15,7 @@ const User: NextPage = () => {
         </div>
         {/* 메인 글 */}
         <div className="flex flex-col items-center mb-5">
-          <span className="text-[40px] font-[600] text-gold my-7">
+          <span className="text-[40px] font-[600] bg-clip-text text-transparent bg-gradient-to-r from-gold to-lightGold my-7">
             Explore Luxury goods
           </span>
           <div className="text-center text-openseaGray p-5">
@@ -28,7 +28,7 @@ const User: NextPage = () => {
               <br /> NFT가 대상 하나하나에 고유의 객체라는 존재감을 나타낼 수
               있어서 실물 명품보다 희소성은 우위에 있다고 볼 수 있습니다.
               <br />
-              JPMP는 세계적인 명품 브랜드와 협업하여 NFT 뿐만 아니라 실물까지
+              MILC는 세계적인 명품 브랜드와 협업하여 NFT 뿐만 아니라 실물까지
               받을 수 있도록 제공하고 있습니다.
               <br />
               여기서 구매한 NFT를 자유롭게 거래하십시오.
@@ -39,7 +39,7 @@ const User: NextPage = () => {
       <hr />
       {/* 카드 */}
       <div>
-        <p className="text-2xl font-[600] text-gold text-center my-10">
+        <p className="text-2xl font-[600] bg-clip-text text-transparent bg-gradient-to-r from-gold to-lightGold text-center my-10">
           Trending collections
         </p>
         <div className="px-[52px]">
