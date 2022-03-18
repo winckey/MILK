@@ -15,7 +15,7 @@ export default function Navbar() {
               className="text-4xl bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold"
               aria-label="Cruip"
             >
-              WISH
+              MILC
             </a>
           </div>
 
