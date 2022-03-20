@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Navbar() {
   return (
     <header
@@ -11,26 +13,32 @@ export default function Navbar() {
           {/* Site branding */}
           <div className="flex-shrink-0 mr-4">
             {/* Logo */}
-            <a
-              className="text-4xl bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold"
-              aria-label="Cruip"
-            >
-              MILC
-            </a>
+            <Link href="/">
+              <a
+                className="text-4xl bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold"
+                aria-label="Cruip"
+              >
+                MILC
+              </a>
+            </Link>
           </div>
 
           {/* Site navigation */}
           <nav className="flex flex-grow ">
             <ul className="flex flex-grow gap-3 justify-end flex-wrap items-center">
               <li>
-                <a className=" btn-sm py-2 px-4 bg-gradient-to-r from-gold to-lightGold text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 shadow hover:shadow-lg ">
-                  로그인
-                </a>
+                <Link href="login">
+                  <a className=" btn-sm py-2 px-4 bg-gradient-to-r from-gold to-lightGold text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 hover:ring-gold  focus:ring-opacity-75  hover:shadow-lg ">
+                    로그인
+                  </a>
+                </Link>
               </li>
               <li>
-                <a className=" btn-sm py-2 px-4 bg-gradient-to-r from-gold to-lightGold text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-75 shadow hover:shadow-lg ">
-                  회원가입
-                </a>
+                <Link href="signup">
+                  <a className=" btn-sm py-2 px-4 bg-gradient-to-r from-gold to-lightGold text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2  hover:ring-gold focus:ring-opacity-75 hover:shadow-lg ">
+                    회원가입
+                  </a>
+                </Link>
               </li>
             </ul>
           </nav>

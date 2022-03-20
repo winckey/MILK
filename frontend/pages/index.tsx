@@ -1,5 +1,6 @@
 import { Navbar } from "@components/ui/common";
 import type { NextPage } from "next";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   return (
@@ -34,9 +35,9 @@ const Home: NextPage = () => {
           </div>
         </div>
         {/* 라이브 경매 */}
-        <div className="grid grid-rows-2 pb-4 ">
+        <div className="flex flex-col  pb-4 ">
           {/* 제목 및 버튼 */}
-          <div className="flex justify-between ">
+          <div className="flex flex-row justify-between pb-6">
             <div className="text-2xl md:text-6xs font-extrabold leading-tighter tracking-tighter mb-4">
               라이브 경매
             </div>
@@ -53,24 +54,23 @@ const Home: NextPage = () => {
           </div>
           {/* 라이브 경매 카드 */}
           <div className="grid grid-cols-4 gap-3">
-            <div className="bg-lightGold h-[250px]">d</div>
-            <div className="bg-lightGold h-[250px]">d</div>
-            <div className="bg-lightGold h-[250px]">s</div>
-            <div className="bg-lightGold h-[250px]">s</div>
+            <div className="bg-lightGold h-[250px] w-80">d</div>
+            <div className="bg-lightGold h-[250px] w-80">d</div>
+            <div className="bg-lightGold h-[250px] w-80">s</div>
+            <div className="bg-lightGold h-[250px] w-80">s</div>
           </div>
         </div>
         {/* 랭킹 */}
-        <div className="grid grid-rows-2 pb-4 ">
+        <div className="flex flex-col  pb-4 ">
           {/* 상단 */}
-          <div className="flex justify-between ">
-            <div className="text-2xl md:text-6xs font-extrabold leading-tighter tracking-tighter mb-4">
-              랭킹
+          <div className="flex  pb-6">
+            <div className="text-2xl  md:text-6xs font-extrabold leading-tighter tracking-tighter mb-4">
+              <Link href="/ranking">랭킹</Link>
             </div>
-            <div>더보기</div>
           </div>
           {/* 하단 */}
           <div>
-            <div className="grid grid-cols-5 gap-1 ">
+            <div className="grid grid-cols-5 gap-4 ">
               <div className="bg-lightGold h-[50px] w-[150px]">d</div>
               <div className="bg-lightGold h-[50px] w-[150px]">d</div>
               <div className="bg-lightGold h-[50px] w-[150px]">s</div>
