@@ -162,7 +162,7 @@ export default function EditProfile() {
               // 유저 닉네임이 나타나야 합니데잉
               placeholder="지갑을 연동해주세요."
             />
-            <button className="mb-4 rounded-md text-white font-bold px-2 py-1 mt-1 bg-gradient-to-r from-gold to-lightGold">
+            <button className="mb-4 rounded-md text-sm text-white font-bold px-2 py-1 mt-1 bg-gradient-to-r from-gold to-lightGold">
               지갑연결
             </button>
           </div>
