@@ -5,7 +5,7 @@ const User: NextPage = () => {
     <div className="pb-20">
       <div>
         {/* 메인 사진 */}
-        <div className="h-[220px] overflow-hidden bg-[#e5e8eb] shadow-2xl">
+        <div className="h-[220px] overflow-hidden bg-basicImage shadow-2xl">
           <div className="h-[600px] w-full max-h-full max-w-full">
             <img
               src="https://lh3.googleusercontent.com/Vw6MpADIga_ZwmXOmclK87L8ax6pI_DylBcn-69kcr1Uhgw5Ij2RvXJD2MFJ0VarfIGeoFZw7NvpGLePX3e2VMztvg7XCQDNo12dLQ=h600"
@@ -18,7 +18,7 @@ const User: NextPage = () => {
           <span className="text-[40px] font-[600] bg-clip-text text-transparent bg-gradient-to-r from-gold to-lightGold my-7">
             Explore Luxury goods
           </span>
-          <div className="text-center text-openseaGray p-5">
+          <div className="text-center text-textGray p-5">
             <span>
               고유성에 가치를 두는 명품 패션 시장도 NFT 시장에 눈을 돌리기
               시작했습니다.
@@ -39,7 +39,7 @@ const User: NextPage = () => {
       <hr />
       {/* 카드 */}
       <div>
-        <p className="text-2xl font-[600] bg-clip-text text-transparent bg-gradient-to-r from-gold to-lightGold text-center my-10">
+        <p className="text-2xl font-[600] bg-clip-text text-transparent bg-gradient-to-r from-textGray to-textBlack text-center my-10">
           Trending collections
         </p>
         <div className="px-[52px]">
