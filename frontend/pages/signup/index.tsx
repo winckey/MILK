@@ -9,7 +9,7 @@ export default function Signup() {
   return (
     <>
       <div>
-        <div className="fixed">
+        <div className="">
           <Navbar />
         </div>
         <div className="flex items-center pt-20">
@@ -54,9 +54,9 @@ export default function Signup() {
             <div className="py-4 ">
               <div>
                 <div>
-                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white rounded pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
-                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                      <span className="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
@@ -75,13 +75,13 @@ export default function Signup() {
                     </div>
                     <input
                       type="email"
-                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="이메일"
                     />
                   </div>
-                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white rounded pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
-                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                      <span className="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
@@ -100,13 +100,13 @@ export default function Signup() {
                     </div>
                     <input
                       type="text"
-                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="비밀번호"
                     />
                   </div>
-                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white rounded pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
-                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                      <span className="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
@@ -125,13 +125,13 @@ export default function Signup() {
                     </div>
                     <input
                       type="text"
-                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="비밀번호 확인"
                     />
                   </div>
-                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white rounded pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
-                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                      <span className="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
@@ -150,13 +150,13 @@ export default function Signup() {
                     </div>
                     <input
                       type="text"
-                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="이름"
                     />
                   </div>
-                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white  rounded  pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
-                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                      <span className="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
@@ -175,7 +175,7 @@ export default function Signup() {
                     </div>
                     <input
                       type="text"
-                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="닉네임"
                     />
                   </div>
