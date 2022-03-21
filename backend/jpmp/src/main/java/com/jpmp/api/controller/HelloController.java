@@ -2,8 +2,10 @@ package com.jpmp.api.controller;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -11,8 +13,10 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class HelloController {
 
-    public String signUp() {
-        return "signUp" ;
+    @GetMapping(value = "/test")
+    public ResponseEntity<?> test(HttpServletRequest request) throws Exception {
+        String reqUrl = "test";
+        return ResponseEntity.ok().body(reqUrl);
     }
 
 
