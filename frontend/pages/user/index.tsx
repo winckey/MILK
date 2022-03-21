@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 
 const User: NextPage = () => {
   return (
-    <Layout>
+    <Layout seoTitle="개인관">
       <div className="pb-20">
         <div>
           {/* 메인 사진 */}
