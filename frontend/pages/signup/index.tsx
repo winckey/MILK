@@ -118,6 +118,31 @@ export default function Signup() {
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                    <input
+                      type="text"
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      placeholder="비밀번호 확인"
+                    />
+                  </div>
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                    <div className="flex -mr-px justify-center w-15 p-4">
+                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                           />
                         </svg>

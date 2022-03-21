@@ -57,7 +57,7 @@ export default function Login() {
                     </div>
                     <input
                       type="email"
-                      className="appearance-none w-full h-12 border my-1.5 border-gray-400 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="이메일"
                     />
                   </div>
@@ -82,7 +82,7 @@ export default function Login() {
                     </div>
                     <input
                       type="text"
-                      className="appearance-none w-full h-12 border my-1.5 border-gray-400 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="비밀번호"
                     />
                   </div>
