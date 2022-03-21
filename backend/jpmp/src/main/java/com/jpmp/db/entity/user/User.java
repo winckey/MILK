@@ -49,5 +49,4 @@ public class User  {
     private UserImg profileImg;
 
 
-
 }

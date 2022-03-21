@@ -8,6 +8,8 @@ import com.jpmp.db.entity.user.User;
 public interface UserService {
     User createUser(UserRegisterReqDto userRegisterInfo);
 
+    User getUserByEmail(String userId);
+
 
 
 }

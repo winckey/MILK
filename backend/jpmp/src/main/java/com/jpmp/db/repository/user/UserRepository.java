@@ -10,9 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional(readOnly = true)
+@Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
 
-
+    @Transactional(readOnly = true)
+    Optional<User> findByEmail(String email);
 
 }
