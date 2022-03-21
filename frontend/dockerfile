@@ -8,6 +8,8 @@ RUN npm install
 
 RUN npm install -g typescript
 
+RUN npm install -g next
+
 COPY ./ /app/
 
 RUN npm run build
