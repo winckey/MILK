@@ -6,7 +6,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Navbar />
-      <div className="px-24 pt-32  ml-4 mr-4 min-h-screen w-full">
+      <div className="px-24 pt-32  ">
         {/* hero */}
         <div className="grid grid-cols-2 pb-12">
           {/* 좌측 */}
