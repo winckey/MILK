@@ -1,17 +1,51 @@
-import { Navbar } from "@components/ui/common";
+import Layout from "@components/ui/layout";
+import useMutation from "libs/useMutation";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+interface ISignupForm {
+  email: string;
+  password: string;
+  nickname: string;
+  address: string;
+  description: string;
+  phone: string;
+  role: string;
+  userRole: string;
+  zipCode: number;
+}
+
+interface ISignupResponse {
+  message: string;
+  statusCode: number;
+}
 
 export default function Signup() {
   const [user, setUser] = useState<string>("");
   const onCompany = () => setUser("company");
   const onUser = () => setUser("person");
 
+  const [signup, { loading, data, error }] =
+    useMutation<ISignupResponse>("/api/user");
+
+  // input 값 받아옴
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<ISignupForm>();
+
+  // form 제출 시 실행
+  const onValid = (formData: ISignupForm) => {
+    console.log(formData);
+    if (loading) return;
+    signup(formData);
+  };
+
   return (
-    <>
+    <Layout seoTitle="회원가입">
       <div>
-        <div className="">
-          <Navbar />
-        </div>
         <div className="flex items-center pt-20">
           <div className="hidden lg:flex flex-row justify-center items-center  w-[50%] min-h-screen bg-gradient-to-r from-gold to-lightGold">
             <div className="flex flex-col justify-center text-left">
@@ -52,7 +86,7 @@ export default function Signup() {
               </button>
             </div>
             <div className="py-4 ">
-              <div>
+              <form onSubmit={handleSubmit(onValid)}>
                 <div>
                   <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white rounded pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
@@ -74,6 +108,7 @@ export default function Signup() {
                       </span>
                     </div>
                     <input
+                      {...register("email")}
                       type="email"
                       className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="이메일"
@@ -99,6 +134,7 @@ export default function Signup() {
                       </span>
                     </div>
                     <input
+                      {...register("password")}
                       type="text"
                       className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="비밀번호"
@@ -174,6 +210,7 @@ export default function Signup() {
                       </span>
                     </div>
                     <input
+                      {...register("nickname")}
                       type="text"
                       className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="닉네임"
@@ -188,11 +225,11 @@ export default function Signup() {
                     회원가입
                   </button>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </Layout>
   );
 }

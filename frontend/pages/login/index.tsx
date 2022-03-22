@@ -1,13 +1,60 @@
-import { Navbar } from "@components/ui/common";
-import { useState } from "react";
+import Layout from "@components/ui/layout";
+import useMutation from "libs/useMutation";
+import { useForm } from "react-hook-form";
+
+interface ILoginForm {
+  email: string;
+  password: string;
+}
+
+interface IUser {
+  age: number;
+  birthDate: string;
+  description: string;
+  email: string;
+  gender: string;
+  id: number;
+  img: boolean;
+  imgUrl: string;
+  nickname: string;
+  phone: string;
+  provider: string;
+  regDate: string;
+  userId: string;
+}
+
+interface ILoginResponse {
+  accessToken: string;
+  message: string;
+  statusCode: number;
+  user: IUser;
+}
 
 export default function Login() {
+  const [login, { loading, data, error }] =
+    useMutation<ILoginResponse>("/api/user/login");
+
+  // input 값 받아옴
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<ILoginForm>();
+
+  // form 제출 시 실행
+  const onValid = (formData: ILoginForm) => {
+    console.log(formData);
+    if (loading) return;
+    login(formData);
+  };
+
+  // console.log(watch());
+  console.log(data);
+
   return (
-    <>
+    <Layout seoTitle="로그인">
       <div>
-        <div className="fixed">
-          <Navbar />
-        </div>
         <div className="flex items-center pt-20">
           <div className="flex flex-row justify-center items-center w-[50%] min-h-screen bg-gradient-to-r from-gold to-lightGold">
             <div className="flex flex-col justify-center text-left">
@@ -33,7 +80,7 @@ export default function Login() {
               <h3>MILC에 오신 것을</h3>
               <h3>환영합니다</h3>
             </div>
-            <div className="py-4 ">
+            <form onSubmit={handleSubmit(onValid)} className="py-4">
               <div>
                 <div>
                   <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white rounded pr-10">
@@ -56,6 +103,7 @@ export default function Login() {
                       </span>
                     </div>
                     <input
+                      {...register("email")}
                       type="email"
                       className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="이메일"
@@ -81,6 +129,7 @@ export default function Login() {
                       </span>
                     </div>
                     <input
+                      {...register("password")}
                       type="text"
                       className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="비밀번호"
@@ -88,18 +137,15 @@ export default function Login() {
                   </div>
                 </div>
                 <div className="my-8">
-                  <button
-                    // onClick={}
-                    className="w-full flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-                  >
+                  <button className="w-full flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white">
                     로그인
                   </button>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
-    </>
+    </Layout>
   );
 }
