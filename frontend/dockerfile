@@ -10,7 +10,6 @@ RUN npm install -g typescript
 
 RUN npm install -g next
 
-COPY ./ /app/
 
 RUN npm run build
 
@@ -19,5 +18,3 @@ COPY  ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 CMD ["npm", "start", "daemon off;", "nginx", "-g"] 
-
-EXPOSE 3000
