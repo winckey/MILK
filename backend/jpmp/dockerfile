@@ -1,11 +1,10 @@
+# backend/Dockerfile
+# 사용한 openjdk 버전에 맞는 값을 입력해주세요.
 FROM openjdk:11
 
-VOLUME ["/doimage", "/doimage"]
+# jar 파일 경로는 직접 입력해주세요.
+COPY build/libs/demo-0.0.1-SNAPSHOT.jar app.jar
 
-ARG JAR_FILE=build/libs/jpmp-1.0.0-RELEASE.jar
-
-COPY ${JAR_FILE} app.jar
-
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
 
 EXPOSE 8080
