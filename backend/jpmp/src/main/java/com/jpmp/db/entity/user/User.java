@@ -2,6 +2,7 @@ package com.jpmp.db.entity.user;
 
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 
 
@@ -53,5 +54,15 @@ public class User  {
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
+    }
+
+    public void changeUser(String address, String description, String email, String nickname, String phone, String zipCode) {
+
+        this.address = address;
+        this.description = description;
+        this.email = email;
+        this.nickname = nickname;
+        this.phone = phone;
+        this.zipCode = zipCode;
     }
 }
