@@ -1,7 +1,17 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
+
 plugins {
-	id 'org.springframework.boot' version '2.6.4'
+	id 'org.springframework.boot' version '2.5.8'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+
+	//querydsl 추가
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.jpmp'
@@ -20,7 +30,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -29,22 +39,43 @@ dependencies {
 	implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.3'
 	runtimeOnly 'mysql:mysql-connector-java'
 
-	implementation 'com.auth0:java-jwt:3.18.2'
+	//implementation 'com.auth0:java-jwt:3.18.2'
+//querydsl 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-core:${queryDslVersion}"
 
-
-//	implementation 'io.springfox:springfox-swagger2:3.0.0'
-//	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
-//	implementation 'io.springfox:springfox-data-rest:3.0.0'
-//	implementation 'io.springfox:springfox-bean-validators:3.0.0'
-//	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-//	implementation 'com.google.guava:guava:31.0.1-jre'
-//	annotationProcessor 'com.google.guava:guava:31.0.1-jre'
+//https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+//	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+
+//querydsl 추가 시작
+//querydsl q클래스 폴더
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
 }
