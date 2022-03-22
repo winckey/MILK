@@ -22,7 +22,7 @@ services:
       context: backend/jpmp/
       dockerfile: dockerfile
     ports:
-      - "8443:8443"  
+      - "8080:8080"  
 
     volumes:
       - /home/ubuntu/docker-volume/ssl2:/root

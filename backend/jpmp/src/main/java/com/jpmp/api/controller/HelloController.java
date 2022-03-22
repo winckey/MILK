@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class HelloController {
 
-    @GetMapping(value = "/test")
+    @GetMapping(value = "/api/test")
     public ResponseEntity<?> test(HttpServletRequest request) throws Exception {
         String reqUrl = "test";
         return ResponseEntity.ok().body(reqUrl);
