@@ -13,7 +13,7 @@ services:
       - "443:443"
 
     volumes:
-      - /home/ubuntu/docker-volume/ssl:/var/www/html
+      - /home/ubuntu/docker-volume/ssl2:/var/www/html
     container_name: "frontend"
   
   backend:
@@ -25,5 +25,5 @@ services:
       - "8443:8443"  
 
     volumes:
-      - /home/ubuntu/docker-volume/ssl:/root
+      - /home/ubuntu/docker-volume/ssl2:/root
     container_name: "backend"
