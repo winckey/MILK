@@ -15,28 +15,25 @@ import java.time.temporal.ChronoUnit;
 public class UserInfoDto {
 
     private Long id;
-    private String userId;
+    private String userName;
     private String nickname;
     private String description;
     private String phone;
     private String email;
-    private Boolean img;
-    private String imgUrl;
-    private Long age;
-    private LocalDate birthDate;
-    private LocalDateTime regDate;
-    private Character gender;
+    private String proImg;
+    private String backgroundImg;
 
-    private String provider;
 
     public static UserInfoDto of(User user) {
         UserInfoDto userInfoDto = new UserInfoDto();
         userInfoDto.setId(user.getId());
-
+        userInfoDto.setUserName(user.getUserName());
         userInfoDto.setNickname(user.getNickname());
         userInfoDto.setDescription(user.getDescription());
         userInfoDto.setPhone(user.getPhone());
         userInfoDto.setEmail(user.getEmail());
+        userInfoDto.setProImg(user.getProfileImg());
+        userInfoDto.setBackgroundImg(user.getBackgroundfileImg());
 
         return userInfoDto;
     }

@@ -18,19 +18,22 @@ import javax.validation.constraints.*;
 public class UserRegisterReqDto {
 
     @Email
+    @NotBlank
     @ApiModelProperty(name="유저 Email", example="user@naver.com")
     private String email;
 
+    @NotBlank
     @ApiModelProperty(name="유저 Password", example="your_password")
     private String password;
 
+    @NotBlank
+    @ApiModelProperty(name="유저 이름", example="장현진")
+    private String userName;
 
     @NotBlank
     @ApiModelProperty(name="닉네임", example="냠냠")
     private String nickname;
 
-
-    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "핸드폰 번호의 양식과 맞지 않습니다. 010-ABCD-ABCD")
     @ApiModelProperty(name="전화번호", example="010-1234-5678")
     private String phone;
 
@@ -56,6 +59,7 @@ public class UserRegisterReqDto {
                 .email(email)
                 .password(password)
                 .nickname(nickname)
+                .userName(userName)
                 .phone(phone)
                 .userRole(role)
                 .description(description)
