@@ -6,12 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Builder
 @Getter
@@ -29,13 +25,16 @@ public class User  {
     @Column(nullable = false , unique = true)
     private String nickname;
 
+    @Column(nullable = false , unique = true)
+    private String userName;
+
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+
     private String phone;
 
-    @Column(nullable = false)
+
     private String userRole;
 
 
@@ -46,9 +45,10 @@ public class User  {
 
     private String zipCode;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_img_id")
-    private UserImg profileImg;
+
+    private String profileImg;
+
+    private String backgroundfileImg;
 
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

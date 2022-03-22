@@ -17,4 +17,7 @@ public class UserLoginReqDto {
     @ApiModelProperty(name = "유저 Password", example = "your_password")
     private String password;
 
+
+
+
 }
