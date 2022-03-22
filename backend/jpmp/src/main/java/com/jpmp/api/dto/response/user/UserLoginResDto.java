@@ -18,10 +18,11 @@ public class UserLoginResDto extends BaseResponseBody {
 
     private UserInfoDto user;
 
-    public static UserLoginResDto of(Integer statusCode, String message, User user) {
+    public static UserLoginResDto of(Integer statusCode, String message, String accessToken, User user) {
         UserLoginResDto res = new UserLoginResDto();
         res.setStatusCode(statusCode);
         res.setMessage(message);
+        res.setAccessToken(accessToken);
         res.setUser(UserInfoDto.of(user));
         return res;
     }
