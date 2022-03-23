@@ -58,9 +58,9 @@ export default function Login() {
   useEffect(() => {
     if (data && data.statusCode === 200) {
       localStorage.setItem("accessToken", data.accessToken); // 로컬 스토리지에 토큰 저장
-      router.push(`/`); // 메인 페이지로 이동
+      router.push("/"); // 메인 페이지로 이동
     }
-  }, [data]);
+  }, [data, router]);
 
   return (
     <Layout seoTitle="로그인">
@@ -73,7 +73,7 @@ export default function Login() {
                 <div>NFT로 만나보세요!</div>
               </div>
               <div className="text-white font-bold pb-10 lg:text-xl">
-                On the World's Best & Largest NFT MarketPlace
+                On the Worlds Best & Largest NFT MarketPlace
               </div>
               <div className="flex justify-between">
                 <div className="w-[150px] h-[200px] lg:w-[200px] bg-blue-500">

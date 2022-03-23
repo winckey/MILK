@@ -14,7 +14,7 @@ export default function Layout({ children, seoTitle, canGoBack }: LayoutProps) {
         <title>MILC | {seoTitle}</title>
       </Head>
       <Navbar />
-      {children}
+      <div className="min-h-screen w-full pt-[72px] bg-lightBg">{children}</div>
     </div>
   );
 }

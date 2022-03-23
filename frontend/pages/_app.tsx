@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           fetch(url).then((response) => response.json()),
       }}
     >
-      <div className="min-h-screen w-full bg-lightBg">
+      <div className="">
         <Component {...pageProps} />
       </div>
     </SWRConfig>
