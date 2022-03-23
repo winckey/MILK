@@ -52,7 +52,23 @@ npm i react-hook-form --legacy-peer-deps
 npm i swr --legacy-peer-deps
 ```
 
+- headlessui
 
+```bash
+npm i @headlessui/react
+```
+
+- heroicons
+
+```bash
+npm i @heroicons/react
+```
+
+- react-icons
+
+```bash
+npm i react-icons
+```
 
 ### Providers
 
