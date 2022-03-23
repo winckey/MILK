@@ -6,6 +6,7 @@ import com.jpmp.api.dto.request.user.UserModifyReqDto;
 import com.jpmp.api.dto.request.user.UserRegisterReqDto;
 import com.jpmp.api.dto.response.BaseResponseBody;
 import com.jpmp.api.dto.response.user.UserLoginResDto;
+import com.jpmp.api.dto.response.user.UserNicknameCheckResDto;
 import com.jpmp.api.dto.response.user.UserResDto;
 import com.jpmp.api.service.user.UserService;
 import com.jpmp.common.util.JwtTokenUtil;
@@ -14,6 +15,7 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import netscape.javascript.JSObject;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 
 @Slf4j
@@ -109,6 +112,52 @@ public class UserController {
         User result = userService.modifyUser(userDetails, userModifyReqDto);
 
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
+    }
+
+
+    @PostMapping("/like")
+    @ApiOperation(value = "좋아요 추가", notes = "좋아요 버튼을 통해 해당 nft를 좋아요한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<UserResDto> addUserNftLike(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") String nftId) {
+        User userDetails = (User) authentication.getDetails();
+
+        User result = userService.addUserNftLike(userDetails, nftId);
+
+        return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
+    }
+
+    @DeleteMapping("/like")
+    @ApiOperation(value = "좋아요 삭제", notes = "좋아요 버튼을 통해 해당 nft를 삭제한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<UserResDto> deleteUserNftLike(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true) String nftId) {
+        User userDetails = (User) authentication.getDetails();
+
+        User result = userService.deleteUserNftLike(userDetails, nftId);
+
+        return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
+    }
+
+    @GetMapping("/nickname/{nickname}")
+    @ApiOperation(value = "닉네임 중복 체크", notes = "닉네임 중복 여부를 알려준다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+    })
+    public ResponseEntity<UserNicknameCheckResDto> checkDuplicateNickname(@NotBlank @PathVariable String nickname) {
+
+        Boolean result = userService.checkDuplicateNickname(nickname);
+
+        return ResponseEntity.status(200).body(UserNicknameCheckResDto.of(200, "Success", nickname, result));
     }
 
 }

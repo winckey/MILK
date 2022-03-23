@@ -13,4 +13,10 @@ public interface UserService {
 
 
     User modifyUser(User userDetails, UserModifyReqDto userModifyReqDto);
+
+    User addUserNftLike(User userDetails, String nftId);
+
+    User deleteUserNftLike(User userDetails, String nftId);
+
+    Boolean checkDuplicateNickname(String nickname);
 }

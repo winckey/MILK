@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -38,6 +40,31 @@ public class UserServiceImpl implements UserService {
                         ,userModifyReqDto.getPhone() , userModifyReqDto.getZipCode());// 이거 동적으로는 안되나?
         userRepository.save(user);
         return user;
+    }
+
+    @Override
+    @Transactional
+    public User addUserNftLike(User userDetails, String nftId) {
+        userDetails.getLikeList().add(nftId);// 이렇게 하면 못읽음 1:N 일떄 주체 인쪽에서 수정해야지!
+        userRepository.save(userDetails);
+        // 나중에 물어보기
+//        List<String> likeList = userDetails.getLikeList();
+//        likeList.add(nftId);
+
+        return userDetails;
+    }
+
+    @Override
+    public User deleteUserNftLike(User userDetails, String nftId) {
+        userDetails.getLikeList().remove(nftId);
+        userRepository.save(userDetails);
+        return userDetails;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Boolean checkDuplicateNickname(String nickname) {
+        return userRepository.existsByNickname(nickname);
     }
 
 
