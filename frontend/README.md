@@ -79,6 +79,15 @@ npm i @react-three/drei @react-three/fiber three
 npm i use-cannon uuid-by-string wouter
 ```
 
+- recoil
+
+```bash
+npm i recoil@0.5.1
+
+# 새로고침 방지
+npm i recoil-persist
+```
+
 
 
 ### Providers

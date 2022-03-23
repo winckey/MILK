@@ -1,8 +1,11 @@
 import Layout from "@components/ui/layout";
+import useMutation from "libs/useMutation";
+import useUser from "libs/useUser";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
-interface IUserResponse {
+interface IEditProfileResponse {
   message: string;
   statusCode: number;
   user: any;
@@ -11,19 +14,14 @@ interface IUserResponse {
 interface IEditProfileForm {
   nickname: string;
   description: string;
-  phone: string;
-  profile_img: string;
-  backgroundfile_img: string;
+  proImg: string;
+  backgroundImg: string;
   zipCode: string;
+  phone: string;
 }
 
 export default function EditProfile() {
-  // 유저 정보 받아옴
-  const { data, mutate } = useSWR<IUserResponse>(
-    `http://j6e206.p.ssafy.io:8080/api/user/info`
-  );
-
-  console.log(data);
+  const { user, isLoading } = useUser();
 
   // input 값 받아옴
   const {
@@ -34,7 +32,33 @@ export default function EditProfile() {
     watch,
   } = useForm<IEditProfileForm>();
 
-  console.log(watch());
+  useEffect(() => {
+    if (user?.nickname) setValue("nickname", user.nickname);
+    if (user?.description) setValue("description", user.description);
+    if (user?.proImg) setValue("proImg", user.proImg);
+    if (user?.backgroundImg) setValue("backgroundImg", user.backgroundImg);
+    if (user?.zipCode) setValue("zipCode", user.zipCode);
+    if (user?.phone) setValue("phone", user.phone);
+  }, [user, setValue]);
+
+  const [editProfile, { data, loading }] = useMutation<IEditProfileResponse>(
+    `/api/user`,
+    "PUT"
+  );
+
+  const onValid = (formData: IEditProfileForm) => {
+    if (loading) return;
+
+    if (window.confirm("해당 정보로 수정하시겠습니까?") == true) {
+      editProfile(formData);
+    }
+  };
+
+  useEffect(() => {
+    if (data && data.statusCode === 200) {
+      alert("회원 정보가 수정되었습니다.");
+    }
+  }, [data]);
 
   return (
     <Layout seoTitle="회원 정보 수정">
@@ -160,160 +184,135 @@ export default function EditProfile() {
               </div>
             </div>
           </div>
-          <div className="w-[30%] pt-10 pl-8">
-            <div className=" text-3xl font-bold">프로필</div>
-            <div className="pt-8">
-              <h1 className="font-bold pb-1">닉네임</h1>
-              <input
-                {...register("nickname")}
-                type="text"
-                className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                // 유저 닉네임이 나타나야 합니데잉
-                placeholder="닉네임을 입력해주세요."
-              />
-            </div>
-            <div>
-              <h1 className="font-bold pb-1">자기소개</h1>
-              <textarea
-                {...register("description")}
-                className="w-[100%] h-24 mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="자기소개를 입력해주세요."
-              />
-            </div>
-            <div>
-              <h1 className="font-bold pb-1">이메일</h1>
-              <input
-                type="email"
-                className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300 cursor-not-allowed"
-                // 유저 이메일이 나타납니데잉
-                placeholder="이메일을 입력해주세요."
-              />
-            </div>
-            <div>
-              <h1 className="font-bold pb-1">지갑주소</h1>
-              <input
-                type="text"
-                className="w-[100%] rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                // 유저 닉네임이 나타나야 합니데잉
-                placeholder="지갑을 연동해주세요."
-              />
-              <button className="mb-4 rounded-md text-sm text-white font-bold px-2 py-1 mt-1 bg-gradient-to-r from-gold to-lightGold">
-                지갑연결
-              </button>
-            </div>
-            {/* <div className="">
-              <h1 className="font-bold pb-1">링크</h1>
-              <input
-                type="text"
-                className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="Instagram"
-              />
-              <br />
-              <input
-                type="text"
-                className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="Twitter"
-              />
-              <br />
-              <input
-                type="text"
-                className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="Website"
-              />
-              <br />
-              <input
-                type="text"
-                className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="Youtube Channel"
-              />
-              <br />
-            </div> */}
-            <div>
-              <h1 className="font-bold pb-1">주소</h1>
-              <div className="flex items-center">
+          <form onSubmit={handleSubmit(onValid)} className="flex w-[75%]">
+            <div className="w-[60%] pl-8">
+              <div className=" text-3xl font-bold">프로필</div>
+              <div className="pt-8">
+                <h1 className="font-bold pb-1">닉네임</h1>
+                <input
+                  {...register("nickname")}
+                  type="text"
+                  className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                  // 유저 닉네임이 나타나야 합니데잉
+                  placeholder="닉네임을 입력해주세요."
+                />
+              </div>
+              <div>
+                <h1 className="font-bold pb-1">자기소개</h1>
+                <textarea
+                  {...register("description")}
+                  className="w-[100%] h-24 mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                  placeholder="자기소개를 입력해주세요."
+                />
+              </div>
+              <div>
+                <h1 className="font-bold pb-1">이메일</h1>
+                <input
+                  type="email"
+                  className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300 cursor-not-allowed"
+                  // 유저 이메일이 나타납니데잉
+                  placeholder="이메일을 입력해주세요."
+                />
+              </div>
+              <div>
+                <h1 className="font-bold pb-1">지갑주소</h1>
                 <input
                   type="text"
-                  className="w-[50%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                  placeholder="우편번호"
+                  className="w-[100%] rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                  // 유저 닉네임이 나타나야 합니데잉
+                  placeholder="지갑을 연동해주세요."
                 />
-                <button className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold">
-                  주소검색
+                <button className="mb-4 rounded-md text-sm text-white font-bold px-2 py-1 mt-1 bg-gradient-to-r from-gold to-lightGold">
+                  지갑연결
                 </button>
               </div>
-              <input
-                type="text"
-                className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="주소"
-              />
-              <br />
-              <input
-                type="text"
-                className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="상세주소"
-              />
-              <br />
-            </div>
-            <div>
-              <h1 className="font-bold pb-1">전화번호</h1>
-              <div className="flex items-center">
+              <div>
+                <h1 className="font-bold pb-1">주소</h1>
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    className="w-[50%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                    placeholder="우편번호"
+                  />
+                  <button className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold">
+                    주소검색
+                  </button>
+                </div>
                 <input
                   type="text"
-                  className="w-[50%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                  placeholder="010-0000-0000"
+                  className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                  placeholder="주소"
                 />
-                <button className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold">
-                  인증
-                </button>
+                <br />
+                <input
+                  type="text"
+                  className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                  placeholder="상세주소"
+                />
+                <br />
               </div>
-            </div>
+              <div>
+                <h1 className="font-bold pb-1">전화번호</h1>
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    className="w-[50%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                    placeholder="010-0000-0000"
+                  />
+                  <button className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold">
+                    인증
+                  </button>
+                </div>
+              </div>
 
-            <div className="my-8">
-              <button
-                // onClick={}
-                className="w-[100%] flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-lg font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-              >
-                프로필 수정
-              </button>
-            </div>
-          </div>
-          <div className="w-auto hidden md:block pt-32 pl-16 text-center">
-            <div className="flex items-center justify-center pb-2 font-bold">
-              프로필 사진
-              <button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gold"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
+              <div className="my-8">
+                <button
+                  // onClick={}
+                  className="w-[100%] flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-lg font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
+                  프로필 수정
+                </button>
+              </div>
             </div>
-            <div className="h-32 w-32 mb-8 bg-gold rounded-full"></div>
-            <div className="flex items-center justify-center pb-2 font-bold">
-              프로필 배너
-              <button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gold"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
+            <div className="w-auto hidden md:block pt-32 pl-16 text-center">
+              <div className="flex items-center justify-center pb-2 font-bold">
+                프로필 사진
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gold"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div className="h-32 w-32 mb-8 bg-gold rounded-full"></div>
+              <div className="flex items-center justify-center pb-2 font-bold">
+                프로필 배너
+                <button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gold"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div className="h-32 w-32 bg-gold rounded-full"></div>
             </div>
-            <div className="h-32 w-32 bg-gold rounded-full"></div>
-          </div>
+          </form>
         </div>
       </div>
     </Layout>
