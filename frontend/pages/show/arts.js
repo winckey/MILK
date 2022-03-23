@@ -15,6 +15,7 @@ import {
 } from "@react-three/drei";
 import { useRoute, useLocation, Link } from "wouter";
 import getUuid from "uuid-by-string";
+
 const pexel = (id) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`;
 const images = [
@@ -101,11 +102,7 @@ export default function arts() {
             />
           </mesh>
         </group>
-        <Html
-          as="div"
-          position={[-0.2, -3, 0]} // Wrapping element (default: 'div')
-          // Aligns to the upper-left corner, fills the screen (default:false) [ignored in transform mode]
-        >
+        <Html as="div" position={[-0.2, -3, 0]}>
           <button onClick={toggleFullScreen}>full screen</button>
         </Html>
       </Suspense>
