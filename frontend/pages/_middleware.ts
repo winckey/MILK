@@ -4,7 +4,9 @@ import type { NextRequest, NextFetchEvent } from "next/server";
 import { NextResponse } from "next/server";
 
 export function middleware(req: NextRequest, ev: NextFetchEvent) {
-  // console.log(req.ua);
+  // console.log(req.);
+
+  // 로그인 확인
 
   // 브라우저 접속 차단 (크롬만 가능)
   if (req.ua?.browser.name !== "Chrome") {

@@ -1,4 +1,8 @@
 export default function Navbar() {
+  const logout = () => {
+    localStorage.clear(); // 로컬 스토리지 초기화
+  };
+
   return (
     <div
       className="fixed w-full z-30 h-[72px] bg-opacity-90 transition duration-300 ease-in-out  
@@ -30,6 +34,14 @@ export default function Navbar() {
                 <a className=" btn-sm py-2 px-4 bg-gradient-to-r from-gold to-lightGold text-white font-semibold rounded-lg shadow-md  focus:outline-none focus:ring-2  focus:ring-opacity-75 hover:shadow-lg ">
                   회원가입
                 </a>
+              </li>
+              <li>
+                <div
+                  onClick={logout}
+                  className=" btn-sm py-2 px-4 bg-gradient-to-r from-gold to-lightGold text-white font-semibold rounded-lg shadow-md  focus:outline-none focus:ring-2  focus:ring-opacity-75 hover:shadow-lg "
+                >
+                  로그아웃
+                </div>
               </li>
             </ul>
           </nav>
