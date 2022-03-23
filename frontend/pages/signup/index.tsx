@@ -1,17 +1,64 @@
-import { Navbar } from "@components/ui/common";
-import { useState } from "react";
+import Layout from "@components/ui/layout";
+import useMutation from "libs/useMutation";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+
+interface ISignupForm {
+  email: string;
+  password: string;
+  checkPw: string; // 비밀번호 확인
+  userName: string;
+  nickname: string;
+}
+
+interface ISignupResponse {
+  message: string;
+  statusCode: number;
+}
 
 export default function Signup() {
-  const [user, setUser] = useState<string>("");
-  const onCompany = () => setUser("company");
-  const onUser = () => setUser("person");
+  // const [user, setUser] = useState<string>("");
+  // const onCompany = () => setUser("company");
+  // const onUser = () => setUser("person");
+
+  const router = useRouter();
+
+  // request
+  const [signup, { loading, data, error }] =
+    useMutation<ISignupResponse>("/api/user");
+
+  // input 값 받아옴
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    watch,
+  } = useForm<ISignupForm>({ mode: "onBlur" });
+
+  // form 제출 시 실행
+  const onValid = (formData: ISignupForm) => {
+    // console.log(formData);
+    if (loading) return;
+
+    if (window.confirm("해당 정보로 가입하시겠습니까?") == true) {
+      signup(formData);
+    }
+  };
+
+  useEffect(() => {
+    if (data && data.statusCode === 200) {
+      alert(`회원가입을 축하합니다!`);
+      router.push(`/login`); // 로그인 페이지로 이동
+    }
+  }, [data, router]);
+
+  // console.log(data);
 
   return (
-    <>
+    <Layout seoTitle="회원가입">
       <div>
-        <div className="fixed">
-          <Navbar />
-        </div>
         <div className="flex items-center pt-20">
           <div className="hidden lg:flex flex-row justify-center items-center  w-[50%] min-h-screen bg-gradient-to-r from-gold to-lightGold">
             <div className="flex flex-col justify-center text-left">
@@ -20,7 +67,7 @@ export default function Signup() {
                 <div>NFT로 만나보세요!</div>
               </div>
               <div className="text-white font-bold pb-10 lg:text-xl">
-                On the World's Best & Largest NFT MarketPlace
+                On the Worlds Best & Largest NFT MarketPlace
               </div>
               <div className="flex justify-between">
                 <div className="w-[150px] h-[200px] lg:w-[200px] bg-blue-500">
@@ -39,24 +86,24 @@ export default function Signup() {
             </div>
             <div className="grid grid-cols-2 mt-6 pt-4 gap-3 ">
               <button
-                onClick={onCompany}
+                // onClick={onCompany}
                 className="flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold text-gray-500 hover:bg-gradient-to-r from-gold to-lightGold hover:text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
               >
                 명품유저
               </button>
               <button
-                onClick={onUser}
+                // onClick={onUser}
                 className="flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold text-gray-500 hover:bg-gradient-to-r from-gold to-lightGold hover:text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
               >
                 개인유저
               </button>
             </div>
             <div className="py-4 ">
-              <div>
+              <form onSubmit={handleSubmit(onValid)}>
                 <div>
-                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white rounded pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
-                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                      <span className="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
@@ -74,14 +121,24 @@ export default function Signup() {
                       </span>
                     </div>
                     <input
-                      type="email"
-                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      {...register("email", {
+                        required: "필수 정보입니다.",
+                        pattern: {
+                          value:
+                            /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                          message: "이메일 양식을 지켜주세요.",
+                        },
+                      })}
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="이메일"
                     />
                   </div>
-                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                  <span className="text-xs text-[#ff5e57]">
+                    {errors?.email?.message}
+                  </span>
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white rounded pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
-                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                      <span className="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
@@ -99,14 +156,27 @@ export default function Signup() {
                       </span>
                     </div>
                     <input
-                      type="text"
-                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      {...register("password", {
+                        required: "필수 정보입니다.",
+                        pattern: {
+                          value:
+                            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%#?&])[A-Za-z\d@$!%*#?&]{8,16}$/,
+                          message:
+                            "8~16자의 영문 대 소문자, 숫자, 특수문자 조합만 사용 가능합니다.",
+                        },
+                      })}
+                      type="password"
+                      maxLength={16}
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="비밀번호"
                     />
                   </div>
-                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                  <span className="text-xs text-[#ff5e57]">
+                    {errors?.password?.message}
+                  </span>
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white rounded pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
-                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                      <span className="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
@@ -124,14 +194,30 @@ export default function Signup() {
                       </span>
                     </div>
                     <input
-                      type="text"
-                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      {...register("checkPw", {
+                        required: "필수 정보입니다.",
+                        validate: {
+                          checkPassword: (value) => {
+                            const { password } = getValues();
+                            return (
+                              password === value ||
+                              "비밀번호가 일치하지 않습니다."
+                            );
+                          },
+                        },
+                      })}
+                      type="password"
+                      maxLength={16}
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="비밀번호 확인"
                     />
                   </div>
-                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                  <span className="text-xs text-[#ff5e57]">
+                    {errors?.checkPw?.message}
+                  </span>
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white rounded pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
-                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                      <span className="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
@@ -149,14 +235,23 @@ export default function Signup() {
                       </span>
                     </div>
                     <input
-                      type="text"
-                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      {...register("userName", {
+                        required: "필수 정보입니다.",
+                        pattern: {
+                          value: /^[가-힣]*$/,
+                          message: "한글만 사용 가능합니다.",
+                        },
+                      })}
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="이름"
                     />
                   </div>
-                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                  <span className="text-xs text-[#ff5e57]">
+                    {errors?.userName?.message}
+                  </span>
+                  <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white  rounded  pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
-                      <span className="flex itecms-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                      <span className="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
@@ -174,11 +269,23 @@ export default function Signup() {
                       </span>
                     </div>
                     <input
-                      type="text"
-                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                      {...register("nickname", {
+                        required: "필수 정보입니다.",
+                        pattern: {
+                          value: /^[가-힣a-zA-Z0-9]{2,10}$/,
+                          message:
+                            "2~10자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
+                        },
+                        validate: {},
+                      })}
+                      maxLength={10}
+                      className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="닉네임"
                     />
                   </div>
+                  <span className="text-xs text-[#ff5e57]">
+                    {errors?.nickname?.message}
+                  </span>
                 </div>
                 <div className="my-8">
                   <button
@@ -188,11 +295,11 @@ export default function Signup() {
                     회원가입
                   </button>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </Layout>
   );
 }
