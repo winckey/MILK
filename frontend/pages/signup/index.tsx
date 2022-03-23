@@ -52,7 +52,7 @@ export default function Signup() {
       alert(`회원가입을 축하합니다!`);
       router.push(`/login`); // 로그인 페이지로 이동
     }
-  }, [data]);
+  }, [data, router]);
 
   // console.log(data);
 
@@ -67,7 +67,7 @@ export default function Signup() {
                 <div>NFT로 만나보세요!</div>
               </div>
               <div className="text-white font-bold pb-10 lg:text-xl">
-                On the World's Best & Largest NFT MarketPlace
+                On the Worlds Best & Largest NFT MarketPlace
               </div>
               <div className="flex justify-between">
                 <div className="w-[150px] h-[200px] lg:w-[200px] bg-blue-500">

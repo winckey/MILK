@@ -1,5 +1,6 @@
 import Layout from "@components/ui/layout";
 import type { NextPage } from "next";
+import Image from "next/image";
 
 const User: NextPage = () => {
   return (
@@ -9,8 +10,9 @@ const User: NextPage = () => {
           {/* 메인 사진 */}
           <div className="h-[220px] overflow-hidden bg-basicImage shadow-2xl">
             <div className="h-[600px] w-full max-h-full max-w-full">
-              <img
+              <Image
                 src="https://lh3.googleusercontent.com/Vw6MpADIga_ZwmXOmclK87L8ax6pI_DylBcn-69kcr1Uhgw5Ij2RvXJD2MFJ0VarfIGeoFZw7NvpGLePX3e2VMztvg7XCQDNo12dLQ=h600"
+                alt="#"
                 className="w-full h-full object-cover "
               />
             </div>
