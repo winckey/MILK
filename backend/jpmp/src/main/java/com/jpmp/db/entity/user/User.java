@@ -2,14 +2,13 @@ package com.jpmp.db.entity.user;
 
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.core.GrantedAuthority;
 
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
+
 
 @Builder
 @Getter
@@ -28,12 +27,15 @@ public class User  {
     private String nickname;
 
     @Column(nullable = false)
+    private String userName;
+
+    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+
     private String phone;
 
-    @Column(nullable = false)
+
     private String userRole;
 
 
@@ -44,9 +46,23 @@ public class User  {
 
     private String zipCode;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_img_id")
-    private UserImg profileImg;
+
+    private String profileImg;
+
+    private String backgroundfileImg;
 
 
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    public void changeUser(String address, String description, String email, String nickname, String phone, String zipCode) {
+
+        this.address = address;
+        this.description = description;
+        this.email = email;
+        this.nickname = nickname;
+        this.phone = phone;
+        this.zipCode = zipCode;
+    }
 }
