@@ -3,6 +3,8 @@ import useMutation from "libs/useMutation";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useSetRecoilState } from "recoil";
+import { accessToken } from "@components/atoms/Auth";
 
 interface ILoginForm {
   email: string;
@@ -34,6 +36,7 @@ interface ILoginResponse {
 
 export default function Login() {
   const router = useRouter();
+  const setTOKEN = useSetRecoilState(accessToken);
 
   // request
   const [login, { loading, data, error }] =
@@ -49,7 +52,7 @@ export default function Login() {
 
   // form 제출 시 실행
   const onValid = (formData: ILoginForm) => {
-    console.log(formData);
+    // console.log(formData);
     if (loading) return;
     login(formData);
   };
@@ -57,7 +60,7 @@ export default function Login() {
 
   useEffect(() => {
     if (data && data.statusCode === 200) {
-      localStorage.setItem("accessToken", data.accessToken); // 로컬 스토리지에 토큰 저장
+      setTOKEN(data.accessToken); // 로컬 스토리지에 토큰 저장
       router.push("/"); // 메인 페이지로 이동
     }
   }, [data, router]);

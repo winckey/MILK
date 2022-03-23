@@ -4,6 +4,7 @@
 import "@styles/globals.css";
 import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
+import { RecoilRoot } from "recoil";
 
 // Component: 접근하고자 하는 페이지의 컴포넌트를 가져옴 (pages 폴더에 있는 해당 파일)
 function MyApp({ Component, pageProps }: AppProps) {
@@ -14,9 +15,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           fetch(url).then((response) => response.json()),
       }}
     >
-      <div className="">
+      <RecoilRoot>
         <Component {...pageProps} />
-      </div>
+      </RecoilRoot>
     </SWRConfig>
   );
 }
