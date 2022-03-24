@@ -1,5 +1,5 @@
 import Layout from "@components/ui/layout";
-import useMutation from "libs/useMutation";
+import useMutation from "libs/client/useMutation";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -36,11 +36,8 @@ interface ILoginResponse {
 
 export default function Login() {
   const router = useRouter();
-  const setTOKEN = useSetRecoilState(accessToken);
 
-  // request
-  const [login, { loading, data, error }] =
-    useMutation<ILoginResponse>("/api/user/login");
+  const setTOKEN = useSetRecoilState(accessToken);
 
   // input 값 받아옴
   const {
@@ -50,6 +47,10 @@ export default function Login() {
     watch,
   } = useForm<ILoginForm>();
 
+  // onValid form data DB에 요청
+  const [login, { loading, data, error }] =
+    useMutation<ILoginResponse>("/api/user/login");
+
   // form 제출 시 실행
   const onValid = (formData: ILoginForm) => {
     // console.log(formData);
@@ -58,9 +59,10 @@ export default function Login() {
   };
   console.log(data);
 
+  // server 응답 받았을 때 실행
   useEffect(() => {
     if (data && data.statusCode === 200) {
-      setTOKEN(data.accessToken); // 로컬 스토리지에 토큰 저장
+      setTOKEN(data.accessToken); // recoil에 토큰 저장
       router.push("/"); // 메인 페이지로 이동
     }
   }, [data, router]);

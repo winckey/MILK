@@ -1,4 +1,4 @@
-// POST fetch (DB의 상태를 mutate)
+// POST, PUT fetch (DB의 상태를 mutate)
 
 import { accessToken } from "@components/atoms/Auth";
 import { useEffect, useState } from "react";
@@ -25,7 +25,7 @@ export default function useMutation<T = any>(
     error: undefined,
     methodType,
   });
-
+  // console.log(methodType);
   const URL = `http://j6e206.p.ssafy.io:8080${url}`;
   const TOKEN = useRecoilValue(accessToken);
   const [headers, setHeaders] = useState({});
@@ -42,11 +42,11 @@ export default function useMutation<T = any>(
       });
     }
   }, []);
-  console.log(headers);
 
   function mutation(data: any) {
     setState((prev) => ({ ...prev, loading: true }));
 
+    // console.log(headers);
     fetch(URL, {
       method: methodType,
       headers: headers,
