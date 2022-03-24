@@ -7,7 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 @Builder
@@ -33,6 +35,7 @@ public class User  {
     private String password;
 
 
+
     private String phone;
 
 
@@ -52,6 +55,11 @@ public class User  {
     private String profileImg;
 
     private String backgroundfileImg;
+
+    @Builder.Default
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "nft_like",joinColumns = @JoinColumn(name="id"))
+    private List<String> likeList = new ArrayList<>();
 
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

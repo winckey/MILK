@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -59,7 +61,7 @@ public class SwaggerConfig {
         return produces;
     }
     private ApiKey apiKey() {
-        return new ApiKey("JWT", "jwt", "header");
+        return new ApiKey("JWT", "Authorization", "header");
     }
     private SecurityContext securityContext() {
         return springfox
@@ -71,10 +73,22 @@ public class SwaggerConfig {
                 .securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build();
     }
 
-    List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+//    List<SecurityReference> defaultAuth() {
+//        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+//        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+//        authorizationScopes[0] = authorizationScope;
+//        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+//    }
+
+    public static final String SECURITY_SCHEMA_NAME = "JWT";
+    public static final String AUTHORIZATION_SCOPE_GLOBAL = "global";
+    public static final String AUTHORIZATION_SCOPE_GLOBAL_DESC = "accessEverything";
+
+    private List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope = new AuthorizationScope(AUTHORIZATION_SCOPE_GLOBAL, AUTHORIZATION_SCOPE_GLOBAL_DESC);
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+        return newArrayList(new SecurityReference(SECURITY_SCHEMA_NAME, authorizationScopes));
     }
+
 }
