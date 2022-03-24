@@ -45,7 +45,9 @@ public class User  {
     private String description;
 
 
-    private String address;
+    private String address1;
+
+    private String address2;
 
     private String zipCode;
 
@@ -64,12 +66,10 @@ public class User  {
         return null;
     }
 
+    public void changeUser(String address1, String address2, String description, String email, String nickname, String phone, String zipCode) {
 
-
-
-    public void changeUser(String address, String description, String email, String nickname, String phone, String zipCode) {
-
-        this.address = address;
+        this.address1 = address1;
+        this.address2 = address2;
         this.description = description;
         this.email = email;
         this.nickname = nickname;
