@@ -22,6 +22,8 @@ public class UserInfoDto {
     private String email;
     private String proImg;
     private String backgroundImg;
+    private String address1;
+    private String address2;
 
 
     public static UserInfoDto of(User user) {
@@ -34,7 +36,8 @@ public class UserInfoDto {
         userInfoDto.setEmail(user.getEmail());
         userInfoDto.setProImg(user.getProfileImg());
         userInfoDto.setBackgroundImg(user.getBackgroundfileImg());
-
+        userInfoDto.setAddress1(user.getAddress1());
+        userInfoDto.setAddress2(user.getAddress2());
         return userInfoDto;
     }
 }
