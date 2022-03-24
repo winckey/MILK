@@ -24,6 +24,7 @@ public class UserInfoDto {
     private String backgroundImg;
     private String address1;
     private String address2;
+    private String zipCode;
 
 
     public static UserInfoDto of(User user) {
@@ -38,6 +39,7 @@ public class UserInfoDto {
         userInfoDto.setBackgroundImg(user.getBackgroundfileImg());
         userInfoDto.setAddress1(user.getAddress1());
         userInfoDto.setAddress2(user.getAddress2());
+        userInfoDto.setZipCode(user.getZipCode());
         return userInfoDto;
     }
 }
