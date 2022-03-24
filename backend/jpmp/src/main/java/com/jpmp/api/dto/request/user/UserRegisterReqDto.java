@@ -43,9 +43,10 @@ public class UserRegisterReqDto {
     @ApiModelProperty(name="자기소개", example="안녕하세요")
     private String description;
 
-    @ApiModelProperty(name="주소", example="창원시 반지동")
-    private String address;
-
+    @ApiModelProperty(name="주소1", example="창원시 반지동")
+    private String address1;
+    @ApiModelProperty(name="주소2", example="창원시 반지동")
+    private String address2;
     @ApiModelProperty(name="우편번호", example="54122")
     private String zipCode;
 
@@ -63,7 +64,8 @@ public class UserRegisterReqDto {
                 .phone(phone)
                 .userRole(role)
                 .description(description)
-                .address(address)
+                .address1(address1)
+                .address2(address2)
                 .zipCode(zipCode)
                 .build();
     }
