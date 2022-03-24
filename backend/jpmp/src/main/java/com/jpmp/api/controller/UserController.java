@@ -153,11 +153,11 @@ public class UserController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserNicknameCheckResDto> checkDuplicateNickname(@NotBlank @PathVariable String nickname) {
+    public ResponseEntity<Boolean> checkDuplicateNickname(@NotBlank @PathVariable String nickname) {
 
         Boolean result = userService.checkDuplicateNickname(nickname);
 
-        return ResponseEntity.status(200).body(UserNicknameCheckResDto.of(200, "Success", nickname, result));
+        return ResponseEntity.status(200).body(!result);
     }
 
 }
