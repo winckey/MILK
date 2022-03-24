@@ -66,7 +66,8 @@ public class User  {
         return null;
     }
 
-    public void changeUser(String address1, String address2, String description, String email, String nickname, String phone, String zipCode) {
+    public void changeUser(String address1, String address2, String description, String email, String nickname, String phone, String zipCode
+                            ,String userName , String profileImg , String backgroundfileImg) {
 
         this.address1 = address1;
         this.address2 = address2;
@@ -75,5 +76,9 @@ public class User  {
         this.nickname = nickname;
         this.phone = phone;
         this.zipCode = zipCode;
+        this.userName = userName;
+        this.profileImg = profileImg;
+        this.backgroundfileImg =backgroundfileImg;
     }
+
 }
