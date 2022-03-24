@@ -24,9 +24,10 @@ public class UserModifyReqDto {
     private String description;
 
 
-    @ApiModelProperty(name = "주소")
-    private String address;
-
+    @ApiModelProperty(name = "주소1")
+    private String address1;
+    @ApiModelProperty(name = "주소2")
+    private String address2;
 
     @ApiModelProperty(name = "우편번호")
     private String zipCode;

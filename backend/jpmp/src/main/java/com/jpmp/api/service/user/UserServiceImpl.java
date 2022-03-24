@@ -7,7 +7,7 @@ import com.jpmp.db.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +33,8 @@ public class UserServiceImpl implements UserService {
 
     @Override// 이거 왜 drity check 안댐?
     public User modifyUser(User user, UserModifyReqDto userModifyReqDto) {
-        user.changeUser(userModifyReqDto.getAddress() , userModifyReqDto.getDescription()
+        user.changeUser(userModifyReqDto.getAddress1(), userModifyReqDto.getAddress2()
+                        , userModifyReqDto.getDescription()
                         ,userModifyReqDto.getEmail() , userModifyReqDto.getNickname()
                         ,userModifyReqDto.getPhone() , userModifyReqDto.getZipCode());// 이거 동적으로는 안되나?
         userRepository.save(user);
