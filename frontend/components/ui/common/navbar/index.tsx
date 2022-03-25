@@ -72,7 +72,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href={"/brand"}>
+            <Link href={"/brand/index"}>
               <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
                 명품관
               </a>
@@ -86,7 +86,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href="/account">
+            <Link href="/account/index">
               <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
                 나의 정보
               </a>
