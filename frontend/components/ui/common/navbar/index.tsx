@@ -49,11 +49,28 @@ export default function Navbar() {
               <a>MILC</a>
             </Link>
           </span>
-          <span className="text-4xl bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
-            <Link href={"/product/name"}>
-              <a>제품</a>
-            </Link>
-          </span>
+          <div className="inline-block ml-64 -mr-40">
+            <span className="text-4xl mx-4 jus bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
+              <Link href={"/brand"}>
+                <a>브랜드관</a>
+              </Link>
+            </span>
+            <span className="text-4xl mx-4 bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
+              <Link href={"/user"}>
+                <a>개인관</a>
+              </Link>
+            </span>
+            <span className="text-4xl mx-4 bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
+              <Link href={"/show/arts"}>
+                <a>전시관</a>
+              </Link>
+            </span>
+            <span className="text-4xl mx-4 bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
+              <Link href={"/account"}>
+                <a>나의 정보</a>
+              </Link>
+            </span>
+          </div>
         </div>
 
         <div
@@ -69,22 +86,22 @@ export default function Navbar() {
             open ? "top-14 " : "top-[-490px]"
           }`}
         >
-          <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href="/user">
+          {/* <li className="md:ml-8 text-xl md:my-0 my-7">
+            <Link href={"/user"}>
               <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
                 개인관
               </a>
             </Link>
           </li>
           <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href="/brand">
+            <Link href={"/brand"}>
               <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
                 명품관
               </a>
             </Link>
           </li>
           <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href="/show/arts">
+            <Link href={"/show/arts"}>
               <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
                 전시관
               </a>
@@ -96,7 +113,7 @@ export default function Navbar() {
                 나의 정보
               </a>
             </Link>
-          </li>
+          </li> */}
 
           <div className="flex justify-start gap-3 md:gap-0">
             {/* {TOKEN ? (
@@ -112,12 +129,6 @@ export default function Navbar() {
               <Link href="/login">
                 <a>
                   <Button>로그인</Button>
-                </a>
-              </Link>
-
-              <Link href="/user">
-                <a>
-                  <Button>개인관임</Button>
                 </a>
               </Link>
 
