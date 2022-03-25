@@ -112,7 +112,7 @@ export default function Navbar() {
 
                 <Link href="/user">
                   <a>
-                    <Button>개인관</Button>
+                    <Button>개인관임</Button>
                   </a>
                 </Link>
 
