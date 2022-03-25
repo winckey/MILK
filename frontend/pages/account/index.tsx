@@ -1,13 +1,28 @@
-import Layout from "@components/ui/layout";
-import useMutation from "libs/client/useMutation";
-import useUser from "libs/client/useUser";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { BackgroundImg, ProfileImg } from "@components/ui/common";
+import Layout from "@components/ui/layout";
+import useMutation from "@libs/client/useMutation";
+import useUser from "@libs/client/useUser";
+
+interface IUser {
+  address1: string;
+  address2: string;
+  backgroundImg: string;
+  description: string;
+  email: string;
+  id: number;
+  nickname: string;
+  phone: string;
+  proImg: string;
+  userName: string;
+  zipCode: string;
+}
 
 interface IEditProfileResponse {
   message: string;
   statusCode: number;
-  user: any;
+  user: IUser;
 }
 
 interface IEditProfileForm {
@@ -15,8 +30,8 @@ interface IEditProfileForm {
   userName: string;
   nickname: string;
   description: string;
-  proImg: FileList;
-  backgroundImg: FileList;
+  // proImg: FileList;
+  // backgroundImg: FileList;
   zipCode: string;
   address1: string;
   address2: string;
@@ -35,27 +50,36 @@ export default function EditProfile() {
     setValue,
     getValues,
     watch,
-  } = useForm<IEditProfileForm>();
+  } = useForm<IEditProfileForm>({ mode: "onBlur" });
 
   // useUser로 불러온 회원 정보 useForm에 저장
   useEffect(() => {
     if (user?.email) setValue("email", user.email);
     if (user?.userName) setValue("userName", user.userName);
     if (user?.nickname) setValue("nickname", user.nickname);
+    if (user?.nickname) setOriginNickname(user.nickname); // 기존 닉네임 저장
     if (user?.description) setValue("description", user.description);
-    if (user?.proImg)
-      setProImgPreview(
-        `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${user?.proImg}/avatar`
-      );
-    if (user?.backgroundImg)
-      setProImgPreview(
-        `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${user?.backgroundImg}/avatar`
-      );
+    // if (user?.proImg)
+    //   setProImgPreview(
+    //     `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${user?.proImg}/avatar`
+    //   );
+    // if (user?.backgroundImg)
+    //   setProImgPreview(
+    //     `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${user?.backgroundImg}/avatar`
+    //   );
     if (user?.zipCode) setValue("zipCode", user.zipCode);
     if (user?.address1) setValue("address1", user.address1);
     if (user?.address2) setValue("address2", user.address2);
     if (user?.phone) setValue("phone", user.phone);
   }, [user, setValue]);
+
+  // 중복검사 시작했는지 확인 (중복검사를 시작했을때부터 SuccessMessage 보이기 위함)
+  const [startCheckNick, setStartCheckNick] = useState(false);
+  const changeStartCheckNick = () => {
+    setStartCheckNick(true);
+    return true;
+  };
+  const [originNickname, setOriginNickname] = useState(""); // 기존 닉네임은 중복 확인 안되도록 저장
 
   // onValid form data DB에 요청
   const [editProfile, { data, loading }] = useMutation<IEditProfileResponse>(
@@ -63,51 +87,46 @@ export default function EditProfile() {
     "PUT"
   );
 
-  // 주소 찾기 API
-  const findAddress = () => {
-    // new window.daum.Postcode({
-    //   oncomplete: function (data) {
-    //     setValue("zipCode", data.zonecode + "");
-    //     setValue("address1", data.address);
-    //     setValue("address2", data.address);
-    //   },
-    // }).open();
-  };
-
   // form 제출 시 실행
   const onValid = async (formData: IEditProfileForm) => {
     if (loading) return;
 
     if (window.confirm("해당 정보로 수정하시겠습니까?") == true) {
-      if (
-        // 프로필 O, 배경 X
-        formData.proImg &&
-        formData.proImg.length > 0 &&
-        formData.backgroundImg &&
-        formData.backgroundImg.length === 0
-      ) {
-        const { uploadURL } = await (await fetch(`/api/files`)).json();
-        const form = new FormData();
-        form.append("file", formData.proImg[0], user?.id + "");
-        const {
-          result: { id },
-        } = await (
-          await fetch(uploadURL, {
-            method: "POST",
-            body: form,
-          })
-        ).json();
+      const newData = {
+        ...formData,
+        email: getValues("email"),
+        userName: getValues("userName"),
+      };
+      editProfile(newData);
+      // if (
+      //   // 프로필 O, 배경 X
+      //   formData.proImg &&
+      //   formData.proImg.length > 0 &&
+      //   formData.backgroundImg &&
+      //   formData.backgroundImg.length === 0
+      // ) {
+      //   const { uploadURL } = await (await fetch(`/api/files`)).json();
+      //   const form = new FormData();
+      //   form.append("file", formData.proImg[0], user?.id + "");
+      //   const {
+      //     result: { id },
+      //   } = await (
+      //     await fetch(uploadURL, {
+      //       method: "POST",
+      //       body: form,
+      //     })
+      //   ).json();
 
-        const newData = {
-          ...formData,
-          email: getValues("email"),
-          userName: getValues("userName"),
-          proImg: id,
-          backgroundImg: "",
-        };
-        console.log(newData);
-        editProfile(newData);
-      }
+      //   const newData = {
+      //     ...formData,
+      //     email: getValues("email"),
+      //     userName: getValues("userName"),
+      //     proImg: id,
+      //     backgroundImg: "",
+      //   };
+      //   console.log(newData);
+      //   editProfile(newData);
+      // }
       // else if (
       //   // 프로필 X, 배경 O
       //   formData.backgroundImg &&
@@ -168,16 +187,16 @@ export default function EditProfile() {
       //   console.log(newData);
       //   editProfile(newData);
       // }
-      else {
-        const newData = {
-          ...formData,
-          email: getValues("email"),
-          userName: getValues("userName"),
-          proImg: "",
-          backgroundImg: "",
-        };
-        editProfile(newData);
-      }
+      // else {
+      //   const newData = {
+      //     ...formData,
+      //     email: getValues("email"),
+      //     userName: getValues("userName"),
+      //     proImg: "",
+      //     backgroundImg: "",
+      //   };
+      //   editProfile(newData);
+      // }
     }
   };
 
@@ -188,21 +207,32 @@ export default function EditProfile() {
     }
   }, [data]);
 
+  // 주소 찾기 API
+  const findAddress = () => {
+    // new window.daum.Postcode({
+    //   oncomplete: function (data) {
+    //     setValue("zipCode", data.zonecode + "");
+    //     setValue("address1", data.address);
+    //     setValue("address2", data.address);
+    //   },
+    // }).open();
+  };
+
   // 이미지 미리보기
-  const [proImgPreview, setProImgPreview] = useState("");
-  const [backgroundImgPreview, setBackgroundImgPreview] = useState("");
-  const proImg = watch("proImg");
-  const backgroundImg = watch("backgroundImg");
-  useEffect(() => {
-    if (proImg && proImg.length > 0) {
-      const file = proImg[0];
-      setProImgPreview(URL.createObjectURL(file));
-    }
-    if (backgroundImg && backgroundImg.length > 0) {
-      const file = backgroundImg[0];
-      setBackgroundImgPreview(URL.createObjectURL(file));
-    }
-  }, [proImg, backgroundImg]);
+  // const [proImgPreview, setProImgPreview] = useState("");
+  // const [backgroundImgPreview, setBackgroundImgPreview] = useState("");
+  // const proImg = watch("proImg");
+  // const backgroundImg = watch("backgroundImg");
+  // useEffect(() => {
+  //   if (proImg && proImg.length > 0) {
+  //     const file = proImg[0];
+  //     setProImgPreview(URL.createObjectURL(file));
+  //   }
+  //   if (backgroundImg && backgroundImg.length > 0) {
+  //     const file = backgroundImg[0];
+  //     setBackgroundImgPreview(URL.createObjectURL(file));
+  //   }
+  // }, [proImg, backgroundImg]);
 
   return (
     <Layout seoTitle="회원 정보 수정">
@@ -328,18 +358,47 @@ export default function EditProfile() {
               </div>
             </div>
           </div>
-          <form onSubmit={handleSubmit(onValid)} className="flex w-[75%]">
-            <div className="w-[60%] pl-8">
-              <div className=" text-3xl font-bold">프로필</div>
+          <div className="flex w-[75%]">
+            <form onSubmit={handleSubmit(onValid)} className="w-[60%] pl-8">
+              <div className="text-3xl font-bold">프로필</div>
               <div className="pt-8">
                 <h1 className="font-bold pb-1">닉네임</h1>
                 <input
-                  {...register("nickname")}
+                  {...register("nickname", {
+                    required: "필수 정보입니다.",
+                    pattern: {
+                      value: /^[가-힣a-zA-Z0-9]{2,10}$/,
+                      message:
+                        "2~10자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
+                    },
+                    validate: {
+                      checkNickname: async (value) =>
+                        originNickname === value
+                          ? true
+                          : (await fetch(
+                              `https://j6e206.p.ssafy.io:8080/api/user/nickname/${value}`
+                            )
+                              .then((res) => res.json())
+                              .then((result) => result))
+                          ? startCheckNick
+                            ? true
+                            : changeStartCheckNick()
+                          : "이미 사용중인 닉네임 입니다.",
+                    },
+                  })}
                   type="text"
-                  className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                  // 유저 닉네임이 나타나야 합니데잉
+                  className="w-[100%] rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
                   placeholder="닉네임을 입력해주세요."
                 />
+                {startCheckNick && !errors?.nickname?.message ? (
+                  <span className="text-xs text-[#05c46b]">
+                    사용 가능한 닉네임 입니다.
+                  </span>
+                ) : (
+                  <span className="text-xs text-[#ff5e57]">
+                    {errors?.nickname?.message}
+                  </span>
+                )}
               </div>
               <div>
                 <h1 className="font-bold pb-1">자기소개</h1>
@@ -403,95 +462,41 @@ export default function EditProfile() {
               </div>
               <div>
                 <h1 className="font-bold pb-1">전화번호</h1>
-                <div className="flex items-center">
+                <div className="">
                   <input
-                    {...register("phone")}
+                    {...register("phone", {
+                      // required: "필수 정보입니다.",
+                      // pattern: {
+                      //   value: /^[0-9]+-[0-9]+-[0-9]+$/,
+                      //   message: "전화번호 양식을 지켜주세요.",
+                      // },
+                    })}
                     type="text"
-                    className="w-[50%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                    className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
                     placeholder="010-0000-0000"
                   />
-                  <button className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold">
+                  <span className="text-xs text-[#ff5e57]">
+                    {errors?.phone?.message}
+                  </span>
+                  {/* <button className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold">
                     인증
-                  </button>
+                  </button> */}
                 </div>
               </div>
-
               <div className="my-8">
-                <button
-                  // onClick={}
-                  className="w-[100%] flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-lg font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-                >
+                <button className="w-[100%] flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-lg font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white">
                   프로필 수정
                 </button>
               </div>
-            </div>
+            </form>
             <div className="w-auto hidden md:block pt-32 pl-16 text-center">
-              <div className="flex items-center justify-center pb-2 font-bold">
-                프로필 사진
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gold"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <label htmlFor="proImg" className="cursor-pointer">
-                {proImgPreview ? (
-                  <img
-                    src={proImgPreview}
-                    className="h-[150px] w-[150px] mb-8 rounded-full"
-                  ></img>
-                ) : (
-                  <div className="h-[150px] w-[150px] mb-8 bg-gold rounded-full"></div>
-                )}
-                <input
-                  {...register("proImg")}
-                  id="proImg"
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                />
-              </label>
-              <div className="flex items-center justify-center pb-2 font-bold">
-                프로필 배너
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gold"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <label htmlFor="backgroundImg" className="cursor-pointer">
-                {backgroundImgPreview ? (
-                  <img
-                    src={backgroundImgPreview}
-                    className="h-[150px] w-[150px] mb-8 rounded-full"
-                  ></img>
-                ) : (
-                  <div className="h-[150px] w-[150px] mb-8 bg-gold rounded-full"></div>
-                )}
-                <input
-                  {...register("backgroundImg")}
-                  id="backgroundImg"
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                />
-              </label>
+              <ProfileImg proImg={user?.proImg} userId={user?.id} />
+              <BackgroundImg
+                backgroundImg={user?.backgroundImg}
+                userId={user?.id}
+              />
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </Layout>
