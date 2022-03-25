@@ -64,15 +64,35 @@ export default function Navbar() {
             open ? "top-14 " : "top-[-490px]"
           }`}
         >
-          {UserLinks.map((link) => (
-            <li key={link.name} className="md:ml-8 text-xl md:my-0 my-7">
-              <Link href={`${link.link}`}>
-                <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
-                  {link.name}
-                </a>
-              </Link>
-            </li>
-          ))}
+          <li className="md:ml-8 text-xl md:my-0 my-7">
+            <Link href="/user">
+              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                개인관
+              </a>
+            </Link>
+          </li>
+          <li className="md:ml-8 text-xl md:my-0 my-7">
+            <Link href="/brand">
+              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                명품관
+              </a>
+            </Link>
+          </li>
+          <li className="md:ml-8 text-xl md:my-0 my-7">
+            <Link href="/show/arts">
+              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                전시관
+              </a>
+            </Link>
+          </li>
+          <li className="md:ml-8 text-xl md:my-0 my-7">
+            <Link href="/account">
+              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                나의 정보
+              </a>
+            </Link>
+          </li>
+
           <div className="flex justify-start gap-3 md:gap-0">
             {TOKEN ? (
               <button
