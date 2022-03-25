@@ -37,9 +37,6 @@ public class UserRegisterReqDto {
     @ApiModelProperty(name="전화번호", example="010-1234-5678")
     private String phone;
 
-    @ApiModelProperty(name="역할", example="")
-    private String role;
-
     @ApiModelProperty(name="자기소개", example="안녕하세요")
     private String description;
 
@@ -51,9 +48,9 @@ public class UserRegisterReqDto {
     private String zipCode;
 
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "user_role")
-    private UserRole userRole;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "user_role")
+//    private UserRole userRole;
 
     public User toEntity() {
         return User.builder()
@@ -62,7 +59,6 @@ public class UserRegisterReqDto {
                 .nickname(nickname)
                 .userName(userName)
                 .phone(phone)
-                .userRole(role)
                 .description(description)
                 .address1(address1)
                 .address2(address2)

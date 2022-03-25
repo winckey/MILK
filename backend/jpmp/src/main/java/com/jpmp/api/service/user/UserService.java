@@ -1,5 +1,6 @@
 package com.jpmp.api.service.user;
 
+import com.jpmp.api.dto.request.nft.NtfRequestReqDto;
 import com.jpmp.api.dto.request.user.UserModifyReqDto;
 import com.jpmp.api.dto.request.user.UserRegisterReqDto;
 import com.jpmp.db.entity.user.User;
@@ -19,4 +20,5 @@ public interface UserService {
     User deleteUserNftLike(User userDetails, String nftId);
 
     Boolean checkDuplicateNickname(String nickname);
+
 }

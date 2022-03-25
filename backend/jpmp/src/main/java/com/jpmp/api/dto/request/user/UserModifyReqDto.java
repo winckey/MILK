@@ -23,7 +23,6 @@ public class UserModifyReqDto {
     @ApiModelProperty(name = "자기 소개")
     private String description;
 
-
     @ApiModelProperty(name = "주소1")
     private String address1;
     @ApiModelProperty(name = "주소2")

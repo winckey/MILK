@@ -1,8 +1,8 @@
 package com.jpmp.db.entity.user;
 
 
+import com.jpmp.db.entity.board.RealizationBoard;
 import lombok.*;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 
 
@@ -38,8 +38,13 @@ public class User  {
 
     private String phone;
 
+    
+    //https://lng1982.tistory.com/279 Enumerated 좋지 못한 방법
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
-    private String userRole;
+
+
 
 
     private String description;
@@ -55,6 +60,14 @@ public class User  {
     private String profileImg;
 
     private String backgroundfileImg;
+
+    @OneToMany(mappedBy = "consumer", cascade = {CascadeType.PERSIST , CascadeType.REMOVE} )
+    private List<RealizationBoard> consumerBoards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "enterprise", cascade = {CascadeType.PERSIST , CascadeType.REMOVE} )
+    private List<RealizationBoard> enterpriseBoards = new ArrayList<>();
+
+
 
     @Builder.Default
     @ElementCollection(fetch = FetchType.EAGER)
@@ -75,5 +88,8 @@ public class User  {
         this.nickname = nickname;
         this.phone = phone;
         this.zipCode = zipCode;
+        this.userRole = UserRole.ROLE_CONSUMER;
     }
+
+
 }
