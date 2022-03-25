@@ -8,12 +8,12 @@ import { useLocation } from "wouter";
 
 export const Button = (props: any) => {
   return (
-    <button
-      className=" bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
+    <div
+      className=" btn bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
     duration-500"
     >
       {props.children}
-    </button>
+    </div>
   );
 };
 
@@ -109,6 +109,13 @@ export default function Navbar() {
                     <Button>로그인</Button>
                   </a>
                 </Link>
+
+                <Link href="/user">
+                  <a>
+                    <Button>개인관</Button>
+                  </a>
+                </Link>
+
                 <Link href="/signup">
                   <a>
                     <Button>회원가입</Button>
