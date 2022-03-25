@@ -49,6 +49,11 @@ export default function Navbar() {
               <a>MILC</a>
             </Link>
           </span>
+          <span className="text-4xl bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
+            <Link href={"/product"}>
+              <a>제품</a>
+            </Link>
+          </span>
         </div>
 
         <div
