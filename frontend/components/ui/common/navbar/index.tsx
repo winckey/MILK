@@ -54,14 +54,14 @@ export default function Navbar() {
           }`}
         >
           <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href={"/user/index"}>
+            <Link href={"/user"}>
               <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
                 개인관
               </a>
             </Link>
           </li>
           <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href={"/brand/index"}>
+            <Link href={"/brand"}>
               <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
                 명품관
               </a>

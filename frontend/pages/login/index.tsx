@@ -70,7 +70,7 @@ export default function Login() {
   return (
     <Layout seoTitle="로그인">
       <div>
-        <div className="flex items-center pt-20">
+        <div className="flex items-center">
           <div className="flex flex-row justify-center items-center w-[50%] min-h-screen bg-gradient-to-r from-gold to-lightGold">
             <div className="flex flex-col justify-center text-left">
               <div className="text-4xl lg:text-5xl text-white font-bold pb-10">
