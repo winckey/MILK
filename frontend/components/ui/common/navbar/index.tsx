@@ -51,17 +51,17 @@ export default function Navbar() {
           </span>
           <div className="inline-block ml-64 -mr-40">
             <span className="text-4xl mx-4 jus bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
-              <Link href={"/brand"}>
+              <Link href={"/brand/"}>
                 <a>브랜드관</a>
               </Link>
             </span>
             <span className="text-4xl mx-4 jus bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
-              <Link href={"/product"}>
+              <Link href={"/product/"}>
                 <a>상품 정보</a>
               </Link>
             </span>
             <span className="text-4xl mx-4 bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
-              <Link href={"/user"}>
+              <Link href={"/user/"}>
                 <a>개인관</a>
               </Link>
             </span>
@@ -71,7 +71,7 @@ export default function Navbar() {
               </Link>
             </span>
             <span className="text-4xl mx-4 bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
-              <Link href={"/account"}>
+              <Link href={"/account/"}>
                 <a>나의 정보</a>
               </Link>
             </span>
