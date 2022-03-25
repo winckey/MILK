@@ -26,7 +26,7 @@ export default function useMutation<T = any>(
     methodType,
   });
   // console.log(methodType);
-  const URL = `http://j6e206.p.ssafy.io:8080${url}`;
+  const URL = `https://j6e206.p.ssafy.io:8080${url}`;
   const TOKEN = useRecoilValue(accessToken);
   const [headers, setHeaders] = useState({});
 
