@@ -2,9 +2,9 @@
 const nextConfig = {
   reactStrictMode: true, // 개발 모드
   images: {
-        loader: 'akamai',
-        path: '/',
-    }
+    loader: "akamai",
+    path: "/",
+  },
 };
 
 module.exports = nextConfig;

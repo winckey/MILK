@@ -1,6 +1,10 @@
+import { accessToken } from "@components/atoms/Auth";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { IoMenu } from "react-icons/io5";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { useLocation } from "wouter";
 
 export const Button = (props: any) => {
   return (
@@ -14,15 +18,25 @@ export const Button = (props: any) => {
 };
 
 export default function Navbar() {
-  const logout = () => {
-    localStorage.clear(); // 로컬 스토리지 초기화
-  };
-  let Links = [
-    { name: "개인관", link: "/user" },
-    { name: "명품관", link: "/" },
-    { name: "랭킹", link: "/" },
-  ];
+  const router = useRouter();
+  const [TOKEN, setTOKEN] = useRecoilState(accessToken);
   const [open, setOpen] = useState(false);
+  const logout = () => {
+    localStorage.clear();
+    setTOKEN("");
+  };
+
+  const AllLinks = [
+    { name: "개인관", link: "/user" },
+    { name: "명품관", link: "/brand" },
+  ];
+  const UserLinks = [
+    { name: "개인관", link: "/user" },
+    { name: "명품관", link: "/brand" },
+    { name: "전시관", link: "/show/arts" },
+    { name: "나의 정보", link: "/account" },
+  ];
+
   return (
     <div className="shadow-md w-full fixed top-0 left-0  ">
       <div className="md:flex items-center justify-between h-[80px] bg-ourBlack py-4 md:px-10 px-7">
@@ -50,19 +64,48 @@ export default function Navbar() {
             open ? "top-14 " : "top-[-490px]"
           }`}
         >
-          {Links.map((link) => (
-            <li key={link.name} className="md:ml-8 text-xl md:my-0 my-7">
-              <Link href={`${link.link}`}>
-                <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
-                  {link.name}
-                </a>
-              </Link>
-            </li>
-          ))}
+          {!TOKEN
+            ? AllLinks.map((link) => (
+                <li key={link.name} className="md:ml-8 text-xl md:my-0 my-7">
+                  <Link href={`${link.link}`}>
+                    <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                      {link.name}
+                    </a>
+                  </Link>
+                </li>
+              ))
+            : UserLinks.map((link) => (
+                <li key={link.name} className="md:ml-8 text-xl md:my-0 my-7">
+                  <Link href={`${link.link}`}>
+                    <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                      {link.name}
+                    </a>
+                  </Link>
+                </li>
+              ))}
           <div className="flex justify-start gap-3 md:gap-0">
-            <Button>전시관</Button>
-            {/* <Button>로그인</Button> */}
-            <Button>로그아웃</Button>
+            {TOKEN ? (
+              <button
+                className=" bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
+    duration-500"
+                onClick={logout}
+              >
+                로그아웃
+              </button>
+            ) : (
+              <>
+                <Link href="/login">
+                  <a>
+                    <Button>로그인</Button>
+                  </a>
+                </Link>
+                <Link href="/signup">
+                  <a>
+                    <Button>회원가입</Button>
+                  </a>
+                </Link>
+              </>
+            )}
           </div>
         </ul>
       </div>

@@ -1,7 +1,7 @@
 import Layout from "@components/ui/layout";
-import useMutation from "libs/useMutation";
+import useMutation from "libs/client/useMutation";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface ISignupForm {
@@ -18,10 +18,6 @@ interface ISignupResponse {
 }
 
 export default function Signup() {
-  // const [user, setUser] = useState<string>("");
-  // const onCompany = () => setUser("company");
-  // const onUser = () => setUser("person");
-
   const router = useRouter();
 
   // request
@@ -47,14 +43,13 @@ export default function Signup() {
     }
   };
 
+  // server 응답 받았을 때 실행
   useEffect(() => {
     if (data && data.statusCode === 200) {
       alert(`회원가입을 축하합니다!`);
       router.push(`/login`); // 로그인 페이지로 이동
     }
   }, [data, router]);
-
-  // console.log(data);
 
   return (
     <Layout seoTitle="회원가입">

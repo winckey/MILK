@@ -1,29 +1,31 @@
 import Layout from "@components/ui/layout";
+import useMutation from "libs/client/useMutation";
+import useUser from "libs/client/useUser";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
 
-interface IUserResponse {
+interface IEditProfileResponse {
   message: string;
   statusCode: number;
   user: any;
 }
 
 interface IEditProfileForm {
+  email: string;
+  userName: string;
   nickname: string;
   description: string;
-  phone: string;
-  profile_img: string;
-  backgroundfile_img: string;
+  proImg: FileList;
+  backgroundImg: FileList;
   zipCode: string;
+  address1: string;
+  address2: string;
+  phone: string;
 }
 
 export default function EditProfile() {
-  // 유저 정보 받아옴
-  const { data, mutate } = useSWR<IUserResponse>(
-    `http://j6e206.p.ssafy.io:8080/api/user/info`
-  );
-
-  console.log(data);
+  const { user, isLoading } = useUser();
+  console.log(user);
 
   // input 값 받아옴
   const {
@@ -31,10 +33,176 @@ export default function EditProfile() {
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
     watch,
   } = useForm<IEditProfileForm>();
 
-  console.log(watch());
+  // useUser로 불러온 회원 정보 useForm에 저장
+  useEffect(() => {
+    if (user?.email) setValue("email", user.email);
+    if (user?.userName) setValue("userName", user.userName);
+    if (user?.nickname) setValue("nickname", user.nickname);
+    if (user?.description) setValue("description", user.description);
+    if (user?.proImg)
+      setProImgPreview(
+        `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${user?.proImg}/avatar`
+      );
+    if (user?.backgroundImg)
+      setProImgPreview(
+        `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${user?.backgroundImg}/avatar`
+      );
+    if (user?.zipCode) setValue("zipCode", user.zipCode);
+    if (user?.address1) setValue("address1", user.address1);
+    if (user?.address2) setValue("address2", user.address2);
+    if (user?.phone) setValue("phone", user.phone);
+  }, [user, setValue]);
+
+  // onValid form data DB에 요청
+  const [editProfile, { data, loading }] = useMutation<IEditProfileResponse>(
+    `/api/user`,
+    "PUT"
+  );
+
+  // 주소 찾기 API
+  const findAddress = () => {
+    // new window.daum.Postcode({
+    //   oncomplete: function (data) {
+    //     setValue("zipCode", data.zonecode + "");
+    //     setValue("address1", data.address);
+    //     setValue("address2", data.address);
+    //   },
+    // }).open();
+  };
+
+  // form 제출 시 실행
+  const onValid = async (formData: IEditProfileForm) => {
+    if (loading) return;
+
+    if (window.confirm("해당 정보로 수정하시겠습니까?") == true) {
+      if (
+        // 프로필 O, 배경 X
+        formData.proImg &&
+        formData.proImg.length > 0 &&
+        formData.backgroundImg &&
+        formData.backgroundImg.length === 0
+      ) {
+        const { uploadURL } = await (await fetch(`/api/files`)).json();
+        const form = new FormData();
+        form.append("file", formData.proImg[0], user?.id + "");
+        const {
+          result: { id },
+        } = await (
+          await fetch(uploadURL, {
+            method: "POST",
+            body: form,
+          })
+        ).json();
+
+        const newData = {
+          ...formData,
+          email: getValues("email"),
+          userName: getValues("userName"),
+          proImg: id,
+          backgroundImg: "",
+        };
+        console.log(newData);
+        editProfile(newData);
+      }
+      // else if (
+      //   // 프로필 X, 배경 O
+      //   formData.backgroundImg &&
+      //   formData.backgroundImg.length > 0 &&
+      //   formData.proImg &&
+      //   formData.proImg.length === 0
+      // ) {
+      //   const { uploadURL } = await (await fetch(`/api/files`)).json();
+      //   const form = new FormData();
+      //   form.append("file", formData.backgroundImg[0], user?.id + "");
+      //   const {
+      //     result: { id },
+      //   } = await (
+      //     await fetch(uploadURL, {
+      //       method: "POST",
+      //       body: form,
+      //     })
+      //   ).json();
+
+      //   const newData = {
+      //     ...formData,
+      //     email: getValues("email"),
+      //     userName: getValues("userName"),
+      //     proImg: "",
+      //     backgroundImg: id,
+      //   };
+      //   console.log(newData);
+      //   editProfile(newData);
+      // } else if (
+      //   // 프로필 O, 배경 O
+      //   formData.proImg &&
+      //   formData.proImg.length > 0 &&
+      //   formData.backgroundImg &&
+      //   formData.backgroundImg.length > 0
+      // ) {
+      //   const { uploadURL } = await (await fetch(`/api/files`)).json();
+      //   const form = new FormData();
+      //   form.append("proFile", formData.proImg[0], user?.id + "");
+      //   form.append("bgFile", formData.backgroundImg[0], user?.id + "");
+      //   const {
+      //     result: { id },
+      //   } = await (
+      //     await fetch(uploadURL, {
+      //       method: "POST",
+      //       body: form,
+      //     })
+      //   ).json();
+      //   console.log(id);
+      //   return;
+
+      //   const newData = {
+      //     ...formData,
+      //     email: getValues("email"),
+      //     userName: getValues("userName"),
+      //     proImg: "",
+      //     backgroundImg: id,
+      //   };
+      //   console.log(newData);
+      //   editProfile(newData);
+      // }
+      else {
+        const newData = {
+          ...formData,
+          email: getValues("email"),
+          userName: getValues("userName"),
+          proImg: "",
+          backgroundImg: "",
+        };
+        editProfile(newData);
+      }
+    }
+  };
+
+  // server 응답 받았을 때 실행
+  useEffect(() => {
+    if (data && data.statusCode === 200) {
+      alert("회원 정보가 수정되었습니다.");
+    }
+  }, [data]);
+
+  // 이미지 미리보기
+  const [proImgPreview, setProImgPreview] = useState("");
+  const [backgroundImgPreview, setBackgroundImgPreview] = useState("");
+  const proImg = watch("proImg");
+  const backgroundImg = watch("backgroundImg");
+  useEffect(() => {
+    if (proImg && proImg.length > 0) {
+      const file = proImg[0];
+      setProImgPreview(URL.createObjectURL(file));
+    }
+    if (backgroundImg && backgroundImg.length > 0) {
+      const file = backgroundImg[0];
+      setBackgroundImgPreview(URL.createObjectURL(file));
+    }
+  }, [proImg, backgroundImg]);
 
   return (
     <Layout seoTitle="회원 정보 수정">
@@ -160,126 +328,106 @@ export default function EditProfile() {
               </div>
             </div>
           </div>
-          <div className="w-[30%] pt-10 pl-8">
-            <div className=" text-3xl font-bold">프로필</div>
-            <div className="pt-8">
-              <h1 className="font-bold pb-1">닉네임</h1>
-              <input
-                {...register("nickname")}
-                type="text"
-                className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                // 유저 닉네임이 나타나야 합니데잉
-                placeholder="닉네임을 입력해주세요."
-              />
-            </div>
-            <div>
-              <h1 className="font-bold pb-1">자기소개</h1>
-              <textarea
-                {...register("description")}
-                className="w-[100%] h-24 mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="자기소개를 입력해주세요."
-              />
-            </div>
-            <div>
-              <h1 className="font-bold pb-1">이메일</h1>
-              <input
-                type="email"
-                className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300 cursor-not-allowed"
-                // 유저 이메일이 나타납니데잉
-                placeholder="이메일을 입력해주세요."
-              />
-            </div>
-            <div>
-              <h1 className="font-bold pb-1">지갑주소</h1>
-              <input
-                type="text"
-                className="w-[100%] rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                // 유저 닉네임이 나타나야 합니데잉
-                placeholder="지갑을 연동해주세요."
-              />
-              <button className="mb-4 rounded-md text-sm text-white font-bold px-2 py-1 mt-1 bg-gradient-to-r from-gold to-lightGold">
-                지갑연결
-              </button>
-            </div>
-            {/* <div className="">
-              <h1 className="font-bold pb-1">링크</h1>
-              <input
-                type="text"
-                className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="Instagram"
-              />
-              <br />
-              <input
-                type="text"
-                className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="Twitter"
-              />
-              <br />
-              <input
-                type="text"
-                className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="Website"
-              />
-              <br />
-              <input
-                type="text"
-                className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="Youtube Channel"
-              />
-              <br />
-            </div> */}
-            <div>
-              <h1 className="font-bold pb-1">주소</h1>
-              <div className="flex items-center">
+          <form onSubmit={handleSubmit(onValid)} className="flex w-[75%]">
+            <div className="w-[60%] pl-8">
+              <div className=" text-3xl font-bold">프로필</div>
+              <div className="pt-8">
+                <h1 className="font-bold pb-1">닉네임</h1>
+                <input
+                  {...register("nickname")}
+                  type="text"
+                  className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                  // 유저 닉네임이 나타나야 합니데잉
+                  placeholder="닉네임을 입력해주세요."
+                />
+              </div>
+              <div>
+                <h1 className="font-bold pb-1">자기소개</h1>
+                <textarea
+                  {...register("description")}
+                  className="w-[100%] h-24 mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                  placeholder="자기소개를 입력해주세요."
+                />
+              </div>
+              {/* <div>
+                <h1 className="font-bold pb-1">이메일</h1>
+                <input
+                  type="email"
+                  className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300 cursor-not-allowed"
+                  // 유저 이메일이 나타납니데잉
+                  placeholder="이메일을 입력해주세요."
+                />
+              </div>
+              <div>
+                <h1 className="font-bold pb-1">지갑주소</h1>
                 <input
                   type="text"
-                  className="w-[50%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                  placeholder="우편번호"
+                  className="w-[100%] rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                  // 유저 닉네임이 나타나야 합니데잉
+                  placeholder="지갑을 연동해주세요."
                 />
-                <button className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold">
-                  주소검색
+                <button className="mb-4 rounded-md text-sm text-white font-bold px-2 py-1 mt-1 bg-gradient-to-r from-gold to-lightGold">
+                  지갑연결
                 </button>
-              </div>
-              <input
-                type="text"
-                className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="주소"
-              />
-              <br />
-              <input
-                type="text"
-                className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                placeholder="상세주소"
-              />
-              <br />
-            </div>
-            <div>
-              <h1 className="font-bold pb-1">전화번호</h1>
-              <div className="flex items-center">
+              </div> */}
+              <div>
+                <h1 className="font-bold pb-1">주소</h1>
+                <div className="flex items-center">
+                  <input
+                    {...register("zipCode")}
+                    type="text"
+                    className="w-[50%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                    placeholder="우편번호"
+                  />
+                  <div
+                    onClick={findAddress}
+                    className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold"
+                  >
+                    주소검색
+                  </div>
+                </div>
                 <input
+                  {...register("address1")}
                   type="text"
-                  className="w-[50%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                  placeholder="010-0000-0000"
+                  className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                  placeholder="주소"
                 />
-                <button className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold">
-                  인증
-                </button>
+                <br />
+                <input
+                  {...register("address2")}
+                  type="text"
+                  className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                  placeholder="상세주소"
+                />
+                <br />
               </div>
-            </div>
+              <div>
+                <h1 className="font-bold pb-1">전화번호</h1>
+                <div className="flex items-center">
+                  <input
+                    {...register("phone")}
+                    type="text"
+                    className="w-[50%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
+                    placeholder="010-0000-0000"
+                  />
+                  <button className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold">
+                    인증
+                  </button>
+                </div>
+              </div>
 
-            <div className="my-8">
-              <button
-                // onClick={}
-                className="w-[100%] flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-lg font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-              >
-                프로필 수정
-              </button>
+              <div className="my-8">
+                <button
+                  // onClick={}
+                  className="w-[100%] flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-lg font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
+                >
+                  프로필 수정
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="w-auto hidden md:block pt-32 pl-16 text-center">
-            <div className="flex items-center justify-center pb-2 font-bold">
-              프로필 사진
-              <button>
+            <div className="w-auto hidden md:block pt-32 pl-16 text-center">
+              <div className="flex items-center justify-center pb-2 font-bold">
+                프로필 사진
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 text-gold"
@@ -292,12 +440,26 @@ export default function EditProfile() {
                     clipRule="evenodd"
                   />
                 </svg>
-              </button>
-            </div>
-            <div className="h-32 w-32 mb-8 bg-gold rounded-full"></div>
-            <div className="flex items-center justify-center pb-2 font-bold">
-              프로필 배너
-              <button>
+              </div>
+              <label htmlFor="proImg" className="cursor-pointer">
+                {proImgPreview ? (
+                  <img
+                    src={proImgPreview}
+                    className="h-[150px] w-[150px] mb-8 rounded-full"
+                  ></img>
+                ) : (
+                  <div className="h-[150px] w-[150px] mb-8 bg-gold rounded-full"></div>
+                )}
+                <input
+                  {...register("proImg")}
+                  id="proImg"
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                />
+              </label>
+              <div className="flex items-center justify-center pb-2 font-bold">
+                프로필 배너
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 text-gold"
@@ -310,10 +472,26 @@ export default function EditProfile() {
                     clipRule="evenodd"
                   />
                 </svg>
-              </button>
+              </div>
+              <label htmlFor="backgroundImg" className="cursor-pointer">
+                {backgroundImgPreview ? (
+                  <img
+                    src={backgroundImgPreview}
+                    className="h-[150px] w-[150px] mb-8 rounded-full"
+                  ></img>
+                ) : (
+                  <div className="h-[150px] w-[150px] mb-8 bg-gold rounded-full"></div>
+                )}
+                <input
+                  {...register("backgroundImg")}
+                  id="backgroundImg"
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                />
+              </label>
             </div>
-            <div className="h-32 w-32 bg-gold rounded-full"></div>
-          </div>
+          </form>
         </div>
       </div>
     </Layout>

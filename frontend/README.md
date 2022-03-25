@@ -70,6 +70,26 @@ npm i @heroicons/react
 npm i react-icons
 ```
 
+- three.js
+
+```bash
+# 리액트용 three js 라이브러리 
+npm i @react-three/drei @react-three/fiber three 
+# 캔버스, 카메라 구도 및 추가 훅 사용을 위한 라이브러리 설치 
+npm i use-cannon uuid-by-string wouter
+```
+
+- recoil
+
+```bash
+npm i recoil@0.5.1
+
+# 새로고침 방지
+npm i recoil-persist
+```
+
+
+
 ### Providers
 
 - web3
