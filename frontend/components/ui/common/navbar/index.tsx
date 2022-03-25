@@ -50,7 +50,7 @@ export default function Navbar() {
             </Link>
           </span>
           <span className="text-4xl bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
-            <Link href={"/product"}>
+            <Link href={"/product/name"}>
               <a>제품</a>
             </Link>
           </span>
