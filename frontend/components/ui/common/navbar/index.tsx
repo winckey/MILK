@@ -26,17 +26,6 @@ export default function Navbar() {
     setTOKEN("");
   };
 
-  const AllLinks = [
-    { name: "개인관", link: "/user" },
-    { name: "명품관", link: "/brand" },
-  ];
-  const UserLinks = [
-    { name: "개인관", link: "/user" },
-    { name: "명품관", link: "/brand" },
-    { name: "전시관", link: "/show/arts" },
-    { name: "나의 정보", link: "/account" },
-  ];
-
   return (
     <div className="shadow-md w-full fixed top-0 left-0  ">
       <div className="md:flex items-center justify-between h-[80px] bg-ourBlack py-4 md:px-10 px-7">
