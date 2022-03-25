@@ -33,8 +33,5 @@ public class UserModifyReqDto {
 
     @ApiModelProperty(name = "우편번호")
     private String zipCode;
-    @ApiModelProperty(name = "proImg")
-    private String proImg;
-    @ApiModelProperty(name = "backgroundImg")
-    private String backgroundImg;
+
 }

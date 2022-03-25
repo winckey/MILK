@@ -42,11 +42,24 @@ public class UserServiceImpl implements UserService {
                         ,userModifyReqDto.getEmail() , userModifyReqDto.getNickname()
                         ,userModifyReqDto.getPhone() , userModifyReqDto.getZipCode()
                         ,userModifyReqDto.getUserName()
-                        ,userModifyReqDto.getProImg() , userModifyReqDto.getBackgroundImg());// 이거 동적으로는 안되나?
+                        );// 이거 동적으로는 안되나?
         userRepository.save(user);
         return user;
     }
 
+    @Override// 이거 왜 drity check 안댐?
+    public User modifyProImgUser(User user, String proFileImg) {
+        user.changeProfileImg(proFileImg);
+        userRepository.save(user);
+        return user;
+    }
+
+    @Override// 이거 왜 drity check 안댐?
+    public User modifyBackImgUser(User user, String backFileImg) {
+        user.changeBackgroundfileImg(backFileImg);
+        userRepository.save(user);
+        return user;
+    }
     @Override
     @Transactional
     public User addUserNftLike(User userDetails, String nftId) {

@@ -14,7 +14,8 @@ public interface UserService {
 
 
     User modifyUser(User userDetails, UserModifyReqDto userModifyReqDto);
-
+    User modifyBackImgUser(User user, String backFileImg);
+    User modifyProImgUser(User user, String proFileImg);
     User addUserNftLike(User userDetails, String nftId);
 
     User deleteUserNftLike(User userDetails, String nftId);
