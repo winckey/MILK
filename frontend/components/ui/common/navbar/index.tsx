@@ -19,12 +19,12 @@ export const Button = (props: any) => {
 
 export default function Navbar() {
   const router = useRouter();
-  // const [TOKEN, setTOKEN] = useRecoilState(accessToken);
+  const [TOKEN, setTOKEN] = useRecoilState(accessToken);
   const [open, setOpen] = useState(false);
-  // const logout = () => {
-  //   localStorage.clear();
-  //   setTOKEN("");
-  // };
+  const logout = () => {
+    localStorage.clear();
+    setTOKEN("");
+  };
 
   const AllLinks = [
     { name: "개인관", link: "/user" },
@@ -78,45 +78,47 @@ export default function Navbar() {
               </a>
             </Link>
           </li>
-          <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href={"/show/arts"}>
-              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
-                전시관
-              </a>
-            </Link>
-          </li>
-          <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href="/account/index">
-              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
-                나의 정보
-              </a>
-            </Link>
-          </li>
 
-          <div className="flex justify-start gap-3 md:gap-0">
-            {/* {TOKEN ? (
-              <button
-                className=" bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
+          <div className="flex justify-start items-center gap-3 md:gap-0">
+            {TOKEN ? (
+              <>
+                <li className="md:ml-8 text-xl md:my-0 my-7">
+                  <Link href={"/show/arts"}>
+                    <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                      전시관
+                    </a>
+                  </Link>
+                </li>
+                <li className="md:ml-8 text-xl md:my-0 my-7">
+                  <Link href="/account">
+                    <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                      나의 정보
+                    </a>
+                  </Link>
+                </li>
+                <button
+                  className=" bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
     duration-500"
-                onClick={logout}
-              >
-                로그아웃
-              </button>
-            ) : ( */}
-            <>
-              <Link href="/login">
-                <a>
-                  <Button>로그인</Button>
-                </a>
-              </Link>
+                  onClick={logout}
+                >
+                  로그아웃
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login">
+                  <a>
+                    <Button>로그인</Button>
+                  </a>
+                </Link>
 
-              <Link href="/signup">
-                <a>
-                  <Button>회원가입</Button>
-                </a>
-              </Link>
-            </>
-            {/* )} */}
+                <Link href="/signup">
+                  <a>
+                    <Button>회원가입</Button>
+                  </a>
+                </Link>
+              </>
+            )}
           </div>
         </ul>
       </div>
