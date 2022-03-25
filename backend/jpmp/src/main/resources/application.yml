@@ -24,3 +24,9 @@ jwt:
 
 server:
   port : 8080
+  ssl :
+    enabled : true
+    key-store-type : PKCS12
+    key-store : /root/key.p12
+    key-store-password : ssafy
+    #인증서 비밀번호
