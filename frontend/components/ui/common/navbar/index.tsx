@@ -8,12 +8,12 @@ import { useLocation } from "wouter";
 
 export const Button = (props: any) => {
   return (
-    <button
-      className=" bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
+    <div
+      className=" btn bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
     duration-500"
     >
       {props.children}
-    </button>
+    </div>
   );
 };
 
@@ -25,17 +25,6 @@ export default function Navbar() {
     localStorage.clear();
     setTOKEN("");
   };
-
-  const AllLinks = [
-    { name: "개인관", link: "/user" },
-    { name: "명품관", link: "/brand" },
-  ];
-  const UserLinks = [
-    { name: "개인관", link: "/user" },
-    { name: "명품관", link: "/brand" },
-    { name: "전시관", link: "/show/arts" },
-    { name: "나의 정보", link: "/account" },
-  ];
 
   return (
     <div className="shadow-md w-full fixed top-0 left-0  ">
@@ -64,34 +53,46 @@ export default function Navbar() {
             open ? "top-14 " : "top-[-490px]"
           }`}
         >
-          {!TOKEN
-            ? AllLinks.map((link) => (
-                <li key={link.name} className="md:ml-8 text-xl md:my-0 my-7">
-                  <Link href={`${link.link}`}>
-                    <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
-                      {link.name}
-                    </a>
-                  </Link>
-                </li>
-              ))
-            : UserLinks.map((link) => (
-                <li key={link.name} className="md:ml-8 text-xl md:my-0 my-7">
-                  <Link href={`${link.link}`}>
-                    <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
-                      {link.name}
-                    </a>
-                  </Link>
-                </li>
-              ))}
-          <div className="flex justify-start gap-3 md:gap-0">
+          <li className="md:ml-8 text-xl md:my-0 my-7">
+            <Link href={"/user"}>
+              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                개인관
+              </a>
+            </Link>
+          </li>
+          <li className="md:ml-8 text-xl md:my-0 my-7">
+            <Link href={"/brand"}>
+              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                명품관
+              </a>
+            </Link>
+          </li>
+
+          <div className="flex justify-start items-center gap-3 md:gap-0">
             {TOKEN ? (
-              <button
-                className=" bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
+              <>
+                <li className="md:ml-8 text-xl md:my-0 my-7">
+                  <Link href={"/show/arts"}>
+                    <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                      전시관
+                    </a>
+                  </Link>
+                </li>
+                <li className="md:ml-8 text-xl md:my-0 my-7">
+                  <Link href="/account">
+                    <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                      나의 정보
+                    </a>
+                  </Link>
+                </li>
+                <button
+                  className=" bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
     duration-500"
-                onClick={logout}
-              >
-                로그아웃
-              </button>
+                  onClick={logout}
+                >
+                  로그아웃
+                </button>
+              </>
             ) : (
               <>
                 <Link href="/login">
@@ -99,6 +100,7 @@ export default function Navbar() {
                     <Button>로그인</Button>
                   </a>
                 </Link>
+
                 <Link href="/signup">
                   <a>
                     <Button>회원가입</Button>

@@ -54,7 +54,7 @@ export default function Signup() {
   return (
     <Layout seoTitle="회원가입">
       <div>
-        <div className="flex items-center pt-20">
+        <div className="flex items-center ">
           <div className="hidden lg:flex flex-row justify-center items-center  w-[50%] min-h-screen bg-gradient-to-r from-gold to-lightGold">
             <div className="flex flex-col justify-center text-left">
               <div className="text-4xl lg:text-5xl text-white font-bold pb-10">

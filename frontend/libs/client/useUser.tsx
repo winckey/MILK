@@ -21,7 +21,7 @@ export default function useUser() {
   // console.log(TOKEN);
 
   const { data, error } = useSWR<IEditProfileResponse>(
-    ["http://j6e206.p.ssafy.io:8080/api/user/info", TOKEN],
+    ["https://j6e206.p.ssafy.io:8080/api/user/info", TOKEN],
     fetcher
   );
   // console.log(data);

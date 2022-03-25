@@ -3,8 +3,8 @@ const nextConfig = {
   reactStrictMode: true, // 개발 모드
   images: {
     loader: "akamai",
-    path: "",
+    path: "/",
   },
 };
 
-module.exports = nextConfig;
+module.exports = { nextConfig, trailingSlash: true };
