@@ -80,7 +80,7 @@ public class User  {
     }
 
     public void changeUser(String address1, String address2, String description, String email, String nickname, String phone, String zipCode
-                            ,String userName , String profileImg , String backgroundfileImg) {
+                            ,String userName ) {
 
         this.address1 = address1;
         this.address2 = address2;
@@ -93,4 +93,11 @@ public class User  {
     }
 
 
+    public void changeBackgroundfileImg(String backgroundfileImg) {
+        this.backgroundfileImg = backgroundfileImg;
+    }
+
+    public void changeProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
 }
