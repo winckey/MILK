@@ -18,7 +18,7 @@ export default function Navbar() {
     localStorage.clear(); // 로컬 스토리지 초기화
   };
   let Links = [
-    { name: "개인관", link: "/" },
+    { name: "개인관", link: "/user" },
     { name: "명품관", link: "/" },
     { name: "랭킹", link: "/" },
   ];

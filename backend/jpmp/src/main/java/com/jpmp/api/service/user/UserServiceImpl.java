@@ -40,7 +40,9 @@ public class UserServiceImpl implements UserService {
         user.changeUser(userModifyReqDto.getAddress1(), userModifyReqDto.getAddress2()
                         , userModifyReqDto.getDescription()
                         ,userModifyReqDto.getEmail() , userModifyReqDto.getNickname()
-                        ,userModifyReqDto.getPhone() , userModifyReqDto.getZipCode());// 이거 동적으로는 안되나?
+                        ,userModifyReqDto.getPhone() , userModifyReqDto.getZipCode()
+                        ,userModifyReqDto.getUserName()
+                        ,userModifyReqDto.getProImg() , userModifyReqDto.getBackgroundImg());// 이거 동적으로는 안되나?
         userRepository.save(user);
         return user;
     }
