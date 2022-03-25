@@ -55,6 +55,11 @@ export default function Navbar() {
                 <a>브랜드관</a>
               </Link>
             </span>
+            <span className="text-4xl mx-4 jus bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
+              <Link href={"/product"}>
+                <a>상품 정보</a>
+              </Link>
+            </span>
             <span className="text-4xl mx-4 bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
               <Link href={"/user"}>
                 <a>개인관</a>
