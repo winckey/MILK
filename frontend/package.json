@@ -22,6 +22,8 @@
     "react-icons": "^4.3.1",
     "recoil": "^0.5.1",
     "recoil-persist": "^4.0.0",
+    "sockjs-client": "^1.6.0",
+    "stompjs": "^2.3.3",
     "swr": "^1.2.2",
     "three": "^0.138.3",
     "use-cannon": "^0.5.3",
