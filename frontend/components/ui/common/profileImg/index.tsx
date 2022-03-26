@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useMutation from "@libs/client/useMutation";
+import Image from "next/image";
 
 interface IUserProps {
   proImg: string;
@@ -18,7 +19,7 @@ interface IEditProfileImgResponse {
 }
 
 export default function ProfileImg({ proImg, userId }: IUserProps) {
-  console.log(proImg, userId);
+  // console.log(proImg, userId);
 
   // input 값 받아옴
   const {
@@ -104,6 +105,8 @@ export default function ProfileImg({ proImg, userId }: IUserProps) {
         <label htmlFor="proImg" className="cursor-pointer">
           {proImgPreview ? (
             <img
+              // width={150}
+              // height={150}
               src={proImgPreview}
               className="h-[150px] w-[150px] mb-8 rounded-full"
             ></img>

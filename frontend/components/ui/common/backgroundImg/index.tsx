@@ -18,7 +18,7 @@ interface IEditBackgroundImgResponse {
 }
 
 export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
-  console.log(backgroundImg, userId);
+  // console.log(backgroundImg, userId);
 
   // input 값 받아옴
   const {
@@ -62,7 +62,7 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
         formData.backgroundImg.length > 0
         // backgroundImg
       ) {
-        console.log("dsdfdsf", formData);
+        // console.log("dsdfdsf", formData);
         const { uploadURL } = await (await fetch(`/api/files`)).json();
         const form = new FormData();
         form.append("file", formData.backgroundImg[0], userId + "");

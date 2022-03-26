@@ -30,8 +30,6 @@ interface IEditProfileForm {
   userName: string;
   nickname: string;
   description: string;
-  // proImg: FileList;
-  // backgroundImg: FileList;
   zipCode: string;
   address1: string;
   address2: string;
@@ -59,14 +57,6 @@ export default function EditProfile() {
     if (user?.nickname) setValue("nickname", user.nickname);
     if (user?.nickname) setOriginNickname(user.nickname); // 기존 닉네임 저장
     if (user?.description) setValue("description", user.description);
-    // if (user?.proImg)
-    //   setProImgPreview(
-    //     `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${user?.proImg}/avatar`
-    //   );
-    // if (user?.backgroundImg)
-    //   setProImgPreview(
-    //     `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${user?.backgroundImg}/avatar`
-    //   );
     if (user?.zipCode) setValue("zipCode", user.zipCode);
     if (user?.address1) setValue("address1", user.address1);
     if (user?.address2) setValue("address2", user.address2);
@@ -98,105 +88,6 @@ export default function EditProfile() {
         userName: getValues("userName"),
       };
       editProfile(newData);
-      // if (
-      //   // 프로필 O, 배경 X
-      //   formData.proImg &&
-      //   formData.proImg.length > 0 &&
-      //   formData.backgroundImg &&
-      //   formData.backgroundImg.length === 0
-      // ) {
-      //   const { uploadURL } = await (await fetch(`/api/files`)).json();
-      //   const form = new FormData();
-      //   form.append("file", formData.proImg[0], user?.id + "");
-      //   const {
-      //     result: { id },
-      //   } = await (
-      //     await fetch(uploadURL, {
-      //       method: "POST",
-      //       body: form,
-      //     })
-      //   ).json();
-
-      //   const newData = {
-      //     ...formData,
-      //     email: getValues("email"),
-      //     userName: getValues("userName"),
-      //     proImg: id,
-      //     backgroundImg: "",
-      //   };
-      //   console.log(newData);
-      //   editProfile(newData);
-      // }
-      // else if (
-      //   // 프로필 X, 배경 O
-      //   formData.backgroundImg &&
-      //   formData.backgroundImg.length > 0 &&
-      //   formData.proImg &&
-      //   formData.proImg.length === 0
-      // ) {
-      //   const { uploadURL } = await (await fetch(`/api/files`)).json();
-      //   const form = new FormData();
-      //   form.append("file", formData.backgroundImg[0], user?.id + "");
-      //   const {
-      //     result: { id },
-      //   } = await (
-      //     await fetch(uploadURL, {
-      //       method: "POST",
-      //       body: form,
-      //     })
-      //   ).json();
-
-      //   const newData = {
-      //     ...formData,
-      //     email: getValues("email"),
-      //     userName: getValues("userName"),
-      //     proImg: "",
-      //     backgroundImg: id,
-      //   };
-      //   console.log(newData);
-      //   editProfile(newData);
-      // } else if (
-      //   // 프로필 O, 배경 O
-      //   formData.proImg &&
-      //   formData.proImg.length > 0 &&
-      //   formData.backgroundImg &&
-      //   formData.backgroundImg.length > 0
-      // ) {
-      //   const { uploadURL } = await (await fetch(`/api/files`)).json();
-      //   const form = new FormData();
-      //   form.append("proFile", formData.proImg[0], user?.id + "");
-      //   form.append("bgFile", formData.backgroundImg[0], user?.id + "");
-      //   const {
-      //     result: { id },
-      //   } = await (
-      //     await fetch(uploadURL, {
-      //       method: "POST",
-      //       body: form,
-      //     })
-      //   ).json();
-      //   console.log(id);
-      //   return;
-
-      //   const newData = {
-      //     ...formData,
-      //     email: getValues("email"),
-      //     userName: getValues("userName"),
-      //     proImg: "",
-      //     backgroundImg: id,
-      //   };
-      //   console.log(newData);
-      //   editProfile(newData);
-      // }
-      // else {
-      //   const newData = {
-      //     ...formData,
-      //     email: getValues("email"),
-      //     userName: getValues("userName"),
-      //     proImg: "",
-      //     backgroundImg: "",
-      //   };
-      //   editProfile(newData);
-      // }
     }
   };
 
@@ -217,22 +108,6 @@ export default function EditProfile() {
     //   },
     // }).open();
   };
-
-  // 이미지 미리보기
-  // const [proImgPreview, setProImgPreview] = useState("");
-  // const [backgroundImgPreview, setBackgroundImgPreview] = useState("");
-  // const proImg = watch("proImg");
-  // const backgroundImg = watch("backgroundImg");
-  // useEffect(() => {
-  //   if (proImg && proImg.length > 0) {
-  //     const file = proImg[0];
-  //     setProImgPreview(URL.createObjectURL(file));
-  //   }
-  //   if (backgroundImg && backgroundImg.length > 0) {
-  //     const file = backgroundImg[0];
-  //     setBackgroundImgPreview(URL.createObjectURL(file));
-  //   }
-  // }, [proImg, backgroundImg]);
 
   return (
     <Layout seoTitle="회원 정보 수정">
