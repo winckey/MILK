@@ -22,8 +22,11 @@ public class RBoradServiceImpl implements RBoradService {
     @Override
     public void addRBorad(Authentication authentication, NtfRequestReqDto ntfRequestReqDto) {
 
-        User userDetails = (User) authentication.getDetails();
+//        User userDetails = (User) authentication.getDetails();
         User enterprise = userRepository.findByUserName(ntfRequestReqDto.getEntrepriseName()).get();
+
+        User userDetails = userRepository.findById(5L).get();
+
 
         RealizationBoard realizationBoard = RealizationBoard.builder()
                 .nftId(ntfRequestReqDto.getNftId())

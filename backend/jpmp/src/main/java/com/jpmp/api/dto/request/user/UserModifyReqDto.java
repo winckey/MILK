@@ -19,7 +19,7 @@ public class UserModifyReqDto {
     @ApiModelProperty(name = "이름", example = "장현진")
     private String userName;
 
-    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "핸드폰 번호의 양식과 맞지 않습니다. 010-ABCD-ABCD")
+
     @ApiModelProperty(name = "전화번호", example = "010-1234-5678")
     private String phone;
 

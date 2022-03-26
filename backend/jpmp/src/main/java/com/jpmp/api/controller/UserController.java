@@ -1,6 +1,7 @@
 package com.jpmp.api.controller;
 
 
+import com.jpmp.api.dto.request.user.UserImgReqDto;
 import com.jpmp.api.dto.request.user.UserLoginReqDto;
 import com.jpmp.api.dto.request.user.UserModifyReqDto;
 import com.jpmp.api.dto.request.user.UserRegisterReqDto;
@@ -121,9 +122,10 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> modifyProImgUser(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) String proImg) {
+    public ResponseEntity<UserResDto> modifyProImgUser(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserImgReqDto userImgReqDto) {
         User userDetails = (User) authentication.getDetails();
-        User result = userService.modifyProImgUser(userDetails,proImg);
+
+        User result = userService.modifyProImgUser(userDetails, userImgReqDto.getImgUrl());
 
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
     }
@@ -135,10 +137,10 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> modifyBackImgUser(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) String backImg) {
+    public ResponseEntity<UserResDto> modifyBackImgUser(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserImgReqDto userImgReqDto) {
         User userDetails = (User) authentication.getDetails();
 
-        User result = userService.modifyBackImgUser(userDetails, backImg);
+        User result = userService.modifyBackImgUser(userDetails, userImgReqDto.getImgUrl());
 
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
     }
