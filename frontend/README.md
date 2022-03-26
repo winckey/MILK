@@ -88,6 +88,12 @@ npm i recoil@0.5.1
 npm i recoil-persist
 ```
 
+- 채팅
+
+```bash
+npm i sockjs-client stompjs 
+```
+
 
 
 ### Providers
