@@ -123,7 +123,6 @@ public class UserController {
     })
     public ResponseEntity<UserResDto> modifyProImgUser(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) String proImg) {
         User userDetails = (User) authentication.getDetails();
-
         User result = userService.modifyProImgUser(userDetails,proImg);
 
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
