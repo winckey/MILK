@@ -1,7 +1,7 @@
 import Layout from "@components/ui/layout";
 import useMutation from "libs/client/useMutation";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface ISignupForm {
@@ -32,6 +32,13 @@ export default function Signup() {
     getValues,
     watch,
   } = useForm<ISignupForm>({ mode: "onBlur" });
+
+  // 중복검사 시작했는지 확인 (중복검사를 시작했을때부터 SuccessMessage 보이기 위함)
+  const [startCheckNick, setStartCheckNick] = useState(false);
+  const changeStartCheckNick = () => {
+    setStartCheckNick(true);
+    return true;
+  };
 
   // form 제출 시 실행
   const onValid = (formData: ISignupForm) => {
@@ -271,16 +278,33 @@ export default function Signup() {
                           message:
                             "2~10자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
                         },
-                        validate: {},
+                        validate: {
+                          checkNickname: async (value) =>
+                            (await fetch(
+                              `https://j6e206.p.ssafy.io:8080/api/user/nickname/${value}`
+                            )
+                              .then((res) => res.json())
+                              .then((result) => result))
+                              ? startCheckNick
+                                ? true
+                                : changeStartCheckNick()
+                              : "이미 사용중인 닉네임 입니다.",
+                        },
                       })}
                       maxLength={10}
                       className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="닉네임"
                     />
                   </div>
-                  <span className="text-xs text-[#ff5e57]">
-                    {errors?.nickname?.message}
-                  </span>
+                  {startCheckNick && !errors?.nickname?.message ? (
+                    <span className="text-xs text-[#05c46b]">
+                      사용 가능한 닉네임 입니다.
+                    </span>
+                  ) : (
+                    <span className="text-xs text-[#ff5e57]">
+                      {errors?.nickname?.message}
+                    </span>
+                  )}
                 </div>
                 <div className="my-8">
                   <button
