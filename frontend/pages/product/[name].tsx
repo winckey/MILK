@@ -1,8 +1,11 @@
 import Layout from "@components/ui/layout";
 import type { NextPage } from "next";
 import Image from "next/image";
+import bag from "public/bag.png";
 
 const Product: NextPage = () => {
+  const brand = "Celine";
+
   return (
     <Layout seoTitle="제품명">
       <div className="flex flex-col items-center">
@@ -11,18 +14,67 @@ const Product: NextPage = () => {
             {/* 제품 상세 */}
             <div className="flex">
               {/* 좌 */}
-              <div className="max-w-[43%] bg-blue-400">
-                <div className="m-5 border-[1px] rounded-[10px] overflow-hidden">
-                  <div className="p-3 h-[42px] w-full bg-white">
-                    <div></div>
-                    <div></div>
+              <div className="max-w-[43%]">
+                {/* image */}
+                <div className="m-5 rounded-[10px] overflow-hidden shadow-lg">
+                  {/* icon bar */}
+                  <div className="p-3 h-[42px] w-full bg-white flex justify-between items-center border-b-[1px] border-lightBg">
+                    <div>
+                      <div className="flex items-center">
+                        <svg
+                          className="w-3"
+                          fill="gray"
+                          viewBox="-38.39985 -104.22675 332.7987 625.3605"
+                        >
+                          <path d="M125.166 285.168l2.795 2.79 127.962-75.638L127.961 0l-2.795 9.5z"></path>
+                          <path d="M127.962 287.959V0L0 212.32z"></path>
+                          <path d="M126.386 412.306l1.575 4.6L256 236.587l-128.038 75.6-1.575 1.92z"></path>
+                          <path d="M0 236.585l127.962 180.32v-104.72z"></path>
+                          <path d="M127.961 154.159v133.799l127.96-75.637z"></path>
+                          <path d="M127.96 154.159L0 212.32l127.96 75.637z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <div>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-5"
+                          viewBox="0 0 20 20"
+                          fill="#C19A77"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z"
+                            clipRule="evenodd"
+                          />
+                          <path d="M9 11H3v5a2 2 0 002 2h4v-7zM11 18h4a2 2 0 002-2v-5h-6v7z" />
+                        </svg>
+                      </div>
+                      <div className="flex mx-[3px]">
+                        <button>
+                          <svg
+                            className="w-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="gray"
+                            aria-hidden="true"
+                          >
+                            <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                          </svg>
+                        </button>
+                      </div>
+                      <p className="text-xs font-medium text-textGray">23</p>
+                    </div>
                   </div>
+                  {/* image */}
                   <div>
                     <div className="w-full h-full min-h-[200px] max-h-[1000px] cursor-pointer">
                       <div className="h-full w-full">
                         <div className="h-full w-[600px] flex items-center justify-center max-w-full max-h-full overflow-hidden">
                           <img
-                            src="data:image/jpeg;base64,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"
+                            src="https://twicpics.celine.com/product-prd/images/large/189003ZVA.38NO_1_LIBRARY_85480.jpg?twic=v1/cover=1:1/resize-max=720"
                             alt="#"
                             className="w-auto h-auto max-w-full max-h-full object-contain"
                           />
@@ -31,9 +83,143 @@ const Product: NextPage = () => {
                     </div>
                   </div>
                 </div>
+                {/* 설명 */}
+                <div className="m-5 rounded-[10px] overflow-hidden bg-white shadow-lg">
+                  <div>
+                    <div className="w-full flex items-center font-semibold p-5">
+                      <div className="mr-[10px]">
+                        <svg
+                          className="h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z"
+                          />
+                        </svg>
+                      </div>
+                      <span className="font-semibold">Description</span>
+                    </div>
+                    <div className="border-t-[1px] border-lightBg bg-[#fbfdff]">
+                      <div className="p-[30px]">
+                        <div className="text-[#8A939B] flex items-center">
+                          <div className="w-full inline-flex items-center h-8">
+                            Created by
+                            <span className="ml-1 text-gold font-semibold overflow-hidden text-ellipsis">
+                              {brand}
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-sm text-ellipsis">
+                            상품 소개
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               {/* 우 */}
-              <div className="">우</div>
+              <div className="ml-[-20px]">
+                <div className="mt-5 mx-5 mb-[15px]">
+                  <div className="h-[46px] flex items-center">
+                    <span className="text-gold font-semibold overflow-hidden text-ellipsis cursor-pointer">
+                      {brand}
+                    </span>
+                  </div>
+                  <span className="text-3xl font-semibold max-w-full text-textBlack">
+                    NANO BELT BAG IN GRAINED CALFSKIN
+                  </span>
+                </div>
+                <div className="m-5">
+                  <div className="mt-2 mb-2 mr-5 flex flex-col justify-center items-center">
+                    <div className="text-[#8A939B] inline-flex items-center h-6 w-full text-[14.5px]">
+                      Owned by
+                      <span className="ml-1 overflow-hidden text-ellipsis text-[#2081e2] cursor-pointer">
+                        won
+                      </span>
+                    </div>
+                  </div>
+                  <div></div>
+                </div>
+                <div className="m-5">
+                  <div className="rounded-[10px] overflow-hidden shadow-lg">
+                    <div className="p-5 bg-white"></div>
+                    <div className="p-5 bg-[#fbfdff]">
+                      <div className="text-[#8A939B] text-[14.5px]">현재가</div>
+                      <div className="mb-2 flex flex-wrap">
+                        <div className="text-[30px] font-semibold flex items-center">
+                          <div className="cursor-pointer">
+                            <a>
+                              <img
+                                className="w-6 h-6 object-contain"
+                                src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
+                                alt="ETH"
+                              />
+                            </a>
+                          </div>
+                          <div className="ml-1 w-full overflow-hidden text-ellipsis">
+                            0.75
+                          </div>
+                        </div>
+                        <div className="text-[15px] mt-[15px]">
+                          <span className="text-textGray overflow-hidden text-ellipsis w-full">
+                            ($2,345.59)
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex max-w-[420px]">
+                        <div className="w-full contents">
+                          <div className="inline-flex w-full">
+                            {/* -------- 구매 버튼 ---------- */}
+                            <button className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full">
+                              <div className="mr-3 flex">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-6 w-6"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </div>
+                              Buy now
+                            </button>
+                          </div>
+                          <div className="inline-flex w-full lg:w-[50%] ml-2">
+                            <button className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-white hover:bg-lightBg px-5 py-3 border-[1px] border-lightGold text-lightGold w-full">
+                              <div className="flex mr-3">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-6 w-6"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </div>
+                              Make offer
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* 액티비티 */}

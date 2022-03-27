@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     loader: "akamai",
     path: "/",
+    domains: ["imagedelivery.net", "videodelivery.net"], // next/image
   },
 };
 

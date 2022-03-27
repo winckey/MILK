@@ -11,27 +11,25 @@ interface ILoginForm {
   password: string;
 }
 
-// interface IUser {
-//   age: number;
-//   birthDate: string;
-//   description: string;
-//   email: string;
-//   gender: string;
-//   id: number;
-//   img: boolean;
-//   imgUrl: string;
-//   nickname: string;
-//   phone: string;
-//   provider: string;
-//   regDate: string;
-//   userId: string;
-// }
+interface IUser {
+  address1: string;
+  address2: string;
+  backgroundImg: string;
+  description: string;
+  email: string;
+  id: number;
+  nickname: string;
+  phone: string;
+  proImg: string;
+  userName: string;
+  zipCode: string;
+}
 
 interface ILoginResponse {
   accessToken: string;
   message: string;
   statusCode: number;
-  user: any;
+  user: IUser;
 }
 
 export default function Login() {
