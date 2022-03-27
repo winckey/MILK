@@ -1,10 +1,13 @@
 import Layout from "@components/ui/layout";
 import type { NextPage } from "next";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import bag from "public/bag.png";
 
 const Product: NextPage = () => {
-  const brand = "Celine";
+  const router = useRouter();
+  console.log(router);
+  // const brand = "Celine";
 
   return (
     <Layout seoTitle="제품명">
@@ -74,7 +77,7 @@ const Product: NextPage = () => {
                       <div className="h-full w-full">
                         <div className="h-full w-[600px] flex items-center justify-center max-w-full max-h-full overflow-hidden">
                           <img
-                            src="https://twicpics.celine.com/product-prd/images/large/189003ZVA.38NO_1_LIBRARY_85480.jpg?twic=v1/cover=1:1/resize-max=720"
+                            src={router?.query.image}
                             alt="#"
                             className="w-auto h-auto max-w-full max-h-full object-contain"
                           />
@@ -109,13 +112,13 @@ const Product: NextPage = () => {
                           <div className="w-full inline-flex items-center h-8">
                             Created by
                             <span className="ml-1 text-gold font-semibold overflow-hidden text-ellipsis">
-                              {brand}
+                              {router.query.name}
                             </span>
                           </div>
                         </div>
                         <div>
                           <span className="text-sm text-ellipsis">
-                            상품 소개
+                            {router?.query.description}
                           </span>
                         </div>
                       </div>
@@ -128,11 +131,11 @@ const Product: NextPage = () => {
                 <div className="mt-5 mx-5 mb-[15px]">
                   <div className="h-[46px] flex items-center">
                     <span className="text-gold font-semibold overflow-hidden text-ellipsis cursor-pointer">
-                      {brand}
+                      {router.query.name}
                     </span>
                   </div>
                   <span className="text-3xl font-semibold max-w-full text-textBlack">
-                    NANO BELT BAG IN GRAINED CALFSKIN
+                    {router.query.name}
                   </span>
                 </div>
                 <div className="m-5">
@@ -163,7 +166,7 @@ const Product: NextPage = () => {
                             </a>
                           </div>
                           <div className="ml-1 w-full overflow-hidden text-ellipsis">
-                            0.75
+                            {router.query.price}
                           </div>
                         </div>
                         <div className="text-[15px] mt-[15px]">
