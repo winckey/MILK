@@ -85,6 +85,13 @@ export default function Navbar() {
                     </a>
                   </Link>
                 </li>
+                <li className="md:ml-8 text-xl md:my-0 my-7">
+                  <Link href="/streams/chat">
+                    <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
+                      채팅
+                    </a>
+                  </Link>
+                </li>
                 <button
                   className=" bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
     duration-500"
