@@ -2,7 +2,6 @@ import Layout from "@components/ui/layout";
 import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import bag from "public/bag.png";
 
 const Product: NextPage = () => {
   const router = useRouter();
