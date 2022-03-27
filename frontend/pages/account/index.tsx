@@ -38,7 +38,7 @@ interface IEditProfileForm {
 
 export default function EditProfile() {
   const { user, isLoading } = useUser();
-  console.log(user);
+  // console.log(user);
 
   // input 값 받아옴
   const {
@@ -100,13 +100,13 @@ export default function EditProfile() {
 
   // 주소 찾기 API
   const findAddress = () => {
-    // new window.daum.Postcode({
-    //   oncomplete: function (data) {
-    //     setValue("zipCode", data.zonecode + "");
-    //     setValue("address1", data.address);
-    //     setValue("address2", data.address);
-    //   },
-    // }).open();
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        setValue("zipCode", data.zonecode + "");
+        setValue("address1", data.address);
+        setValue("address2", data.address);
+      },
+    }).open();
   };
 
   return (
@@ -182,29 +182,6 @@ export default function EditProfile() {
                   </div>
                   <div>
                     <button className="font-bold">1:1 문의</button>
-                  </div>
-                </div>
-              </div>
-              <div className="pl-16">
-                <div className="flex w-[70%] p-2 rounded-md text-textGray">
-                  <div className="pr-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <button className="font-bold">실물화</button>
                   </div>
                 </div>
               </div>
@@ -340,13 +317,12 @@ export default function EditProfile() {
                 <div className="">
                   <input
                     {...register("phone", {
-                      // required: "필수 정보입니다.",
-                      // pattern: {
-                      //   value: /^[0-9]+-[0-9]+-[0-9]+$/,
-                      //   message: "전화번호 양식을 지켜주세요.",
-                      // },
+                      required: "필수 정보입니다.",
+                      pattern: {
+                        value: /^\d{3}-\d{3,4}-\d{4}$/,
+                        message: "전화번호 양식을 지켜주세요.",
+                      },
                     })}
-                    type="text"
                     className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
                     placeholder="010-0000-0000"
                   />

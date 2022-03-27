@@ -5,6 +5,7 @@ import "@styles/globals.css";
 import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
 import { RecoilRoot } from "recoil";
+import Script from "next/script";
 
 // Component: 접근하고자 하는 페이지의 컴포넌트를 가져옴 (pages 폴더에 있는 해당 파일)
 function MyApp({ Component, pageProps }: AppProps) {
@@ -17,6 +18,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     >
       <RecoilRoot>
         <Component {...pageProps} />
+
+        {/* 주소 찾기 */}
+        <Script
+          src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+          strategy="lazyOnload"
+        />
       </RecoilRoot>
     </SWRConfig>
   );
