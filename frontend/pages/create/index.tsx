@@ -1,8 +1,7 @@
-import { Navbar } from "@components/ui/common";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { create as ipfsHttpClient } from "ipfs-http-client";
+import { create, CID, Options, IPFSHTTPClient } from "ipfs-http-client";
 import {
   connectWallet,
   loadMarketItems,
@@ -12,8 +11,7 @@ import {
 } from "../../utils/interact";
 import { useRouter } from "next/router";
 import detectEthereumProvider from "@metamask/detect-provider";
-
-const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
+import files from "@pages/api/files";
 
 declare let window: any;
 
@@ -50,6 +48,17 @@ const Create: NextPage = () => {
     image: any;
   }
 
+  let ipfs: IPFSHTTPClient | undefined;
+  try {
+    ipfs = create({
+      url: "https://ipfs.infura.io:5001/api/v0",
+      // headers: { authorization },
+    });
+  } catch (error) {
+    console.error("IPFS error ", error);
+    ipfs = undefined;
+  }
+
   const connectMeta = async () => {
     const wallet = await connectWallet();
     if (wallet.address) {
@@ -83,10 +92,17 @@ const Create: NextPage = () => {
 
   const uploadIPFS = async (event: any) => {
     event.preventDefault();
-    const file = event.target.files[0];
+    const form = event.target as HTMLFormElement;
+    const files = (form[0] as HTMLInputElement).files;
+    // const file = event.target.files[0];
+    if (!files || files.length === 0) {
+      return alert("No files selected");
+    }
+    const file = files[0];
+
     if (typeof file !== "undefined") {
       try {
-        const result = await client.add(file);
+        const result = await (ipfs as IPFSHTTPClient).add(file);
         console.log(result);
         setImage(`https://ipfs.infura.io/ipfs/${result.path}`);
       } catch (error) {
@@ -98,7 +114,7 @@ const Create: NextPage = () => {
   const createNFT = async () => {
     if (!image || !price || !name || !description) return;
     try {
-      const result = await client.add(
+      const result = await (ipfs as IPFSHTTPClient).add(
         JSON.stringify({ image, price, name, description })
       );
       mintThenList(result);
@@ -148,7 +164,6 @@ const Create: NextPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-lightBg  ">
-      <Navbar />
       <div className="px-24 pt-32  ml-12 mr-4">
         <div>
           <div className="text-5xl mb-12 "> Create item</div>
@@ -211,17 +226,21 @@ const Create: NextPage = () => {
               </div>
             </div>
             <div className="grid gap-5 ">
-              <div>
-                <div>제품 파일 올리기</div>
-                <div className="bg-lightGold h-[250px] w-[250px]">
-                  <input
-                    type="file"
-                    required
-                    name="file"
-                    onChange={uploadIPFS}
-                  />
-                </div>
-              </div>
+              {ipfs && (
+                <>
+                  <div>
+                    <div>제품 파일 올리기</div>
+                    <div className="bg-lightGold h-[250px] w-[250px]">
+                      <input
+                        type="file"
+                        required
+                        name="file"
+                        onChange={uploadIPFS}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
               <div>
                 <div>가격</div>
                 <input
