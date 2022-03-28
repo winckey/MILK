@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Modal } from "../../common";
 
 // const defaultOrder = {
@@ -43,22 +44,42 @@ interface RealizationModalProps {
   onClose: Function;
 }
 
+interface IRealizationForm {
+  check1: boolean;
+  check2: boolean;
+  check3: boolean;
+  check4: boolean;
+}
+
 export default function RealizationModal({ onClose }: RealizationModalProps) {
-  const [isOpen, setIsOpen] = useState(true);
-  // const [order, setOrder] = useState(defaultOrder);
-  // const [enablePrice, setEnablePrice] = useState(false);
-  // const [hasAgreedTOS, setHasAgreedTOS] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  // useEffect(() => {
-  //   if (!!course) {
-  //     setIsOpen(true);
-  //     setOrder({
-  //       ...defaultOrder,
-  //       price: eth.perItem,
-  //     });
-  //   }
-  // }, [course]);
+  // input 값 받아옴
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<IRealizationForm>();
 
+  // data 초기화
+  useEffect(() => {
+    // if (!!course) {
+    setIsOpen(true);
+    // }
+    setValue("check1", false);
+    setValue("check2", false);
+    setValue("check3", false);
+    setValue("check4", false);
+  }, []);
+
+  // form 제출 시 실행
+  const onValid = (formData: IRealizationForm) => {
+    console.log(formData);
+  };
+
+  // 취소 버튼
   const closeModal = () => {
     setIsOpen(false);
     // setOrder(defaultOrder);
@@ -67,146 +88,137 @@ export default function RealizationModal({ onClose }: RealizationModalProps) {
     onClose();
   };
 
-  // const formState = createFormState(order, hasAgreedTOS, isNewPurchase);
-
   return (
     <Modal isOpen={isOpen}>
-      <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-        <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+      <div className="inline-block align-bottom bg-lightBg rounded-lg text-textBlack text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
           <div className="sm:flex sm:items-start">
-            <div className="mt-3 sm:mt-0 sm:ml-4 sm:text-left">
-              <h3
-                className="mb-7 text-lg font-bold leading-6 text-gray-900"
-                id="modal-title"
-              >
-                course.title
-              </h3>
-              <div className="mt-1 relative rounded-md">
-                <div className="mb-1">
-                  <label className="mb-2 font-bold">Price(eth)</label>
-                  <div className="text-xs text-gray-700 flex">
-                    <label className="flex items-center mr-2">
-                      <input
-                        // checked={enablePrice}
-                        // onChange={({ target: { checked } }) => {
-                        //   setOrder({
-                        //     ...order,
-                        //     price: checked ? order.price : eth.perItem,
-                        //   });
-                        //   setEnablePrice(checked);
-                        // }}
-                        type="checkbox"
-                        className="form-checkbox"
-                      />
-                    </label>
-                    <span>
-                      Adjust Price - only when the price is not correct
-                    </span>
+            <form
+              onSubmit={handleSubmit(onValid)}
+              className="mt-3 sm:mt-0 sm:text-left"
+              id="form"
+            >
+              <h3 className="mb-7 font-semibold text-xl">실물화 신청</h3>
+
+              <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
+                <div className="font-semibold px-4">상품명</div>
+                <div className="bg-[#fbfdff] border-t border-lightBg px-4">
+                  response.name
+                </div>
+              </div>
+              <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
+                <div className="font-semibold px-4">이름</div>
+                <div className="bg-[#fbfdff] border-t border-lightBg px-4">
+                  user.userName
+                </div>
+              </div>
+              <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
+                <div className="font-semibold px-4">이메일</div>
+                <div className="bg-[#fbfdff] border-t border-lightBg px-4">
+                  user.email
+                </div>
+              </div>
+              <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
+                <div className="font-semibold px-4">휴대전화</div>
+                <div className="bg-[#fbfdff] border-t border-lightBg px-4">
+                  user.phone
+                </div>
+              </div>
+              <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
+                <div className="font-semibold px-4">주소</div>
+                <div className="bg-[#fbfdff] border-t border-lightBg px-4">
+                  <div>user.zipCode</div>
+                  <div>user.address1</div>
+                  <div>user.address2</div>
+                </div>
+              </div>
+
+              <div className="text-xs my-5 space-y-2">
+                <div className="flex px-2">
+                  <label className="flex items-center mr-2">
+                    <input
+                      {...register("check1", {
+                        required: "error",
+                      })}
+                      type="checkbox"
+                    />
+                  </label>
+                  <div className="text-textGray">
+                    실물화 신청 후 승인이 완료되면 해당 NFT의 거래가
+                    &apos;정지&apos; 됩니다.
                   </div>
                 </div>
-                <input
-                  // disabled={!enablePrice}
-                  // value={order.price}
-                  // onChange={({ target: { value } }) => {
-                  //   if (isNaN(value)) {
-                  //     return;
-                  //   }
-                  //   setOrder({
-                  //     ...order,
-                  //     price: value,
-                  //   });
-                  // }}
-                  type="text"
-                  name="price"
-                  id="price"
-                  className="disabled:opacity-50 w-80 mb-1 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
-                />
-                <p className="text-xs text-gray-700">
-                  Price will be verified at the time of the order. If the price
-                  will be lower, order can be declined (+- 2% slipage is
-                  allowed)
-                </p>
-              </div>
-              {/* {isNewPurchase && (
-                <> */}
-              <div className="mt-2 relative rounded-md">
-                <div className="mb-1">
-                  <label className="mb-2 font-bold">Email</label>
+                <div className="flex px-2">
+                  <label className="flex items-center mr-2">
+                    <input
+                      {...register("check2", {
+                        required: "error",
+                      })}
+                      type="checkbox"
+                    />
+                  </label>
+                  <div className="text-textGray">
+                    실물화 신청 후 승인이 완료되면 실물화 취소가
+                    &apos;불가능&apos; 합니다.
+                  </div>
                 </div>
-                <input
-                  // onChange={({ target: { value } }) => {
-                  //   setOrder({
-                  //     ...order,
-                  //     email: value.trim(),
-                  //   });
-                  // }}
-                  type="email"
-                  name="email"
-                  id="email"
-                  className="w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
-                  placeholder="x@y.com"
-                />
-                <p className="text-xs text-gray-700 mt-1">
-                  It&apos;s important to fill a correct email, otherwise the
-                  order cannot be verified. We are not storing your email
-                  anywhere
-                </p>
-              </div>
-              <div className="my-2 relative rounded-md">
-                <div className="mb-1">
-                  <label className="mb-2 font-bold">Repeat Email</label>
+                <div className="flex px-2">
+                  <label className="flex items-center mr-2">
+                    <input
+                      {...register("check3", {
+                        required: "error",
+                      })}
+                      type="checkbox"
+                    />
+                  </label>
+                  <div className="text-textGray">
+                    상품 배송기간은 브랜드 및 상품별로 상이하며, 예정 시일보다
+                    길어질 수 있습니다.
+                  </div>
                 </div>
-                <input
-                  // onChange={({ target: { value } }) => {
-                  //   setOrder({
-                  //     ...order,
-                  //     confirmationEmail: value.trim(),
-                  //   });
+                <div className="flex px-2">
+                  <label className="flex items-center mr-2">
+                    <input
+                      {...register("check4", {
+                        required: "error",
+                      })}
+                      type="checkbox"
+                    />
+                  </label>
+                  <div className="text-textGray">
+                    실물화 조건을 모두 확인하였으며, 실물화 진행에 동의합니다.
+                  </div>
+                </div>
+              </div>
+
+              {(errors.check1 ||
+                errors.check2 ||
+                errors.check3 ||
+                errors.check4) && (
+                <div className="px-4 mb-5 text-red-500 rounded-lg text-sm">
+                  실물화 이용약관에 대한 안내 모두 동의해주세요.
+                </div>
+              )}
+
+              <div className="flex">
+                <button
+                  className="rounded-[10px] font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full mr-2"
+                  form="form"
+                  // onClick={() => {
+                  //   onSubmit(order, course);
                   // }}
-                  type="email"
-                  name="confirmationEmail"
-                  id="confirmationEmail"
-                  className="w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
-                  placeholder="x@y.com"
-                />
+                >
+                  신청
+                </button>
+                <button
+                  onClick={closeModal}
+                  className="rounded-[10px] font-semibold bg-red-300 hover:bg-red-600 px-5 py-3 text-white w-[100px]"
+                >
+                  취소
+                </button>
               </div>
-              {/* </>
-              )} */}
-              <div className="text-xs text-gray-700 flex mt-5">
-                <label className="flex items-center mr-2">
-                  <input
-                    // checked={hasAgreedTOS}
-                    // onChange={({ target: { checked } }) => {
-                    //   setHasAgreedTOS(checked);
-                    // }}
-                    type="checkbox"
-                    className="form-checkbox"
-                  />
-                </label>
-                <span>
-                  I accept Eincode &apos;terms of service&apos; and I agree that
-                  my order can be rejected in the case data provided above are
-                  not correct
-                </span>
-              </div>
-              {/* {formState.message && ( */}
-              <div className="p-4 my-3 text-yellow-700 bg-yellow-200 rounded-lg text-sm">
-                formState.message
-              </div>
-              {/* )} */}
-            </div>
+            </form>
           </div>
-        </div>
-        <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex">
-          <button
-          // disabled={formState.isDisabled}
-          // onClick={() => {
-          //   onSubmit(order, course);
-          // }}
-          >
-            Submit
-          </button>
-          <button onClick={closeModal}>Cancel</button>
         </div>
       </div>
     </Modal>
