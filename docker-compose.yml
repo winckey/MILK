@@ -4,18 +4,11 @@ version: '3.2'
 
 services: 
   frontend:
-    image: frontend-vue
-    build:
-      context: frontend/
-      dockerfile: dockerfile
+    build: ./
+    restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+       - 3000:3000
 
-    volumes:
-      - /home/ubuntu/docker-volume/ssl2:/var/www/html
-    container_name: "frontend"
-  
   backend:
     image: backend-spring
     build:
