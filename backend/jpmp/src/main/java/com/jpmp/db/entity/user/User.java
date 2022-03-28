@@ -5,6 +5,7 @@ import com.jpmp.api.dto.request.user.UserModifyReqDto;
 import com.jpmp.api.dto.request.user.UserRegisterReqDto;
 import com.jpmp.db.entity.board.RealizationBoard;
 import com.jpmp.db.entity.common.Authority;
+import com.jpmp.db.entity.nft.NFT;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -75,7 +76,8 @@ public class User  {
     @OneToMany(mappedBy = "enterprise", cascade = {CascadeType.PERSIST , CascadeType.REMOVE} )
     private List<RealizationBoard> enterpriseBoards = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "owner", cascade = ALL  )
+    private List<NFT> nftList = new ArrayList<>();
 
     @Builder.Default
     @ElementCollection(fetch = FetchType.EAGER)
@@ -126,7 +128,7 @@ public class User  {
                 .email(joinDto.getEmail())//
                 .password(joinDto.getPassword())//
                 .nickname(joinDto.getNickname())//
-                .realname(joinDto.getUserName())//
+                .realname(joinDto.getRealName())//
                 .phone(joinDto.getPhone())//
                 .description(joinDto.getDescription())//
                 .address1(joinDto.getAddress1())//
@@ -144,7 +146,7 @@ public class User  {
                 .email(joinDto.getEmail())//
                 .password(joinDto.getPassword())//
                 .nickname(joinDto.getNickname())//
-                .realname(joinDto.getUserName())//
+                .realname(joinDto.getRealName())//
                 .phone(joinDto.getPhone())//
                 .description(joinDto.getDescription())//
                 .address1(joinDto.getAddress1())//
