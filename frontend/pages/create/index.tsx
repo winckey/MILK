@@ -147,7 +147,7 @@ const Create: NextPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full ">
+    <div className="min-h-screen w-full bg-lightBg  ">
       <Navbar />
       <div className="px-24 pt-32  ml-12 mr-4">
         <div>
