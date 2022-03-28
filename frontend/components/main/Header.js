@@ -216,22 +216,28 @@ export default function Header({ mobileMenu }) {
         <Nav>
           <ul>
             <li>
-              <NavItem className="p-2 px-3 rounded-md" href="/user">
-                개인관
-              </NavItem>
+              <Link href="/user">
+                <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                  개인관
+                </NavItem>
+              </Link>
             </li>
             <li>
-              <NavItem className="p-2 px-3 rounded-md" href="/brand">
-                명품관
-              </NavItem>
+              <Link href="/brand">
+                <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                  명품관
+                </NavItem>
+              </Link>
             </li>
 
             {TOKEN ? (
               <>
                 <li>
-                  <NavItem className="p-2 px-3 rounded-md" href="/stream">
-                    라이브 경매
-                  </NavItem>
+                  <Link href="/stream">
+                    <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                      라이브 경매
+                    </NavItem>
+                  </Link>
                 </li>
                 <li>
                   <Link href="/create">
@@ -253,7 +259,6 @@ export default function Header({ mobileMenu }) {
       ) : (
         ""
       )}
-
       <SearchIcon>
         <CgSearch
           onClick={() => {
@@ -261,18 +266,28 @@ export default function Header({ mobileMenu }) {
           }}
         />
       </SearchIcon>
-      {TOKEN ? (
-        <MyDropdown logout={logout} />
-      ) : (
-        <>
-          <NavItem className="p-2 px-3 rounded-md" href="/login">
-            로그인
-          </NavItem>
-          <NavItem className="p-2 px-3 rounded-md" href="/signup">
-            회원가입
-          </NavItem>
-        </>
-      )}
+      <div>
+        {TOKEN ? (
+          <MyDropdown logout={logout} />
+        ) : (
+          <ul className="flex flex-row items-center list-style-none gap-1">
+            <li>
+              <Link href="/login">
+                <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                  로그인
+                </NavItem>
+              </Link>
+            </li>
+            <li>
+              <Link href="/signup">
+                <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                  회원가입
+                </NavItem>
+              </Link>
+            </li>
+          </ul>
+        )}
+      </div>
     </HeaderEl>
   );
 }

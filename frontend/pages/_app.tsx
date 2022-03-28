@@ -7,65 +7,14 @@ import { SWRConfig } from "swr";
 import { RecoilRoot } from "recoil";
 import Script from "next/script";
 
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import { Colors } from "@components/main/Theme";
 import { useState } from "react";
 import Header from "@components/main/Header";
 import Button from "@components/main/styled/Button.styled";
 import Page from "@components/main/styled/Page.styled";
 import Footer from "@components/main/Footer";
-import { accessToken } from "@components/atoms/Auth";
-import { useRecoilState } from "recoil";
-
-const GlobalStyle = createGlobalStyle`
- 
-
-  html,
-  body {
-    background-color: ${Colors.Background};
-    font-family: "Poppins", sans-serif;
-    
-  }
-
-  p,a,h1,h2,h3,h5,h6,div,span{
-    /* color:${Colors.White}; */
-    color: inherit;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-    transition: all 0.3s linear;
-
-  }
-
-  * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  }
-
-  /* width */
-  body::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  /* Track */
-  body::-webkit-scrollbar-track {
-    background: #ffffff;
-  }
-
-  /* Handle */
-  body::-webkit-scrollbar-thumb {
-    background: #212121;
-    border-radius: 20px;
-  }
-
-  /* Handle on hover */
-  body::-webkit-scrollbar-thumb:hover {
-    background: rgb(43, 43, 43);
-  }
-`;
+import GlobalStyle from "@styles/GlobalStyle";
 
 const Main = styled.div`
   display: flex;
@@ -115,6 +64,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     >
       <RecoilRoot>
         <GlobalStyle />
+        {/* navbar 햄버거 */}
         <Main>
           <Header mobileMenu={{ MobileMenuIsOpen, setMobileMenuIsOpen }} />
           <Page>
