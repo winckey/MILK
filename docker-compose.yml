@@ -4,7 +4,7 @@ version: '3.2'
 
 services: 
   frontend:
-    build: ./
+    build: frontend/
     restart: unless-stopped
     ports:
        - 3000:3000
