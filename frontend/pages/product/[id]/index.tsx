@@ -75,11 +75,11 @@ const Product: NextPage = () => {
                     <div className="w-full h-full min-h-[200px] max-h-[1000px] cursor-pointer">
                       <div className="h-full w-full">
                         <div className="h-full w-[600px] flex items-center justify-center max-w-full max-h-full overflow-hidden">
-                          <img
-                            src={router?.query.image}
+                          {/* <img
+                            // src={router?.query.image}
                             alt="#"
                             className="w-auto h-auto max-w-full max-h-full object-contain"
-                          />
+                          /> */}
                         </div>
                       </div>
                     </div>

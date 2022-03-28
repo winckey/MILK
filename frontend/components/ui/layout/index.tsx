@@ -1,5 +1,5 @@
-import Header from "@components/main/Header";
 import Head from "next/head";
+import { Navbar } from "../common";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,7 +13,8 @@ export default function Layout({ children, seoTitle, canGoBack }: LayoutProps) {
       <Head>
         <title>MILC | {seoTitle}</title>
       </Head>
-      <div className="min-h-screen w-full bg-lightBg">{children}</div>
+      <Navbar />
+      <div className="min-h-screen w-full pt-[72px] bg-lightBg">{children}</div>
     </div>
   );
 }
