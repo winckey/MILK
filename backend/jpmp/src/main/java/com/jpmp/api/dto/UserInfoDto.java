@@ -30,7 +30,7 @@ public class UserInfoDto {
     public static UserInfoDto of(User user) {
         UserInfoDto userInfoDto = new UserInfoDto();
         userInfoDto.setId(user.getId());
-        userInfoDto.setUserName(user.getUserName());
+        userInfoDto.setUserName(user.getRealname());
         userInfoDto.setNickname(user.getNickname());
         userInfoDto.setDescription(user.getDescription());
         userInfoDto.setPhone(user.getPhone());

@@ -1,6 +1,7 @@
 package com.jpmp.api.controller;
 
 
+import com.jpmp.api.dto.TokenDto;
 import com.jpmp.api.dto.request.user.UserImgReqDto;
 import com.jpmp.api.dto.request.user.UserLoginReqDto;
 import com.jpmp.api.dto.request.user.UserModifyReqDto;
@@ -12,6 +13,7 @@ import com.jpmp.api.dto.response.user.UserResDto;
 import com.jpmp.api.service.user.UserService;
 import com.jpmp.common.util.JwtTokenUtil;
 import com.jpmp.db.entity.user.User;
+import com.jpmp.db.repository.user.UserRepository;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +41,9 @@ import javax.validation.constraints.NotBlank;
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final JwtTokenUtil jwtTokenUtil;
+
 
     @PostMapping()
     @ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
@@ -51,7 +55,7 @@ public class UserController {
     })
     public ResponseEntity<? extends BaseResponseBody> register(
             @Valid @RequestBody @ApiParam(value="회원가입 정보<br>birthDate 칼럼은 yyyy-MM-dd 포맷<br>gender 칼럼은 M 또는 F 값으로 전달", required = true) UserRegisterReqDto registerInfo) {
-        registerInfo.setPassword(passwordEncoder.encode(registerInfo.getPassword()));
+
         userService.createUser(registerInfo);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
@@ -65,21 +69,29 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
     public ResponseEntity<UserLoginResDto> login(@Valid @RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginReqDto loginInfo) {
-        String userEmail = loginInfo.getEmail();
-        String password = loginInfo.getPassword();
 
-        User user = userService.getUserByEmail(userEmail);
-        // 로그인 요청한 유저로부터 입력된 패스워드 와 디비에 저장된 유저의 암호화된 패스워드가 같은지 확인.(유효한 패스워드인지 여부 확인)
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-            String token = JwtTokenUtil.getToken(userEmail);
-
-            return ResponseEntity.ok(UserLoginResDto.of(200, "Success", token, user));
-        }
-
-        return ResponseEntity.ok(UserLoginResDto.of(404, "Success", null,  user));
-
+            TokenDto tokenDto = userService.login(loginInfo);
+            return ResponseEntity.ok(UserLoginResDto.of(200, "Success",
+                    tokenDto.getAccessToken() , tokenDto.getRefreshToken(), tokenDto.getUser()));
     }
+
+    @PostMapping("/reissue")
+    @ApiOperation(value = "재인증", notes = "refresh 토큰으로 재인증 한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공", response = UserLoginResDto.class),
+            @ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+            @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+    })
+    public ResponseEntity<UserLoginResDto> reissue(@RequestHeader("RefreshToken") String refreshToken, @Valid @RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginReqDto userLoginReqDto) {
+        User user = userRepository.findByEmail(userLoginReqDto.getEmail()).get();
+        TokenDto tokenDto = userService.reissue(refreshToken , user.getUsername());
+
+        return ResponseEntity.ok(UserLoginResDto.of(200, "Success",
+                tokenDto.getAccessToken() , tokenDto.getRefreshToken(), user));
+    }
+
+
 
     @GetMapping("/info")
     @ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
@@ -107,8 +119,12 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> modifyUser(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserModifyReqDto userModifyReqDto) {
-        User userDetails = (User) authentication.getDetails();
+    public ResponseEntity<UserResDto> modifyUser(@ApiIgnore@RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserModifyReqDto userModifyReqDto) {
+
+        System.out.println("usercontroller accesstoken 106 : " + accessToken);
+        String username = jwtTokenUtil.getUsername(accessToken);
+
+        User userDetails = userRepository.findByUsername(username);
 
         User result = userService.modifyUser(userDetails, userModifyReqDto);
 
@@ -162,6 +178,7 @@ public class UserController {
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
     }
 
+
     @DeleteMapping("/like")
     @ApiOperation(value = "좋아요 삭제", notes = "좋아요 버튼을 통해 해당 nft를 삭제한다.")
     @ApiResponses({
@@ -178,6 +195,7 @@ public class UserController {
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
     }
 
+
     @GetMapping("/nickname/{nickname}")
     @ApiOperation(value = "닉네임 중복 체크", notes = "닉네임 중복 여부를 알려준다.")
     @ApiResponses({
@@ -190,5 +208,7 @@ public class UserController {
 
         return ResponseEntity.status(200).body(!result);
     }
-
+    private String resolveToken(String accessToken) {
+        return accessToken.substring(7);
+    }
 }
