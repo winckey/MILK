@@ -1,3 +1,5 @@
+// 수정 금지
+
 import Header from "@components/main/Header";
 import Head from "next/head";
 
