@@ -76,7 +76,7 @@ public class User  {
     @OneToMany(mappedBy = "enterprise", cascade = {CascadeType.PERSIST , CascadeType.REMOVE} )
     private List<RealizationBoard> enterpriseBoards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", cascade = ALL  )
+    @OneToMany(mappedBy = "owner", cascade = ALL  )// 이건 생각좀
     private List<NFT> nftList = new ArrayList<>();
 
     @Builder.Default

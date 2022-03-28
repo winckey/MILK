@@ -26,7 +26,12 @@ public class NFT  {
     private String nftId;
 
     @Column(nullable = false)
+    private String marketId;
+
+
+    @Column(nullable = false)
     private String nftName;
+
 
     @Column(nullable = false)
     private String price;
