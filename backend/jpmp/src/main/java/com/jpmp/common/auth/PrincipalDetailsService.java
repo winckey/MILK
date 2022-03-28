@@ -28,6 +28,6 @@ public class PrincipalDetailsService implements UserDetailsService {
     }
 
     private UserDetails createUserDetails(User users) {
-       return new org.springframework.security.core.userdetails.User(users.getEmail(), users.getPassword(), users.getAuthorities());
+       return new org.springframework.security.core.userdetails.User(users.getUsername(), users.getPassword(), users.getAuthorities());
     }
 }

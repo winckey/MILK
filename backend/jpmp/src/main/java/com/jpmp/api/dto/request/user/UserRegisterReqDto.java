@@ -57,7 +57,7 @@ public class UserRegisterReqDto {
                 .email(email)
                 .password(password)
                 .nickname(nickname)
-                .userName(userName)
+                .realname(userName)
                 .phone(phone)
                 .description(description)
                 .address1(address1)

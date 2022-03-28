@@ -23,19 +23,19 @@ public class RBoradServiceImpl implements RBoradService {
     public void addRBorad(Authentication authentication, NtfRequestReqDto ntfRequestReqDto) {
 
 //        User userDetails = (User) authentication.getDetails();
-        User enterprise = userRepository.findByUserName(ntfRequestReqDto.getEntrepriseName()).get();
-
-        User userDetails = userRepository.findById(5L).get();
-
-
-        RealizationBoard realizationBoard = RealizationBoard.builder()
-                .nftId(ntfRequestReqDto.getNftId())
-                .nftName(ntfRequestReqDto.getNftName())
-                .nftImgUrl(ntfRequestReqDto.getImgUrl())
-                .consumer(userDetails)
-                .enterprise(enterprise)
-                .build();
-
-        rBoradRepository.save(realizationBoard);
+//        User enterprise = userRepository.findByUserName(ntfRequestReqDto.getEntrepriseName()).get();
+//
+//        User userDetails = userRepository.findById(5L).get();
+//
+//
+//        RealizationBoard realizationBoard = RealizationBoard.builder()
+//                .nftId(ntfRequestReqDto.getNftId())
+//                .nftName(ntfRequestReqDto.getNftName())
+//                .nftImgUrl(ntfRequestReqDto.getImgUrl())
+//                .consumer(userDetails)
+//                .enterprise(enterprise)
+//                .build();
+//
+//        rBoradRepository.save(realizationBoard);
     }
 }

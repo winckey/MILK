@@ -16,14 +16,18 @@ public class UserLoginResDto extends BaseResponseBody {
     @ApiModelProperty(name="JWT 인증 토큰", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN...")
     private String accessToken;
 
+    @ApiModelProperty(name="JWT refresh 토큰", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN...")
+    private String refreshToken;
+
     private UserInfoDto user;
 
-    public static UserLoginResDto of(Integer statusCode, String message, String accessToken, User user) {
+    public static UserLoginResDto of(Integer statusCode, String message, String accessToken, String refreshToken , User user ) {
         UserLoginResDto res = new UserLoginResDto();
         res.setStatusCode(statusCode);
         res.setMessage(message);
         res.setAccessToken(accessToken);
         res.setUser(UserInfoDto.of(user));
+        res.setRefreshToken(refreshToken);
         return res;
     }
 
