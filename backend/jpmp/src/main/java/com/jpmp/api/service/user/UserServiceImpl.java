@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
         checkPassword(userLoginReqDto.getPassword(), user.getPassword());
 
         String username = user.getUsername();
+        System.out.println("userservice 57 :    String username = user.getUsername() : " + username);
         String accessToken = jwtTokenUtil.generateAccessToken(username);
         RefreshToken refreshToken = saveRefreshToken(username);
 

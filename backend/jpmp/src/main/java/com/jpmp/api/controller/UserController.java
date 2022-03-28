@@ -12,8 +12,11 @@ import com.jpmp.api.dto.response.user.UserNicknameCheckResDto;
 import com.jpmp.api.dto.response.user.UserResDto;
 import com.jpmp.api.service.user.UserService;
 import com.jpmp.common.util.JwtTokenUtil;
+import com.jpmp.common.util.SecurityUtils;
 import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.user.UserRepository;
+import com.jpmp.exception.CustomException;
+import com.jpmp.exception.ErrorCode;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -101,12 +104,12 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> getUserInfo(@ApiIgnore Authentication authentication) {
+    public ResponseEntity<UserResDto> getUserInfo(@ApiIgnore @RequestHeader("Authorization") String accessToken) {
         /**
          * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
          * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
          */
-        User userDetails = (User) authentication.getDetails();
+        User userDetails = userRepository.findByUsername( getUsername());
 
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", userDetails));
     }
@@ -119,7 +122,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> modifyUser(@ApiIgnore@RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserModifyReqDto userModifyReqDto) {
+    public ResponseEntity<UserResDto> modifyUser(@ApiIgnore @RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserModifyReqDto userModifyReqDto) {
 
         System.out.println("usercontroller accesstoken 106 : " + accessToken);
         String username = jwtTokenUtil.getUsername(accessToken);
@@ -138,8 +141,8 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> modifyProImgUser(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserImgReqDto userImgReqDto) {
-        User userDetails = (User) authentication.getDetails();
+    public ResponseEntity<UserResDto> modifyProImgUser(@ApiIgnore @RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserImgReqDto userImgReqDto) {
+        User userDetails = userRepository.findByUsername( getUsername());
 
         User result = userService.modifyProImgUser(userDetails, userImgReqDto.getImgUrl());
 
@@ -153,8 +156,8 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> modifyBackImgUser(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserImgReqDto userImgReqDto) {
-        User userDetails = (User) authentication.getDetails();
+    public ResponseEntity<UserResDto> modifyBackImgUser(@ApiIgnore @RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserImgReqDto userImgReqDto) {
+        User userDetails = userRepository.findByUsername( getUsername());
 
         User result = userService.modifyBackImgUser(userDetails, userImgReqDto.getImgUrl());
 
@@ -170,8 +173,8 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<UserResDto> addUserNftLike(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") String nftId) {
-        User userDetails = (User) authentication.getDetails();
+    public ResponseEntity<UserResDto> addUserNftLike(@ApiIgnore @RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") String nftId) {
+        User userDetails = userRepository.findByUsername( getUsername());
 
         User result = userService.addUserNftLike(userDetails, nftId);
 
@@ -187,8 +190,8 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<UserResDto> deleteUserNftLike(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true) String nftId) {
-        User userDetails = (User) authentication.getDetails();
+    public ResponseEntity<UserResDto> deleteUserNftLike(@ApiIgnore @RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true) String nftId) {
+        User userDetails = userRepository.findByUsername( getUsername());
 
         User result = userService.deleteUserNftLike(userDetails, nftId);
 
@@ -210,5 +213,10 @@ public class UserController {
     }
     private String resolveToken(String accessToken) {
         return accessToken.substring(7);
+    }
+
+    public String getUsername(){
+        return SecurityUtils.getCurrentUsername()
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }

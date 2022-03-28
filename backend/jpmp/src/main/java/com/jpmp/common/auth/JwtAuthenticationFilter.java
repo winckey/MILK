@@ -60,12 +60,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 checkLogout(accessToken);
                 //해당 토큰이 null이 아닐 경우는 이 토큰이 로그아웃된 토큰인지 검증합니다.
                 String username = jwtTokenUtil.getUsername(accessToken);
+                System.out.println("jwt인증필터 63 String username = jwtTokenUtil.getUsername(accessToken) : " + username);
 
 
                 //JwtTokenUtil에 선언된 메서드로 토큰에서 username을 가져옵니다.
 
                 if (username != null) {
                     UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
+                    System.out.println("jwt인증필터 70 customUserDetailService.loadUserByUsername(username); : " + userDetails.getUsername());
                     //username이 null이 아닌 경우는 앞에서 만든 CustomUserDetailService에서 UserDetails객체를 가져옵니다.
 
                     validateAccessToken(accessToken, userDetails);
