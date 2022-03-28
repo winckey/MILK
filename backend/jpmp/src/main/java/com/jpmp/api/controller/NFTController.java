@@ -64,6 +64,42 @@ public class NFTController {
         return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
     }
 
+    @PutMapping()
+    @ApiOperation(value = "nft 소유권 이전", notes = "nft 생성 및 기업에 등록")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> transferNft(@ApiIgnore Authentication authentication,
+                                                      @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") NFTDto nftDto) {
+        User userDetails = userRepository.findByUsername(getUsername());
+
+        nftService.transferNFT(userDetails, nftDto);
+
+        return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
+    }
+
+    @GetMapping()
+    @ApiOperation(value = "나의 nft 조회", notes = "자신이 소유한 nft 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> getNftList(@ApiIgnore Authentication authentication,
+                                                        @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") NFTDto nftDto) {
+        User userDetails = userRepository.findByUsername(getUsername());
+
+        nftService.getNftList(userDetails);
+
+        return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
+    }
+    
+    
+
     public String getUsername(){
         return SecurityUtils.getCurrentUsername()
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
