@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { BsInstagram, BsMedium, BsDiscord, BsTelegram } from "react-icons/bs";
 import { GrTwitter } from "react-icons/gr";
 import { Colors, Devices } from "./Theme";
+// hi
 
 const FooterEl = styled.footer`
   display: flex;

@@ -24,7 +24,7 @@ const Create: NextPage = () => {
   const [hidden, setHidden] = useState(true);
   const [marketplace, setMarketplace] = useState({});
   const [nft, setNFT] = useState({});
-
+  const [id, setId] = useState("");
   const [image, setImage] = useState<string | undefined>("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");

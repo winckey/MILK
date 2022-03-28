@@ -1,11 +1,33 @@
-// import { Navbar } from "@components/ui/common";
-import Layout from "@components/ui/layout";
-import type { NextPage } from "next";
+import Head from "next/head";
+import styled from "styled-components";
+import { Colors, Devices } from "@components/main/Theme";
+import { BsGithub, BsGlobe } from "react-icons/bs";
 import Link from "next/link";
-import Home from "@components/main/Home";
+import Hero from "@components/main/Home/Hero";
+import AOS from "aos";
+import Carousel from "@components/main/Home/Carousel";
+import TopCollectibles from "@components/main/Home/TopCollectibles";
+import { useEffect } from "react";
+// hi
 
-const Main: NextPage = () => {
-  return <Home />;
-};
+const HomeEl = styled.article`
+  color: ${Colors.White};
+`;
 
-export default Main;
+export default function Home() {
+  useEffect(() => {
+    AOS.init();
+  });
+  return (
+    <HomeEl>
+      <Head>
+        <meta content="Cleaned create-next-app including styled-components and configured theme" />
+        <link rel="icon" href="/favicon.png" />
+      </Head>
+      <Hero />
+
+      <Carousel />
+      <TopCollectibles />
+    </HomeEl>
+  );
+}

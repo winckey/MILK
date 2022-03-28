@@ -9,15 +9,10 @@ import SearchBarMob from "./Header/MobileSearchBar";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { accessToken } from "@components/atoms/Auth";
 import { useState } from "react";
-import {
-  Menu,
-  MenuButton,
-  MenuItems,
-  MenuItem,
-  Transition,
-} from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+// hi
 
 const HeaderEl = styled.header`
   z-index: 10;

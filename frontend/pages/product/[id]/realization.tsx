@@ -1,10 +1,40 @@
-import Layout from "@components/ui/layout";
 import { NextPage } from "next";
+import Layout from "@components/ui/layout";
+import useUser from "@libs/client/useUser";
 
 const Realization: NextPage = () => {
+  // const { user, isLoading } = useUser();
+  // console.log(user);
+
+  // product id로 nft 정보 받아온 결과
+  const response = {
+    name: "Gucci bag",
+  };
+
   return (
     <Layout seoTitle="실물화">
-      <div>
+      <div className="h-[220px] overflow-hidden bg-basicImage shadow-md">
+        <div className="h-[600px] w-full max-h-full max-w-full">
+          <img
+            src="https://lh3.googleusercontent.com/Vw6MpADIga_ZwmXOmclK87L8ax6pI_DylBcn-69kcr1Uhgw5Ij2RvXJD2MFJ0VarfIGeoFZw7NvpGLePX3e2VMztvg7XCQDNo12dLQ=h600"
+            alt="#"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+      <div className="max-w-[850px] w-[90%] mx-auto">
+        <div className="mb-[70px] bg-lightGold py-3 px-5 rounded text-center shadow-md">
+          <span className="text-white font-semibold text-xl">실물화</span>
+        </div>
+        <div className="mb-[70px] rounded-[10px]">
+          <div className="bg-white px-4 py-5 font-semibold">상품명 : dd</div>
+          <div className="bg-[#fbfdff] px-4 py-5 border-t border-lightBg">
+            {response.name}
+          </div>
+        </div>
+      </div>
+
+      {/* <div>
         <div className="flex pt-20">
           <div className="w-[85%] lg:w-[70%] xl:w-[60%] 2xl:w-[50%] pt-10 pl-8">
             <div className=" text-3xl font-bold">실물화</div>
@@ -151,7 +181,7 @@ const Realization: NextPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </Layout>
   );
 };

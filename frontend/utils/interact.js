@@ -82,10 +82,21 @@ export const loadMarketItems = async (marketplace, nft) => {
         description: metadata.description,
         image: metadata.image,
       });
+      console.log("이 NFT의 ID 값은", item.itemId);
+      console.log("이 NFT의 주인은", item.seller);
     }
   }
   console.log(items);
-  return items;
+  console.log(
+    items[itemCounts - 1].seller,
+    items[itemCounts - 1].itemId,
+    typeof items[itemCounts - 1].itemId
+  );
+  return {
+    items: items,
+    seller: items[itemCounts - 1].seller,
+    id: items[itemCounts - 1].itemId,
+  };
 };
 
 export const purchaseMarketItem = async (item, marketplace) => {

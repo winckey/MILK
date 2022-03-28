@@ -7,6 +7,9 @@ import { useState, useEffect } from "react";
 import Button from "../styled/Button.styled";
 import AOS from "aos";
 import "aos/dist/aos.css";
+
+// hi
+
 const HeroEl = styled.article`
   margin: 6rem 1rem 5rem 1rem;
   text-align: center;
