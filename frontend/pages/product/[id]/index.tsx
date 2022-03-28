@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 const Product: NextPage = () => {
-  const [isOwner, setIsOwner] = useState(false)); // 본인 상품인지 여부
+  const [isOwner, setIsOwner] = useState(false); // 본인 상품인지 여부
   const [selectedOrder, setSelectedOrder] = useState<null | object>(null);
   const [selectedRealization, setSelectedRealization] = useState<null | object>(
     null
