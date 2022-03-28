@@ -92,13 +92,18 @@ const Create: NextPage = () => {
 
   const uploadIPFS = async (event: any) => {
     event.preventDefault();
+    console.log(event);
+    console.log(event.target[0]);
     const form = event.target as HTMLFormElement;
-    const files = (form[0] as HTMLInputElement).files;
+    console.log(form);
+    const file = form.files[0];
+    console.log(files);
     // const file = event.target.files[0];
-    if (!files || files.length === 0) {
-      return alert("No files selected");
-    }
-    const file = files[0];
+    // if (!files || files.length === 0) {
+    //   return alert("No files selected");
+    // }
+    // const file = files[0];
+    console.log(file);
 
     if (typeof file !== "undefined") {
       try {
@@ -109,6 +114,7 @@ const Create: NextPage = () => {
         console.log("ipfs image upload error: ", error);
       }
     }
+    console.log(typeof image);
   };
 
   const createNFT = async () => {
