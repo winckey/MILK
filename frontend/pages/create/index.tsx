@@ -52,6 +52,7 @@ const Create: NextPage = () => {
   try {
     ipfs = create({
       url: "https://ipfs.infura.io:5001/api/v0",
+      // headers: { authorization },
     });
   } catch (error) {
     console.error("IPFS error ", error);

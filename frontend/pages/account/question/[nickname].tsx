@@ -1,11 +1,9 @@
-import { Navbar } from "@components/ui/common";
+// import { Navbar } from "@components/ui/common";
 
 export default function Question() {
   return (
     <div>
-      <div className="fixed">
-        <Navbar />
-      </div>
+      <div className="fixed">{/* <Navbar /> */}</div>
       <div className="flex pt-20">
         <div className="w-[25%] hidden lg:block">
           <div className="py-8 pl-16 text-2xl font-bold">계정 설정</div>
