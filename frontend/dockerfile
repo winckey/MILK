@@ -1,20 +1,19 @@
 FROM node:16
 
-WORKDIR /app
-
-COPY package*.json /app/
+WORKDIR /usr/app
 
 RUN npm install --global pm2
-RUN npm install --production
-RUN npm install
 
-COPY ./ /app/
+COPY ./package*.json ./
+
+RUN npm install --production
+
+COPY ./ ./
 
 RUN npm run build
 
 EXPOSE 3000
 
-FROM nginx:stable-alpine as production-stage
-COPY  ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
+USER node
 
-CMD [ "pm2-runtime", "npm", "start", "daemon off;", "nginx", "-g"]
+CMD [ "pm2-runtime", "start", "npm", "--", "start" ]
