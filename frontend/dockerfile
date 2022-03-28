@@ -1,25 +1,19 @@
-From node:16
+FROM node:16
 
-MAINTAINER tony <tpgjs0527@naver.com>
+WORKDIR /usr/app
 
-RUN sed -i "s/^exit 101$/exit 0/" /usr/sbin/policy-rc.d
+RUN npm install --global pm2
 
-RUN apt-get update && apt-get install git -y
-RUN echo "git install"
+COPY ./package*.json ./
 
-RUN npm install -g pm2
-ENV NODE_ENV production
+RUN npm install --production
 
-RUN mkdir -p /app
-WORKDIR /app
+COPY ./ ./
 
-RUN git clone https://lab.ssafy.com/s06-blockchain-nft-sub2/S06P22E206.git
-WORKDIR /app/S06P22E206
-
-COPY ./processes.json /app/S06P22E206
-
-RUN npm install
+RUN npm run build
 
 EXPOSE 3000
 
-CMD ["pm2-docker", "processes.json"]
+USER node
+
+CMD [ "pm2-runtime", "start", "npm", "--", "start" ]
