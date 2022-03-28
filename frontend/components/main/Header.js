@@ -216,29 +216,35 @@ export default function Header({ mobileMenu }) {
         <Nav>
           <ul>
             <li>
-              <NavItem className="p-2 px-3 rounded-md" href="/user">
-                개인관
+              <NavItem className="p-2 px-3 rounded-md">
+                <Link href="/user">
+                  <a>개인관</a>
+                </Link>
               </NavItem>
             </li>
             <li>
-              <NavItem className="p-2 px-3 rounded-md" href="/brand">
-                명품관
+              <NavItem className="p-2 px-3 rounded-md">
+                <Link href="/brand">
+                  <a>명품관</a>
+                </Link>
               </NavItem>
             </li>
 
             {TOKEN ? (
               <>
                 <li>
-                  <NavItem className="p-2 px-3 rounded-md" href="/stream">
-                    라이브 경매
+                  <NavItem className="p-2 px-3 rounded-md">
+                    <Link href="/stream">
+                      <a>라이브 경매</a>
+                    </Link>
                   </NavItem>
                 </li>
                 <li>
-                  <Link href="/create">
-                    <CreateItem className="cursor-pointer font-bold text-xl  to-lightGold  shadow-md py-2 px-3 rounded-md ">
-                      Create
-                    </CreateItem>
-                  </Link>
+                  <CreateItem className="cursor-pointer font-bold text-xl  to-lightGold  shadow-md py-2 px-3 rounded-md ">
+                    <Link href="/create">
+                      <a>Create</a>
+                    </Link>
+                  </CreateItem>
                 </li>
               </>
             ) : null}
@@ -253,7 +259,6 @@ export default function Header({ mobileMenu }) {
       ) : (
         ""
       )}
-
       <SearchIcon>
         <CgSearch
           onClick={() => {
@@ -261,18 +266,28 @@ export default function Header({ mobileMenu }) {
           }}
         />
       </SearchIcon>
-      {TOKEN ? (
-        <MyDropdown logout={logout} />
-      ) : (
-        <>
-          <NavItem className="p-2 px-3 rounded-md" href="/login">
-            로그인
-          </NavItem>
-          <NavItem className="p-2 px-3 rounded-md" href="/signup">
-            회원가입
-          </NavItem>
-        </>
-      )}
+      <div>
+        {TOKEN ? (
+          <MyDropdown logout={logout} />
+        ) : (
+          <ul className="flex flex-row items-center list-style-none gap-1">
+            <li>
+              <NavItem className="p-2 px-3 rounded-md">
+                <Link href="/login">
+                  <a>로그인</a>
+                </Link>
+              </NavItem>
+            </li>
+            <li>
+              <NavItem className="p-2 px-3 rounded-md">
+                <Link href="/signup">
+                  <a>회원가입</a>
+                </Link>
+              </NavItem>
+            </li>
+          </ul>
+        )}
+      </div>
     </HeaderEl>
   );
 }
