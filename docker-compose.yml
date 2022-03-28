@@ -12,7 +12,6 @@ services:
       - 443:443
     volumes:
       - /home/ubuntu/docker-volume/ssl2:/var/www/html
-      - ./frontend/nginx/nginx.conf:/etc/nginx/nginx.conf
     container_name: "frontend"
 
   backend:
