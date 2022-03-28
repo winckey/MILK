@@ -20,4 +20,4 @@ USER node
 FROM nginx:stable-alpine as production-stage
 COPY  ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-CMD [ "pm2-runtime", "start", "npm", "--", "start", "nginx"]
+CMD [ "pm2-runtime", "start", "npm", "--", "start", "nginx", "-g", "daemon off;"]
