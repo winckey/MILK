@@ -1,4 +1,3 @@
-import { Navbar } from "@components/ui/common";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
@@ -148,7 +147,6 @@ const Create: NextPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-lightBg  ">
-      <Navbar />
       <div className="px-24 pt-32  ml-12 mr-4">
         <div>
           <div className="text-5xl mb-12 "> Create item</div>
