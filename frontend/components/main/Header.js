@@ -216,35 +216,35 @@ export default function Header({ mobileMenu }) {
         <Nav>
           <ul>
             <li>
-              <NavItem className="p-2 px-3 rounded-md">
-                <Link href="/user">
-                  <a>개인관</a>
-                </Link>
-              </NavItem>
+              <Link href="/user">
+                <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                  개인관
+                </NavItem>
+              </Link>
             </li>
             <li>
-              <NavItem className="p-2 px-3 rounded-md">
-                <Link href="/brand">
-                  <a>명품관</a>
-                </Link>
-              </NavItem>
+              <Link href="/brand">
+                <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                  명품관
+                </NavItem>
+              </Link>
             </li>
 
             {TOKEN ? (
               <>
                 <li>
-                  <NavItem className="p-2 px-3 rounded-md">
-                    <Link href="/stream">
-                      <a>라이브 경매</a>
-                    </Link>
-                  </NavItem>
+                  <Link href="/stream">
+                    <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                      라이브 경매
+                    </NavItem>
+                  </Link>
                 </li>
                 <li>
-                  <CreateItem className="cursor-pointer font-bold text-xl  to-lightGold  shadow-md py-2 px-3 rounded-md ">
-                    <Link href="/create">
-                      <a>Create</a>
-                    </Link>
-                  </CreateItem>
+                  <Link href="/create">
+                    <CreateItem className="cursor-pointer font-bold text-xl  to-lightGold  shadow-md py-2 px-3 rounded-md ">
+                      Create
+                    </CreateItem>
+                  </Link>
                 </li>
               </>
             ) : null}
@@ -272,18 +272,18 @@ export default function Header({ mobileMenu }) {
         ) : (
           <ul className="flex flex-row items-center list-style-none gap-1">
             <li>
-              <NavItem className="p-2 px-3 rounded-md">
-                <Link href="/login">
-                  <a>로그인</a>
-                </Link>
-              </NavItem>
+              <Link href="/login">
+                <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                  로그인
+                </NavItem>
+              </Link>
             </li>
             <li>
-              <NavItem className="p-2 px-3 rounded-md">
-                <Link href="/signup">
-                  <a>회원가입</a>
-                </Link>
-              </NavItem>
+              <Link href="/signup">
+                <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                  회원가입
+                </NavItem>
+              </Link>
             </li>
           </ul>
         )}
