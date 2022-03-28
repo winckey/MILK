@@ -4,6 +4,7 @@ import { Colors, Devices } from "../Theme";
 import Grid from "../styled/Grid.styled";
 import Link from "next/link";
 import NFTCard from "../styled/NFTCard.styled";
+// hi
 
 const TopCollectiblesEl = styled.article`
   display: flex;

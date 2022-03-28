@@ -97,6 +97,18 @@ npm i sockjs-client stompjs
 npm i net -S
 ```
 
+- aos
+
+```bash
+npm i --save-dev @types/aos
+```
+
+- styled-components
+
+```bash
+npm i --save-dev @types/styled-components
+```
+
 
 
 ### Providers

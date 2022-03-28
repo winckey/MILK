@@ -1,6 +1,6 @@
 // blueprint
 // 페이지에 접근할 때 가장 먼저 보는 곳 (페이지 불러올 때마다 브라우저에서 실행)
-
+// hi
 import "@styles/globals.css";
 import type { AppProps } from "next/app";
 import { SWRConfig } from "swr";
