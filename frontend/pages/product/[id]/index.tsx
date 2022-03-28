@@ -7,7 +7,10 @@ const Product: NextPage = () => {
   const router = useRouter();
   console.log(router);
   // const brand = "Celine";
-  const image = router.query.image;
+  const image: string | undefined = router.query.image;
+  console.log(image);
+  console.log(typeof image);
+
   return (
     <Layout seoTitle="제품명">
       <div className="flex flex-col items-center">
