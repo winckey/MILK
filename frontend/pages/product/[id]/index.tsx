@@ -1,15 +1,39 @@
 import Layout from "@components/ui/layout";
+import { OrderModal } from "@components/ui/order";
+import { RealizationModal } from "@components/ui/realization";
 import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const Product: NextPage = () => {
+  const [isOwner, setIsOwner] = useState(false); // 본인 상품인지 여부
+  const [selectedOrder, setSelectedOrder] = useState<null | object>(null);
+  const [selectedRealization, setSelectedRealization] = useState<null | object>(
+    null
+  );
+
+  const cleanupModal = () => {
+    setSelectedRealization(null);
+    setSelectedOrder(null);
+  };
+
+  // 관이 part
   const router = useRouter();
   console.log(router);
-  // const brand = "Celine";
   const image: string | undefined = router.query.image?.toString();
   console.log(image);
   console.log(typeof image);
+
+  // router에서 받아온 id로 요청 후 받은 데이터 (임시 참고용)
+  const response = {
+    name: "string",
+    image: "string",
+    description: "string",
+    price: "string",
+    edition: "string",
+    type: "string",
+  };
 
   return (
     <Layout seoTitle="제품명">
@@ -177,50 +201,103 @@ const Product: NextPage = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="flex max-w-[420px]">
-                        <div className="w-full contents">
-                          <div className="inline-flex w-full">
-                            {/* -------- 구매 버튼 ---------- */}
-                            <button className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full">
-                              <div className="mr-3 flex">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-6 w-6"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </div>
-                              Buy now
-                            </button>
-                          </div>
-                          <div className="inline-flex w-full lg:w-[50%] ml-2">
-                            <button className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-white hover:bg-lightBg px-5 py-3 border-[1px] border-lightGold text-lightGold w-full">
-                              <div className="flex mr-3">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-6 w-6"
-                                  viewBox="0 0 20 20"
-                                  fill="currentColor"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </div>
-                              Make offer
-                            </button>
+                      {/* 본인 상품이냐에 따라 다른 UI */}
+                      {isOwner ? (
+                        <div className="flex max-w-[420px]">
+                          <div className="w-full contents">
+                            <div className="inline-flex w-full">
+                              <button
+                                onClick={() => setSelectedRealization(response)}
+                                className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full"
+                              >
+                                <div className="mr-3 flex">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </div>
+                                실물화
+                              </button>
+                            </div>
+                            <div className="inline-flex w-full lg:w-[50%] ml-2">
+                              <button className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-white hover:bg-lightBg px-5 py-3 border-[1px] border-lightGold text-lightGold w-full">
+                                <div className="flex mr-3">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </div>
+                                판매
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="flex max-w-[420px]">
+                          <div className="w-full contents">
+                            <div className="inline-flex w-full">
+                              {/* -------- 구매 버튼 ---------- */}
+                              <button
+                                onClick={() => setSelectedOrder(response)}
+                                className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full"
+                              >
+                                <div className="mr-3 flex">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </div>
+                                Buy now
+                              </button>
+                            </div>
+                            <div className="inline-flex w-full lg:w-[50%] ml-2">
+                              <button className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-white hover:bg-lightBg px-5 py-3 border-[1px] border-lightGold text-lightGold w-full">
+                                <div className="flex mr-3">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </div>
+                                Make offer
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -234,6 +311,10 @@ const Product: NextPage = () => {
             <div>other items</div>
           </div>
         </div>
+
+        {/* Modal */}
+        {selectedOrder && <OrderModal onClose={cleanupModal} />}
+        {selectedRealization && <RealizationModal onClose={cleanupModal} />}
       </div>
     </Layout>
   );
