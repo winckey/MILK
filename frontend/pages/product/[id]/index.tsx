@@ -7,6 +7,9 @@ const Product: NextPage = () => {
   const router = useRouter();
   console.log(router);
   // const brand = "Celine";
+  const image: string | undefined = router.query.image?.toString();
+  console.log(image);
+  console.log(typeof image);
 
   return (
     <Layout seoTitle="제품명">
@@ -76,7 +79,7 @@ const Product: NextPage = () => {
                       <div className="h-full w-full">
                         <div className="h-full w-[600px] flex items-center justify-center max-w-full max-h-full overflow-hidden">
                           <img
-                            src={router?.query.image}
+                            src={image}
                             alt="#"
                             className="w-auto h-auto max-w-full max-h-full object-contain"
                           />

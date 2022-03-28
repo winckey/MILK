@@ -23,28 +23,28 @@ const Main = styled.div`
   min-height: 100vh;
 `;
 
-const MobileMenu = styled.div`
-  background-color: ${Colors.Background};
-  color: ${Colors.White};
-  z-index: ${(p) => (p.open ? "9" : "-1")};
-  position: absolute;
-  padding: 2rem 1rem 1rem 1.2rem;
-  left: 0;
-  display: flex;
-  width: ${(p) => (p.open ? "100%" : "0")};
-  height: 100%;
+// const MobileMenu = styled.div`
+//   background-color: ${Colors.Background};
+//   color: ${Colors.White};
+//   z-index: ${(p) => (p.open ? "9" : "-1")};
+//   position: absolute;
+//   padding: 2rem 1rem 1rem 1.2rem;
+//   left: 0;
+//   display: flex;
+//   width: ${(p) => (p.open ? "100%" : "0")};
+//   height: 100%;
 
-  ul {
-    opacity: ${(p) => (p.open ? "1" : "0")};
-    transition: all 0.1s ease-out;
-    text-decoration: none;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
-  }
-`;
+//   ul {
+//     opacity: ${(p) => (p.open ? "1" : "0")};
+//     transition: all 0.1s ease-out;
+//     text-decoration: none;
+//     list-style: none;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 2rem;
+//     width: 100%;
+//   }
+// `;
 
 const NavItem = styled.a`
   font-size: 1.2rem;
@@ -68,7 +68,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Main>
           <Header mobileMenu={{ MobileMenuIsOpen, setMobileMenuIsOpen }} />
           <Page>
-            <MobileMenu open={MobileMenuIsOpen}>
+            {/* <MobileMenu open={MobileMenuIsOpen}>
               <ul>
                 <li>
                   <NavItem href="/user">개인관</NavItem>
@@ -85,7 +85,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                   </Button>
                 </li>
               </ul>
-            </MobileMenu>
+            </MobileMenu> */}
             <Component {...pageProps} />
 
             {/* 주소 찾기 */}
