@@ -2,6 +2,8 @@ From node:16
 
 MAINTAINER tony <tpgjs0527@naver.com>
 
+RUN sed -i "s/^exit 101$/exit 0/" /usr/sbin/policy-rc.d
+
 RUN apt-get update && apt-get install git -y
 RUN echo "git install"
 
