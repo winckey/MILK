@@ -25,7 +25,7 @@ const Create: NextPage = () => {
   const [marketplace, setMarketplace] = useState({});
   const [nft, setNFT] = useState({});
 
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<string | string[] | undefined>([]);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -52,7 +52,6 @@ const Create: NextPage = () => {
   try {
     ipfs = create({
       url: "https://ipfs.infura.io:5001/api/v0",
-      headers: { authorization },
     });
   } catch (error) {
     console.error("IPFS error ", error);
