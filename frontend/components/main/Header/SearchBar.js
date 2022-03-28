@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { CgSearch } from "react-icons/cg";
 import { Colors, Devices } from "../Theme";
+
+// hi
+
 const SearchBarEl = styled.article`
   padding: 0.5rem 1rem;
   gap: 0.5rem;

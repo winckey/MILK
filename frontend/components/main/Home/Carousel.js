@@ -5,6 +5,7 @@ import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import Link from "next/link";
+// hi
 
 const CarouselEl = styled.article`
   display: flex;

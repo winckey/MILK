@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Image from "next/image";
 import { Colors } from "../Theme";
 import { BsHeart } from "react-icons/bs";
+// hi
 
 const NFTCardEl = styled.article`
   position: relative;
