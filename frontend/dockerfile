@@ -7,7 +7,7 @@ RUN npm install --global pm2
 COPY ./package*.json ./
 
 RUN npm install --production
-npm install --save-dev @types/react
+Run npm install --save-dev @types/react
 
 COPY ./ ./
 
