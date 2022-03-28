@@ -1,3 +1,5 @@
+// 수정 금지
+
 interface ModalProps {
   isOpen?: boolean;
   children: React.ReactNode;

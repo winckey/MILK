@@ -1,3 +1,5 @@
+// 수정 금지
+
 import { NextApiRequest, NextApiResponse } from "next";
 
 export interface ResponseType {

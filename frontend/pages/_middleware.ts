@@ -1,3 +1,4 @@
+// 수정 금지
 // Server와 Controller 중간에서 처리
 
 import type { NextRequest, NextFetchEvent } from "next/server";
