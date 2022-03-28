@@ -270,22 +270,24 @@ export default function Header({ mobileMenu }) {
         {TOKEN ? (
           <MyDropdown logout={logout} />
         ) : (
-          <ul className="flex flex-row items-center list-style-none gap-1">
-            <li>
-              <Link href="/login">
-                <NavItem className="cursor-pointer p-2 px-3 rounded-md">
-                  로그인
-                </NavItem>
-              </Link>
-            </li>
-            <li>
-              <Link href="/signup">
-                <NavItem className="cursor-pointer p-2 px-3 rounded-md">
-                  회원가입
-                </NavItem>
-              </Link>
-            </li>
-          </ul>
+          <>
+            <ul className="flex flex-row items-center list-style-none gap-1">
+              <li>
+                <Link href="/login">
+                  <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                    로그인
+                  </NavItem>
+                </Link>
+              </li>
+              <li>
+                <Link href="/signup">
+                  <NavItem className="cursor-pointer p-2 px-3 rounded-md">
+                    회원가입
+                  </NavItem>
+                </Link>
+              </li>
+            </ul>
+          </>
         )}
       </div>
     </HeaderEl>

@@ -5,10 +5,8 @@ import { useRouter } from "next/router";
 
 const Product: NextPage = () => {
   const router = useRouter();
-  console.log(router);
   // const brand = "Celine";
   const image: string | undefined = router.query.image?.toString();
-  console.log(image);
   console.log(typeof image);
 
   return (
