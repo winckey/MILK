@@ -2,15 +2,8 @@ package com.jpmp.api.controller;
 
 
 import com.jpmp.api.dto.request.nft.NtfRequestReqDto;
-import com.jpmp.api.dto.request.user.UserLoginReqDto;
-import com.jpmp.api.dto.request.user.UserModifyReqDto;
-import com.jpmp.api.dto.request.user.UserRegisterReqDto;
 import com.jpmp.api.dto.response.BaseResponseBody;
-import com.jpmp.api.dto.response.user.UserLoginResDto;
-import com.jpmp.api.dto.response.user.UserResDto;
-import com.jpmp.api.service.nft.RBoradService;
-import com.jpmp.api.service.user.UserService;
-import com.jpmp.common.util.JwtTokenUtil;
+import com.jpmp.api.service.nft.RBoardService;
 import com.jpmp.common.util.SecurityUtils;
 import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.user.UserRepository;
@@ -27,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 
 @Slf4j
@@ -36,9 +28,9 @@ import javax.validation.constraints.NotBlank;
 @RestController
 @RequestMapping("/api/realization_board")
 @RequiredArgsConstructor
-public class RBoradController {
+public class RBoardController {
 
-    private final RBoradService rBoradService;
+    private final RBoardService rBoradService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
