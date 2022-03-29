@@ -45,8 +45,9 @@ public class RBoradServiceImpl implements RBoradService {
     @Override
     public void addRBorad(User user, NtfRequestReqDto ntfRequestReqDto) {
 
-        User enterprise = userRepository.findByRealname(ntfRequestReqDto.getEntrepriseName()).get();
+
         NFT nft = nftRepository.findByNftId(ntfRequestReqDto.getNftId()).get();
+        User enterprise = nft.getEnterprise();
 
         RealizationBoard realizationBoard = RealizationBoard.builder()
                 .nft(nft)
