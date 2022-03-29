@@ -1,4 +1,4 @@
-import Layout from "@components/ui/layout";
+import { Layout } from "@components/ui/layout";
 import Message from "@components/ui/message";
 import { NextPage } from "next";
 
