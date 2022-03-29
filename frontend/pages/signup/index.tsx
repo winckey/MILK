@@ -8,7 +8,7 @@ interface ISignupForm {
   email: string;
   password: string;
   checkPw: string; // 비밀번호 확인
-  realname: string;
+  realName: string;
   nickname: string;
 }
 
@@ -237,7 +237,7 @@ export default function Signup() {
                       </span>
                     </div>
                     <input
-                      {...register("realname", {
+                      {...register("realName", {
                         required: "필수 정보입니다.",
                         pattern: {
                           value: /^[가-힣]*$/,
@@ -249,7 +249,7 @@ export default function Signup() {
                     />
                   </div>
                   <span className="text-xs text-[#ff5e57]">
-                    {errors?.realname?.message}
+                    {errors?.realName?.message}
                   </span>
                   <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white  rounded  pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">

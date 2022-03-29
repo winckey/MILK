@@ -86,7 +86,7 @@ const EditProfile: NextPage = () => {
       const newData = {
         ...formData,
         email: getValues("email"),
-        userName: getValues("userName"),
+        realName: getValues("userName"),
       };
       editProfile(newData);
     }
@@ -105,7 +105,7 @@ const EditProfile: NextPage = () => {
       oncomplete: function (data) {
         setValue("zipCode", data.zonecode + "");
         setValue("address1", data.address);
-        setValue("address2", data.address);
+        setValue("address2", "");
       },
     }).open();
   };
@@ -114,8 +114,28 @@ const EditProfile: NextPage = () => {
     <Layout seoTitle="프로필 수정">
       <AccountLayout>
         <div className="mt-7 mx-[52px] text-textBlack max-w-[800px] flex-1">
-          <div className="mt-9">
+          <div className="flex flex-wrap justify-between mt-9">
             <h1 className="font-semibold text-[40px]">프로필 수정</h1>
+            <div className="flex items-center">
+              <a className="px-5 py-3 inline-flex flex-row items-center justify-center font-semibold rounded-[10px] bg-white text-textGray border hover:text-textBlack hover:shadow-lg cursor-pointer">
+                <div className="mr-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path
+                      fillRule="evenodd"
+                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                Preview
+              </a>
+            </div>
           </div>
           {/* 아래 */}
           <div className="mt-[30px]">

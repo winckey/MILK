@@ -27,6 +27,7 @@ interface IUser {
 
 interface ILoginResponse {
   accessToken: string;
+  refreshToken: string;
   message: string;
   statusCode: number;
   user: IUser;
@@ -55,7 +56,7 @@ export default function Login() {
     if (loading) return;
     login(formData);
   };
-  console.log(data);
+  // console.log(data);
 
   // server 응답 받았을 때 실행
   useEffect(() => {
