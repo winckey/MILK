@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -38,17 +40,8 @@ public class RBoardServiceImpl implements RBoardService {
     }
 
     @Override
-    public void getRBoradList(User user) {
+    public List<RealizationBoard> getRBoradList(User user) {
 
-//        User enterprise = userRepository.findByRealname(ntfRequestReqDto.getEntrepriseName()).get();
-//        NFT nft = nftRepository.findByNftId(ntfRequestReqDto.getNftId()).get();
-//
-//        RealizationBoard realizationBoard = RealizationBoard.builder()
-//                .nft(nft)
-//                .consumer(user)
-//                .enterprise(enterprise)
-//                .build();
-//
-//        rBoradRepository.save(realizationBoard);
+        return user.getConsumerBoards();
     }
 }
