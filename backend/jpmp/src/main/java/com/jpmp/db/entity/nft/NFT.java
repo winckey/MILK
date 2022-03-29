@@ -36,7 +36,8 @@ public class NFT  {
     @Column(nullable = false)
     private String price;
 
-
+    @Column(nullable = false)
+    private Boolean ownerIsEnterprise;
 
     @Column(nullable = false)
     private Boolean seleStatus;
@@ -59,6 +60,7 @@ public class NFT  {
                 .imgUrl(nftDto.getImgUrl())
                 .seleStatus(true)//생성과동시에 판매등록
                 .realizationStatus(false)//생성즉시기떄문에 아직 실물화 아님
+                .ownerIsEnterprise(true)// 생성시 기업소유
                 .owner(owner)
                 .build();
     }

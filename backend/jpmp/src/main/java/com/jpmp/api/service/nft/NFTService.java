@@ -14,4 +14,6 @@ public interface NFTService {
     void transferNFT(User userDetails, NFTDto nftDto);
 
     List<NFT> getNftList(User userDetails);
+
+    void getNftList(User userDetails, Boolean ownerIsEnterprise);
 }
