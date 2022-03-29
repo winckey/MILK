@@ -1,12 +1,16 @@
 import { Layout } from "@components/ui/layout";
 import { OrderModal } from "@components/ui/order";
 import { RealizationModal } from "@components/ui/realization";
+import useUser from "@libs/client/useUser";
 import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 const Product: NextPage = () => {
+  const { user, isLoading } = useUser();
+  // console.log(user);
+
   const [isOwner, setIsOwner] = useState(false); // 본인 상품인지 여부
   const [selectedOrder, setSelectedOrder] = useState<null | object>(null);
   const [selectedRealization, setSelectedRealization] = useState<null | object>(
@@ -20,19 +24,21 @@ const Product: NextPage = () => {
 
   // 관이 part
   const router = useRouter();
-  console.log(router);
+  // console.log(router);
   const image: string | undefined = router.query.image?.toString();
-  console.log(image);
-  console.log(typeof image);
+  // console.log(image);
+  // console.log(typeof image);
 
   // router에서 받아온 id로 요청 후 받은 데이터 (임시 참고용)
+  const nftId = "zxs123123123";
   const response = {
-    name: "string",
+    name: "가방",
+    brand: "루이비똥",
     image: "string",
     description: "string",
     price: "string",
     edition: "string",
-    type: "string",
+    type: "boolean",
   };
 
   return (
@@ -314,7 +320,14 @@ const Product: NextPage = () => {
 
         {/* Modal */}
         {selectedOrder && <OrderModal onClose={cleanupModal} />}
-        {selectedRealization && <RealizationModal onClose={cleanupModal} />}
+        {selectedRealization && (
+          <RealizationModal
+            nft={selectedRealization}
+            onClose={cleanupModal}
+            user={user}
+            nftId={nftId}
+          />
+        )}
       </div>
     </Layout>
   );
