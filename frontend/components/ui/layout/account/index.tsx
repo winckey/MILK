@@ -9,7 +9,7 @@ interface LayoutProps {
 export default function AccountLayout({ children }: LayoutProps) {
   return (
     <div className="flex items-stretch">
-      <div className="px-3 min-w-[250px] border-r">
+      <div className="hidden px-3 min-w-[250px] border-r lg:block xl:w-[340px] xl:min-h-screen">
         <ul className="px-2">
           <div className="px-[10px] py-2">
             <p className="font-bold text-xs text-textGray uppercase my-3 tracking-[1px]">
