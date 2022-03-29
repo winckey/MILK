@@ -29,9 +29,6 @@ public class NFT  {
     @Column(nullable = false)
     private String nftId;
 
-    @Column(nullable = false)
-    private String marketId;
-
 
     @Column(nullable = false)
     private String nftName;
@@ -55,6 +52,10 @@ public class NFT  {
     @JoinColumn(name = "owner", referencedColumnName = "id")
     private User owner;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "enterprise", referencedColumnName = "id")
+    private User enterprise;
+
 
     public static NFT ofCreateNft(User owner , NFTDto nftDto) {
         return NFT.builder()
@@ -66,6 +67,7 @@ public class NFT  {
                 .realizationStatus(false)//생성즉시기떄문에 아직 실물화 아님
                 .ownerIsEnterprise(true)// 생성시 기업소유
                 .owner(owner)
+                .enterprise(owner)
                 .build();
     }
 

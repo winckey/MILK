@@ -56,7 +56,7 @@ public class NFTController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> createNft(@ApiIgnore Authentication authentication,
-                                                @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") NFTDto nftDto) {
+                                                @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true ) NFTDto nftDto) {
         User userDetails = userRepository.findByUsername(getUsername());
 
         nftService.createNFT(userDetails, nftDto);
@@ -73,7 +73,7 @@ public class NFTController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> transferNft(@ApiIgnore Authentication authentication,
-                                                      @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") NFTDto nftDto) {
+                                                      @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true ) NFTDto nftDto) {
 
         User userDetails = userRepository.findByUsername(getUsername());
         nftService.transferNFT(userDetails, nftDto);
