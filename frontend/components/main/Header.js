@@ -137,7 +137,7 @@ function MyDropdown({ logout }) {
       > */}
       <Menu.Items className="absolute mt-10 mr-2 flex flex-col right-0 bg-white rounded-md shadow-lg border">
         <Menu.Item>
-          <Link href="/account">
+          <Link href="/account/edit">
             <a className="px-4 py-2 hover:bg-gray-300 text-gray-500">프로필</a>
           </Link>
         </Menu.Item>
