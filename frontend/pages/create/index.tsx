@@ -120,10 +120,15 @@ const Create: NextPage = () => {
   const createNFT = async () => {
     if (!image || !price || !name || !description) return;
     try {
-      const result = await (ipfs as IPFSHTTPClient).add(
-        JSON.stringify({ image, price, name, description })
-      );
-      mintThenList(result);
+      let result = [];
+      for (let index = 1; index <= Number(edition); index++) {
+        const tmp = await (ipfs as IPFSHTTPClient).add(
+          JSON.stringify({ image, name, description, index })
+        );
+        result.push(tmp);
+      }
+      console.log(result);
+      // mintThenList(result);
     } catch (error) {
       console.log("ipfs uri upload error: ", error);
     }
@@ -139,9 +144,7 @@ const Create: NextPage = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const jsonRpcProvider = new ethers.providers.JsonRpcProvider();
-
     const res1 = await marketContract(signer);
-
     const res2 = await nftContract(signer);
 
     await res2.mint(uri);
