@@ -1,4 +1,4 @@
-import Layout from "@components/ui/layout";
+import { Layout } from "@components/ui/layout";
 import { OrderModal } from "@components/ui/order";
 import { RealizationModal } from "@components/ui/realization";
 import type { NextPage } from "next";
