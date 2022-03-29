@@ -1,4 +1,4 @@
-import Layout from "@components/ui/layout";
+import { Layout } from "@components/ui/layout";
 import useMutation from "libs/client/useMutation";
 import { useRouter } from "next/router";
 import { useEffect } from "react";

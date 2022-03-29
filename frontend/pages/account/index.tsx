@@ -1,9 +1,10 @@
+import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BackgroundImg, ProfileImg } from "@components/cloudflare";
-import Layout from "@components/ui/layout";
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
+import { Layout } from "@components/ui/layout";
 
 interface IUser {
   address1: string;
@@ -36,7 +37,7 @@ interface IEditProfileForm {
   phone: string;
 }
 
-export default function EditProfile() {
+const EditProfile: NextPage = () => {
   const { user, isLoading } = useUser();
   // console.log(user);
 
@@ -352,4 +353,6 @@ export default function EditProfile() {
       </div>
     </Layout>
   );
-}
+};
+
+export default EditProfile;

@@ -1,4 +1,4 @@
-import Layout from "@components/ui/layout";
+import { Layout } from "@components/ui/layout";
 import type { NextPage } from "next";
 import Image from "next/image";
 
