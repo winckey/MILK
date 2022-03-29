@@ -28,5 +28,12 @@ export default function useUser() {
   );
   // console.log(data);
 
+  // const router = useRouter();
+  // useEffect(() => {
+  //   if (data && !data.ok) {
+  //     router.replace("/enter"); // replace가 브라우저 history 남기지 않음
+  //   }
+  // }, [data, router]);
+
   return { user: data?.user, isLoading: !data && !error };
 }
