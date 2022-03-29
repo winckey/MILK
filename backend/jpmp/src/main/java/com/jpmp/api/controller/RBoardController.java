@@ -3,8 +3,11 @@ package com.jpmp.api.controller;
 
 import com.jpmp.api.dto.request.nft.NtfRequestReqDto;
 import com.jpmp.api.dto.response.BaseResponseBody;
+import com.jpmp.api.dto.response.rBoard.RBoardDto;
+import com.jpmp.api.dto.response.rBoard.RBoardListResDto;
 import com.jpmp.api.service.nft.RBoardService;
 import com.jpmp.common.util.SecurityUtils;
+import com.jpmp.db.entity.board.RealizationBoard;
 import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.user.UserRepository;
 import com.jpmp.exception.CustomException;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Slf4j
@@ -60,9 +64,13 @@ public class RBoardController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> getUserRBoradList() {
+    public ResponseEntity<RBoardListResDto> getUserRBoradList() {
 
-        return null;
+
+        User user = userRepository.findByUsername(getUsername());
+        List<RealizationBoard> rBoardDtoList = (rBoradService.getRBoradList(user));
+        System.out.println("RBoardController 72 : " + rBoardDtoList);
+        return ResponseEntity.status(200).body(RBoardListResDto.of(200, "Success" , rBoardDtoList));
     }
 
     @GetMapping("/enterpris")
@@ -74,6 +82,8 @@ public class RBoardController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> getEnterpriseRBoradList() {
+
+
 
         return null;
     }
@@ -103,6 +113,8 @@ public class RBoardController {
 
         return null;
     }
+
+
     public String getUsername(){
         return SecurityUtils.getCurrentUsername()
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
