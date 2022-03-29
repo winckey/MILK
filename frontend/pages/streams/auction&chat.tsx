@@ -155,7 +155,7 @@ const Stream: NextPage = () => {
     console.log("더 높이 응찰하세요");
     setMoney(0);
   };
-
+  //
   // 최고가 비교하기 및 갱신
   useEffect(() => {
     if (highMoney < money) {
