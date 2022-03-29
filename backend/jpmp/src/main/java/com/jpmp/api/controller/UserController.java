@@ -104,7 +104,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> getUserInfo(@ApiIgnore @RequestHeader("Authorization") String accessToken) {
+    public ResponseEntity<UserResDto> getUserInfo(@ApiIgnore Authentication authentication) {
         /**
          * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
          * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
@@ -122,12 +122,9 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> modifyUser(@ApiIgnore @RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserModifyReqDto userModifyReqDto) {
+    public ResponseEntity<UserResDto> modifyUser(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserModifyReqDto userModifyReqDto) {
 
-        System.out.println("usercontroller accesstoken 106 : " + accessToken);
-        String username = jwtTokenUtil.getUsername(accessToken);
-
-        User userDetails = userRepository.findByUsername(username);
+        User userDetails = userRepository.findByUsername( getUsername());
 
         User result = userService.modifyUser(userDetails, userModifyReqDto);
 
@@ -141,7 +138,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> modifyProImgUser(@ApiIgnore @RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserImgReqDto userImgReqDto) {
+    public ResponseEntity<UserResDto> modifyProImgUser(@Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserImgReqDto userImgReqDto) {
         User userDetails = userRepository.findByUsername( getUsername());
 
         User result = userService.modifyProImgUser(userDetails, userImgReqDto.getImgUrl());
@@ -156,7 +153,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserResDto> modifyBackImgUser(@ApiIgnore @RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserImgReqDto userImgReqDto) {
+    public ResponseEntity<UserResDto> modifyBackImgUser(@Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserImgReqDto userImgReqDto) {
         User userDetails = userRepository.findByUsername( getUsername());
 
         User result = userService.modifyBackImgUser(userDetails, userImgReqDto.getImgUrl());
@@ -173,7 +170,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<UserResDto> addUserNftLike(@ApiIgnore @RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") String nftId) {
+    public ResponseEntity<UserResDto> addUserNftLike(@Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") String nftId) {
         User userDetails = userRepository.findByUsername( getUsername());
 
         User result = userService.addUserNftLike(userDetails, nftId);
@@ -190,7 +187,8 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<UserResDto> deleteUserNftLike(@ApiIgnore @RequestHeader("Authorization") String accessToken, @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true) String nftId) {
+    public ResponseEntity<UserResDto> deleteUserNftLike(@Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true) String nftId) {
+
         User userDetails = userRepository.findByUsername( getUsername());
 
         User result = userService.deleteUserNftLike(userDetails, nftId);

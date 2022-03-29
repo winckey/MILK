@@ -1,5 +1,6 @@
 package com.jpmp.db.entity.board;
 
+import com.jpmp.db.entity.nft.NFT;
 import com.jpmp.db.entity.user.User;
 import lombok.*;
 import javax.persistence.*;
@@ -24,15 +25,9 @@ public class RealizationBoard  {
     @Enumerated(EnumType.STRING)
     private RBoardStatus status;
 
-
-    //상품이름
-    @Column(nullable = false )
-    private String nftName;
-
-
-    //토큰id
-    @Column(nullable = false)
-    private String nftId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nft", referencedColumnName = "id")
+    private NFT nft;
 
     //신청자
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,9 +38,6 @@ public class RealizationBoard  {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enterprise", referencedColumnName = "id")
     private User enterprise;
-
-    //이미지 경로
-    private String nftImgUrl;
 
     //신청날짜
     private LocalDateTime applicationDate;
@@ -61,11 +53,9 @@ public class RealizationBoard  {
     }
 
     @Builder
-    public RealizationBoard(String nftId, String nftName , String nftImgUrl ,  User consumer , User enterprise ) {
+    public RealizationBoard(NFT nft,   User consumer , User enterprise ) {
        this.status = RBoardStatus.STATUS_NOTADM;
-       this.nftId = nftId;
-       this.nftName = nftName;
-       this.nftImgUrl = nftImgUrl;
+       this.nft = nft;
        changeConsumer(consumer);
        changeEnterprise(enterprise);
        applicationDate = LocalDateTime.now();

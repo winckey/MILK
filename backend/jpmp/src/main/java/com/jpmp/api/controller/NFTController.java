@@ -74,11 +74,11 @@ public class NFTController {
     })
     public ResponseEntity<BaseResponseBody> transferNft(@ApiIgnore Authentication authentication,
                                                       @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") NFTDto nftDto) {
+
         User userDetails = userRepository.findByUsername(getUsername());
-
         nftService.transferNFT(userDetails, nftDto);
-
         return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
+
     }
 
     @GetMapping()

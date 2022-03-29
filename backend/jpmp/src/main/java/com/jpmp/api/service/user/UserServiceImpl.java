@@ -7,8 +7,12 @@ import com.jpmp.api.dto.request.user.UserRegisterReqDto;
 import com.jpmp.common.auth.JwtExpirationEnums;
 import com.jpmp.common.util.JwtTokenUtil;
 import com.jpmp.common.util.RefreshToken;
+import com.jpmp.db.entity.nft.NFT;
+import com.jpmp.db.entity.nft.NFTUserLike;
 import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.jwt.RefreshTokenRedisRepository;
+import com.jpmp.db.repository.nft.NFTLikeRepository;
+import com.jpmp.db.repository.nft.NFTRepository;
 import com.jpmp.db.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtil jwtTokenUtil;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
+    private final NFTRepository nftRepository;
+    private final NFTLikeRepository nftLikeRepository;
+
     @Override
     public User createUser(UserRegisterReqDto registerRequestDto) {
         // 이게 좀더 맞는 코딩!
@@ -84,30 +91,36 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+
     @Override// 이거 왜 drity check 안댐?
     public User modifyBackImgUser(User user, String backFileImg) {
         user.changeBackgroundfileImg(backFileImg);
         userRepository.save(user);
         return user;
     }
+
+
     @Override
     @Transactional
     public User addUserNftLike(User userDetails, String nftId) {
-        userDetails.getLikeList().add(nftId);// 이렇게 하면 못읽음 1:N 일떄 주체 인쪽에서 수정해야지!
-        userRepository.save(userDetails);
-        // 나중에 물어보기
-//        List<String> likeList = userDetails.getLikeList();
-//        likeList.add(nftId);
+
+        NFT nft = nftRepository.findByNftId(nftId).get();//예외처리
+        NFTUserLike nftUserLike = NFTUserLike.ofCreateNftLike(userDetails , nft);// 이렇게 하면 못읽음 1:N 일떄 주체 인쪽에서 수정해야지!
+        nftLikeRepository.save(nftUserLike);
 
         return userDetails;
     }
+
+
 
     @Override
     public User deleteUserNftLike(User userDetails, String nftId) {
-        userDetails.getLikeList().remove(nftId);
-        userRepository.save(userDetails);
+        NFT nft = nftRepository.findByNftId(nftId).get();//예외처리
+        nftLikeRepository.deleteByUserAndNft(userDetails , nft);
         return userDetails;
     }
+
+
 
     @Override
     public TokenDto reissue(String refreshToken, String username) {

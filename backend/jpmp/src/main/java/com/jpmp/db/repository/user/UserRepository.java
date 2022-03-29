@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Transactional
@@ -24,5 +25,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select m from User m join fetch m.authorities a where m.username = :username")
     Optional<User> findByUsernameWithAuthority(String username);
 
+    @Transactional(readOnly = true)
     User findByUsername(String username);
+
+    @Transactional(readOnly = true)
+    Optional<User> findByRealname(String entrepriseName);
 }
