@@ -14,4 +14,7 @@ public interface NFTRepository extends JpaRepository<NFT, Long> {
 
     @Transactional(readOnly = true)
     Optional<NFT> findByNftId(String nftId);
+
+    @Transactional(readOnly = true)
+    Optional<NFT> findByOwnerIsEnterprise(Boolean ownerIsEnterprise);
 }

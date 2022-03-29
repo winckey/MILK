@@ -89,16 +89,30 @@ public class NFTController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> getNftList(@ApiIgnore Authentication authentication,
-                                                        @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") NFTDto nftDto) {
+    public ResponseEntity<BaseResponseBody> getNftMyList(@ApiIgnore Authentication authentication ) {
         User userDetails = userRepository.findByUsername(getUsername());
 
         nftService.getNftList(userDetails);
 
         return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
     }
-    
-    
+
+
+    @GetMapping("/{owner}")
+    @ApiOperation(value = "중고 / 명품 nft 조회", notes = "nft 카테고리별 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> getNft(@ApiIgnore Authentication authentication ,@NotBlank @PathVariable Boolean ownerIsEnterprise) {
+        User userDetails = userRepository.findByUsername(getUsername());
+
+        nftService.getNftList(userDetails , ownerIsEnterprise);
+
+        return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
+    }
 
     public String getUsername(){
         return SecurityUtils.getCurrentUsername()

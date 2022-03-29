@@ -30,16 +30,20 @@ public class NFTServiceImpl implements NFTService {
     @Override
     public void transferNFT(User userDetails, NFTDto nftDto) {
 
-        NFT nft = nftRepository.findByNftId(nftDto.getNftId()).get();
+        NFT nft = nftRepository.findByNftId(nftDto.getNftId()).get();// 컨텍스트는 한 트렉젝션 내애서만 유지됨
         nft.addNFT(userDetails);
 
     }
 
     @Override
     public List<NFT> getNftList(User userDetails) {
-        for (NFT nft : userDetails.getNftList()){
-            System.out.println(nft.getNftId());
-        }
+        System.out.println("nft controller  40 : " + userDetails.getNftList().size());
+
         return userDetails.getNftList();
+    }
+
+    @Override
+    public void getNftList(User userDetails, Boolean ownerIsEnterprise) {
+        nftRepository.findByOwnerIsEnterprise(ownerIsEnterprise);
     }
 }
