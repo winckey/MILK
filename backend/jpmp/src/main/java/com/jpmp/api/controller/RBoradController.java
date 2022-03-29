@@ -11,7 +11,11 @@ import com.jpmp.api.dto.response.user.UserResDto;
 import com.jpmp.api.service.nft.RBoradService;
 import com.jpmp.api.service.user.UserService;
 import com.jpmp.common.util.JwtTokenUtil;
+import com.jpmp.common.util.SecurityUtils;
 import com.jpmp.db.entity.user.User;
+import com.jpmp.db.repository.user.UserRepository;
+import com.jpmp.exception.CustomException;
+import com.jpmp.exception.ErrorCode;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +40,7 @@ public class RBoradController {
 
     private final RBoradService rBoradService;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     @PostMapping()
     @ApiOperation(value = "실물화 요청", notes = "해당 기업에게 실물화를 요청한다.")
@@ -48,8 +53,9 @@ public class RBoradController {
     public ResponseEntity<? extends BaseResponseBody> register(
             @ApiIgnore Authentication authentication,
             @Valid @RequestBody @ApiParam(value = "jwt 토큰 , 기업 이름 , nft 정보 요청", required = true) NtfRequestReqDto ntfRequestReqDto) {
+        User user = userRepository.findByUsername(getUsername());
 
-        rBoradService.addRBorad(authentication, ntfRequestReqDto);
+        rBoradService.addRBorad(user, ntfRequestReqDto);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
@@ -105,5 +111,8 @@ public class RBoradController {
 
         return null;
     }
-
+    public String getUsername(){
+        return SecurityUtils.getCurrentUsername()
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 }
