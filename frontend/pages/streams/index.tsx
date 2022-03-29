@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import useSWR from "swr";
 import Image from "next/image";
-import Layout from "@components/ui/layout";
+import { Layout } from "@components/ui/layout";
 import { useEffect, useState } from "react";
 
 interface StreamsResponse {
