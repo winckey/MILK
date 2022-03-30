@@ -33,6 +33,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 @Slf4j
@@ -114,6 +115,22 @@ public class UserController {
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", userDetails));
     }
 
+    @GetMapping("/info/{nickname}")
+    @ApiOperation(value = "nickname 정보 조회", notes = "nickname으로 타회원의 정보를 응답한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공", response = UserResDto.class),
+            @ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+            @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+    })
+    public ResponseEntity<UserResDto> getUserInfoBynickName(@ApiIgnore Authentication authentication , @NotNull @PathVariable String nickname) {
+
+        User userDetails = userRepository.findByNickname(nickname).get();
+        return ResponseEntity.status(200).body(UserResDto.of(200, "Success", userDetails));
+    }
+
+
+
     @PutMapping("")
     @ApiOperation(value = "회원 본인 정보 수정")
     @ApiResponses({
@@ -130,6 +147,8 @@ public class UserController {
 
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
     }
+
+
     @PutMapping("/pro")
     @ApiOperation(value = "회원 프로필이미지 수정")
     @ApiResponses({
@@ -145,6 +164,8 @@ public class UserController {
 
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
     }
+
+
     @PutMapping("/back")
     @ApiOperation(value = "회원 배경이미지 수정")
     @ApiResponses({
