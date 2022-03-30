@@ -29,6 +29,8 @@ const Realization: NextPage = () => {
     tokenFetcher
   );
 
+  console.log(data);
+
   return (
     <Layout seoTitle="실물화 내역">
       <AccountLayout>
@@ -47,9 +49,9 @@ const Realization: NextPage = () => {
                   </p>
                 </div>
                 <div className="my-5">
-                  <div className="rounded-[10px] bg-white shadow-sm">
+                  <div className="rounded-[10px] bg-white shadow-md">
                     {/* 리스트 */}
-                    {data?.rboardDtoList ? (
+                    {data?.rboardDtoList.length ? (
                       <div>
                         {data?.rboardDtoList?.map((apply) => (
                           <div
