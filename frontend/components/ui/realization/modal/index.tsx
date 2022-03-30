@@ -1,5 +1,8 @@
+import useMutation from "@libs/client/useMutation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+
 import { Modal } from "../../common";
 
 // const defaultOrder = {
@@ -65,17 +68,23 @@ interface IRealizationForm {
   check4: boolean;
 }
 
+interface IRealizationResponse {
+  message: string;
+  statusCode: number;
+}
+
 export default function RealizationModal({
   nft,
   onClose,
   user,
   nftId,
 }: RealizationModalProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log(user);
-  console.log(nft);
-  console.log(nftId);
+  // console.log(user);
+  // console.log(nft);
+  // console.log(nftId);
 
   // input 값 받아옴
   const {
@@ -85,6 +94,10 @@ export default function RealizationModal({
     setValue,
     watch,
   } = useForm<IRealizationForm>();
+
+  // request
+  const [requestRealization, { loading, data, error }] =
+    useMutation<IRealizationResponse>("/api/realization_board");
 
   // data 초기화
   useEffect(() => {
@@ -100,8 +113,20 @@ export default function RealizationModal({
 
   // form 제출 시 실행
   const onValid = (formData: IRealizationForm) => {
-    console.log(formData);
+    if (loading) return;
+    // console.log(nftId);
+    if (window.confirm("해당 정보로 실물화 신청을 하시겠습니까?") == true) {
+      requestRealization({ nftId });
+    }
   };
+
+  // server 응답 받았을 때 실행
+  useEffect(() => {
+    if (data && data.statusCode === 200) {
+      alert(`신청이 완료되었습니다!`);
+      router.push(`/account/realization`); // 실물화 내역 페이지로 이동
+    }
+  }, [data, router]);
 
   // 취소 버튼
   const closeModal = () => {

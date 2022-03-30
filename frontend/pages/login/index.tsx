@@ -66,6 +66,21 @@ export default function Login() {
     }
   }, [data, router]);
 
+  // const test = async () => {
+  //   await fetch(
+  //     `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ID}/images/v1/direct_upload`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${process.env.CF_IMAGES_TOKEN}`,
+  //       },
+  //     }
+  //   )
+  //     .then((response) => response.json())
+  //     .then((data) => console.log(data));
+  // };
+
   return (
     <Layout seoTitle="로그인">
       <div>
@@ -167,6 +182,7 @@ export default function Login() {
                 </div>
               </div>
             </form>
+            {/* <button onClick={test}>test</button> */}
           </div>
         </div>
       </div>

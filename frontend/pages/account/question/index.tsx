@@ -1,7 +1,10 @@
 import { AccountLayout, Layout } from "@components/ui/layout";
+import useUser from "@libs/client/useUser";
 import { NextPage } from "next";
 
 const Question: NextPage = () => {
+  const { user, isLoading } = useUser();
+
   return (
     <Layout seoTitle="문의">
       <AccountLayout>

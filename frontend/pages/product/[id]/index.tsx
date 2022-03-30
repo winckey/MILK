@@ -11,7 +11,7 @@ const Product: NextPage = () => {
   const { user, isLoading } = useUser();
   // console.log(user);
 
-  const [isOwner, setIsOwner] = useState(false); // 본인 상품인지 여부
+  const [isOwner, setIsOwner] = useState(true); // 본인 상품인지 여부
   const [selectedOrder, setSelectedOrder] = useState<null | object>(null);
   const [selectedRealization, setSelectedRealization] = useState<null | object>(
     null
@@ -32,11 +32,11 @@ const Product: NextPage = () => {
   // router에서 받아온 id로 요청 후 받은 데이터 (임시 참고용)
   const nftId = "zxs123123123";
   const response = {
-    name: "가방",
+    name: "구찌 가방",
     brand: "루이비똥",
-    image: "string",
+    image: "http~~~~",
     description: "string",
-    price: "string",
+    price: "GUCCI",
     edition: "string",
     type: "boolean",
   };
