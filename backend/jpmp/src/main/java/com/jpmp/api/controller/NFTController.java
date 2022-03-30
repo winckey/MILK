@@ -3,6 +3,7 @@ package com.jpmp.api.controller;
 
 import com.jpmp.api.dto.TokenDto;
 import com.jpmp.api.dto.request.nft.NFTDto;
+import com.jpmp.api.dto.request.nft.NFTSearchReqDto;
 import com.jpmp.api.dto.request.user.UserImgReqDto;
 import com.jpmp.api.dto.request.user.UserLoginReqDto;
 import com.jpmp.api.dto.request.user.UserModifyReqDto;
@@ -36,7 +37,7 @@ import java.util.Optional;
 @Validated
 @Api(tags = "NFT")
 @RestController
-@RequestMapping("/api/nft")
+@RequestMapping("/Mlik/nft")
 @RequiredArgsConstructor
 public class NFTController {
 
@@ -96,6 +97,23 @@ public class NFTController {
 
         return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
     }
+
+    @GetMapping("/search")
+    @ApiOperation(value = "nft 조회 조건 검색", notes = "nft 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> getNftList(@RequestParam NFTSearchReqDto nftSearchReqDto) {//https://brunch.co.kr/@kd4/158
+        User userDetails = userRepository.findByUsername(getUsername());
+
+        nftService.getNftList(userDetails);
+
+        return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
+    }
+
 
 
     @GetMapping("/{owner}")

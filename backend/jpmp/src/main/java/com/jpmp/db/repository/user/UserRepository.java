@@ -30,4 +30,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional(readOnly = true)
     Optional<User> findByRealname(String entrepriseName);
+
+    @Transactional(readOnly = true)
+    Optional<User> findByNickname(String nickname);
 }

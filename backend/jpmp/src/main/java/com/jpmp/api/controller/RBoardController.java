@@ -73,7 +73,7 @@ public class RBoardController {
         return ResponseEntity.status(200).body(RBoardListResDto.of(200, "Success" , rBoardDtoList));
     }
 
-    @GetMapping("/enterpris")
+    @GetMapping("/enterpris")//////////////
     @ApiOperation(value = "실물화 기업 요청리스트", notes = "기업이 소비자가 요청한 실물화리스트를 확인한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -88,7 +88,7 @@ public class RBoardController {
         return null;
     }
 
-    @PutMapping()
+    @PutMapping()//////////////
     @ApiOperation(value = "실물화 요청리스트 상태변경", notes = "기업이 실물화리스트 상태를 변경 한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -101,7 +101,7 @@ public class RBoardController {
         return null;
     }
 
-    @DeleteMapping()
+    @DeleteMapping()///////////////////
     @ApiOperation(value = "실물화 요청리스트 삭제", notes = "실물화 요청리스트 삭제")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
