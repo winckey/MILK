@@ -1,7 +1,9 @@
 import { AccountLayout, Layout } from "@components/ui/layout";
+import useUser from "@libs/client/useUser";
 import { NextPage } from "next";
 
 const Earning: NextPage = () => {
+  const { user, isLoading } = useUser();
   return (
     <Layout seoTitle="수익">
       <AccountLayout>
@@ -10,7 +12,7 @@ const Earning: NextPage = () => {
             <h1 className="font-semibold text-[40px]">수익</h1>
           </div>
           {/* 아래 */}
-          <div className="mt-[30px]">아래</div>
+          <div className="mt-[30px]"></div>
         </div>
       </AccountLayout>
     </Layout>
