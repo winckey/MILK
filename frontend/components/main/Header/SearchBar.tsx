@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { CgSearch } from "react-icons/cg";
 import { Colors, Devices } from "../Theme";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 
 // hi
 
@@ -18,7 +20,7 @@ const SearchBarEl = styled.article`
   }
 `;
 
-const SearchBarBg = styled.div`
+const SearchBarBg = styled.form`
   background-color: ${Colors.White};
   display: flex;
   width: 100%;
@@ -42,12 +44,30 @@ const SearchInput = styled.input`
   }
 `;
 
+interface IForm {
+  keyword: string;
+}
+
 export default function SearchBar() {
+  const router = useRouter();
+  const { register, handleSubmit } = useForm<IForm>();
+
+  const onValid = (data: IForm) => {
+    router.push(`/search?keyword=${data.keyword}`);
+  };
+
   return (
     <SearchBarEl>
-      <SearchBarBg>
-        <CgSearch className="" />
-        <SearchInput placeholder="당신의 NFT를 찾아보세요" />
+      <SearchBarBg
+        className="focus:ring-gold focus:outline-none  focus:border-lightGold"
+        onSubmit={handleSubmit(onValid)}
+      >
+        <CgSearch />
+        <SearchInput
+          className="text-black"
+          {...register("keyword", { required: true, minLength: 2 })}
+          placeholder="당신의 NFT를 찾아보세요"
+        />
       </SearchBarBg>
     </SearchBarEl>
   );
