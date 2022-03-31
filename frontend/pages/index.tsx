@@ -25,7 +25,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.png" />
       </Head>
       <Hero />
-
+      dfsdf
       <Carousel />
       <TopCollectibles />
     </HomeEl>
