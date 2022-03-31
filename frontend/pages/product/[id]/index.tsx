@@ -1,11 +1,17 @@
 import { Layout } from "@components/ui/layout";
 import { OrderModal } from "@components/ui/order";
 import { RealizationModal } from "@components/ui/realization";
+import { ethers } from "ethers";
 import useUser from "@libs/client/useUser";
 import type { NextPage } from "next";
-import Image from "next/image";
+// import Image from "next/image";
 import { useRouter } from "next/router";
+import { loadMarketItems, marketContract, nftContract } from "utils/interact";
+import ThreeDimension from "@components/ui/image";
 import { useState } from "react";
+import useMutation from "@libs/client/useMutation";
+
+declare let window: any;
 
 const Product: NextPage = () => {
   const { user, isLoading } = useUser();
@@ -16,6 +22,10 @@ const Product: NextPage = () => {
   const [selectedRealization, setSelectedRealization] = useState<null | object>(
     null
   );
+  const [marketplace, setMarketplace] = useState({});
+  const [nft, setNFT] = useState({});
+  const [itemId, setItemId] = useState(0);
+  const [name, setname] = useState("");
 
   const cleanupModal = () => {
     setSelectedRealization(null);
@@ -24,6 +34,8 @@ const Product: NextPage = () => {
 
   // 관이 part
   const router = useRouter();
+  // const brand = "Celine";
+  console.log(router);
   // console.log(router);
   const image: string | undefined = router.query.image?.toString();
   // console.log(image);
@@ -32,14 +44,45 @@ const Product: NextPage = () => {
   // router에서 받아온 id로 요청 후 받은 데이터 (임시 참고용)
   const nftId = "zxs123123123";
   const response = {
-    name: "구찌 가방",
-    brand: "루이비똥",
-    image: "http~~~~",
-    description: "string",
-    price: "GUCCI",
-    edition: "string",
-    type: "boolean",
+    name: router.query.name?.toString(),
+    image: router.query.image?.toString(),
+    description: router.query.description?.toString(),
+    price: Number(router.query.price),
+    edition: Number(router.query.edition),
+    type: router.query.type?.toString(),
+    balance: router.query.balance,
+    nftId: router.query.nftId,
+    // name: "구찌 가방",
+    // brand: "루이비똥",
+    // image: "http~~~~",
+    // description: "string",
+    // price: "GUCCI",
+    // edition: "string",
+    // type: "boolean",
   };
+
+  const loadContracts = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const res1 = await marketContract(signer);
+    const res2 = await nftContract(signer);
+    const items = await loadMarketItems(res1, res2);
+    // setitems(items);
+    // setMarketplace(res1);
+    // setNFT(res2);
+    // setLoading(false);
+    // setId(items.id);
+    // console.log(id);
+    // console.log(marketplace);
+  };
+
+  const buyMarketItem = async (item) => {
+    await (
+      await marketplace.purchaseItem(item.itemid, { value: item.totalPrice })
+    ).wait();
+  };
+
+  console.log(response);
 
   return (
     <Layout seoTitle="제품명">
@@ -104,15 +147,17 @@ const Product: NextPage = () => {
                     </div>
                   </div>
                   {/* image */}
+
                   <div>
                     <div className="w-full h-full min-h-[200px] max-h-[1000px] cursor-pointer">
                       <div className="h-full w-full">
                         <div className="h-full w-[600px] flex items-center justify-center max-w-full max-h-full overflow-hidden">
                           <img
-                            src={image}
+                            src={response.image}
                             alt="#"
                             className="w-auto h-auto max-w-full max-h-full object-contain"
                           />
+                          {/* <ThreeDimension name={response.image} /> */}
                         </div>
                       </div>
                     </div>
@@ -319,6 +364,12 @@ const Product: NextPage = () => {
         </div>
 
         {/* Modal */}
+<<<<<<< HEAD
+        {selectedOrder && (
+          <OrderModal response={response} onClose={cleanupModal} />
+        )}
+        {selectedRealization && <RealizationModal onClose={cleanupModal} />}
+=======
         {selectedOrder && <OrderModal onClose={cleanupModal} />}
         {selectedRealization && (
           <RealizationModal
@@ -328,6 +379,7 @@ const Product: NextPage = () => {
             nftId={nftId}
           />
         )}
+>>>>>>> 64cdc33ce490dbc7d6d9ec896c8a559ccef212a7
       </div>
     </Layout>
   );

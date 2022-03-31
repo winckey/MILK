@@ -43,8 +43,23 @@ interface RealizationModalProps {
   onClose: Function;
 }
 
-export default function OrderModal({ onClose }: RealizationModalProps) {
+interface Iresponse {
+  response: {
+    name: string | undefined;
+    image: string | undefined;
+    description: string | undefined;
+    price: number;
+    edition: number;
+    type: string | undefined;
+    balance: number;
+    nftId: string;
+  };
+  onClose: Function;
+}
+
+export default function OrderModal({ response, onClose }: Iresponse) {
   const [isOpen, setIsOpen] = useState(true);
+  console.log(response);
   // const [order, setOrder] = useState(defaultOrder);
   // const [enablePrice, setEnablePrice] = useState(false);
   // const [hasAgreedTOS, setHasAgreedTOS] = useState(false);
@@ -73,140 +88,76 @@ export default function OrderModal({ onClose }: RealizationModalProps) {
     <Modal isOpen={isOpen}>
       <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
         <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-          <div className="sm:flex sm:items-start">
-            <div className="mt-3 sm:mt-0 sm:ml-4 sm:text-left">
-              <h3
-                className="mb-7 text-lg font-bold leading-6 text-gray-900"
-                id="modal-title"
-              >
-                course.title
-              </h3>
-              <div className="mt-1 relative rounded-md">
-                <div className="mb-1">
-                  <label className="mb-2 font-bold">Price(eth)</label>
-                  <div className="text-xs text-gray-700 flex">
-                    <label className="flex items-center mr-2">
-                      <input
-                        // checked={enablePrice}
-                        // onChange={({ target: { checked } }) => {
-                        //   setOrder({
-                        //     ...order,
-                        //     price: checked ? order.price : eth.perItem,
-                        //   });
-                        //   setEnablePrice(checked);
-                        // }}
-                        type="checkbox"
-                        className="form-checkbox"
-                      />
-                    </label>
-                    <span>
-                      Adjust Price - only when the price is not correct
-                    </span>
+          <div className="">
+            <div className="mt-3 sm:mt-0 sm:text-left">
+              <div className="flex justify-between mx-2">
+                <div>
+                  {" "}
+                  <h3
+                    className="mb-7 text-lg font-bold leading-6 text-gray-900"
+                    id="modal-title"
+                  >
+                    구매하기
+                  </h3>
+                </div>
+
+                <div>
+                  <button
+                    className="flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
+                    onClick={closeModal}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+              <div className="mt-1 relative rounded-md flex items-center">
+                <div className="">
+                  <div className="mb-1">
+                    <img
+                      src={response.image}
+                      className="w-[200px] h-[200px]"
+                      alt=""
+                    />
                   </div>
                 </div>
-                <input
-                  // disabled={!enablePrice}
-                  // value={order.price}
-                  // onChange={({ target: { value } }) => {
-                  //   if (isNaN(value)) {
-                  //     return;
-                  //   }
-                  //   setOrder({
-                  //     ...order,
-                  //     price: value,
-                  //   });
-                  // }}
-                  type="text"
-                  name="price"
-                  id="price"
-                  className="disabled:opacity-50 w-80 mb-1 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
-                />
-                <p className="text-xs text-gray-700">
-                  Price will be verified at the time of the order. If the price
-                  will be lower, order can be declined (+- 2% slipage is
-                  allowed)
-                </p>
+                <div className="block pl-4">
+                  <div className="text-sm font-bold">
+                    Edition {response.edition} of Total Edition
+                  </div>
+                  <div className="text-xs text-textGray pt-4">Product Name</div>
+                  <div className="text-xl">{response.name}</div>
+                  <div className="text-xs text-textGray pt-4">Price</div>
+                  <div className="flex">
+                    {" "}
+                    <div className="cursor-pointer">
+                      <a>
+                        <img
+                          className="w-6 h-6 object-contain"
+                          src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
+                          alt="ETH"
+                        />
+                      </a>
+                    </div>
+                    <div>{response.price.toFixed(1)} (₩ 이더가격)</div>
+                  </div>
+                </div>
               </div>
               {/* {isNewPurchase && (
                 <> */}
-              <div className="mt-2 relative rounded-md">
-                <div className="mb-1">
-                  <label className="mb-2 font-bold">Email</label>
-                </div>
-                <input
-                  // onChange={({ target: { value } }) => {
-                  //   setOrder({
-                  //     ...order,
-                  //     email: value.trim(),
-                  //   });
-                  // }}
-                  type="email"
-                  name="email"
-                  id="email"
-                  className="w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
-                  placeholder="x@y.com"
-                />
-                <p className="text-xs text-gray-700 mt-1">
-                  It&apos;s important to fill a correct email, otherwise the
-                  order cannot be verified. We are not storing your email
-                  anywhere
-                </p>
-              </div>
-              <div className="my-2 relative rounded-md">
-                <div className="mb-1">
-                  <label className="mb-2 font-bold">Repeat Email</label>
-                </div>
-                <input
-                  // onChange={({ target: { value } }) => {
-                  //   setOrder({
-                  //     ...order,
-                  //     confirmationEmail: value.trim(),
-                  //   });
-                  // }}
-                  type="email"
-                  name="confirmationEmail"
-                  id="confirmationEmail"
-                  className="w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
-                  placeholder="x@y.com"
-                />
-              </div>
-              {/* </>
-              )} */}
-              <div className="text-xs text-gray-700 flex mt-5">
-                <label className="flex items-center mr-2">
-                  <input
-                    // checked={hasAgreedTOS}
-                    // onChange={({ target: { checked } }) => {
-                    //   setHasAgreedTOS(checked);
-                    // }}
-                    type="checkbox"
-                    className="form-checkbox"
-                  />
-                </label>
-                <span>
-                  I accept Eincode &apos;terms of service&apos; and I agree that
-                  my order can be rejected in the case data provided above are
-                  not correct
-                </span>
-              </div>
-              {/* {formState.message && ( */}
-              <div className="p-4 my-3 text-yellow-700 bg-yellow-200 rounded-lg text-sm">
-                formState.message
-              </div>
-              {/* )} */}
+              <div>{response.balance}</div>
             </div>
           </div>
         </div>
         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex">
           <button
-          // disabled={formState.isDisabled}
-          // onClick={() => {
-          //   onSubmit(order, course);
-          // }}
+            className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
+            // disabled={formState.isDisabled}
+            // onClick={() => {
+            //   onSubmit(order, course);
+            // }}
           >
-            Submit
+            Buy
           </button>
-          <button onClick={closeModal}>Cancel</button>
         </div>
       </div>
     </Modal>
