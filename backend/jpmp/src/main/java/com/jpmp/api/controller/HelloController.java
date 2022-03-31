@@ -1,13 +1,25 @@
 package com.jpmp.api.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
+@Api(tags = {"HelloController API"})
+@RequiredArgsConstructor
 public class HelloController {
 
-    @GetMapping("/hello")
-    public String hello(){
-        return "hello";
+    @GetMapping(value = "/api/test")
+    public ResponseEntity<?> test(HttpServletRequest request) throws Exception {
+        String reqUrl = "test";
+        return ResponseEntity.ok().body(reqUrl);
     }
+
+
+
+
 }

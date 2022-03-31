@@ -44,7 +44,7 @@ export const connectWallet = async () => {
 
 export const marketContract = async (signer) => {
   const contract = new ethers.Contract(
-    Marketplace.networks["5777"].address,
+    Marketplace.networks["3"].address,
     Marketplace.abi,
     signer
   );
@@ -53,7 +53,7 @@ export const marketContract = async (signer) => {
 
 export const nftContract = async (signer) => {
   const contract = new ethers.Contract(
-    NFT.networks["5777"].address,
+    NFT.networks["3"].address,
     NFT.abi,
     signer
   );

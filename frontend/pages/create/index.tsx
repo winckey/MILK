@@ -163,7 +163,7 @@ const Create: NextPage = () => {
   const timeout = (delay: number) => {
     return new Promise((res) => setTimeout(res, delay));
   };
-  const createNFT = async (event: HTMLFormElement) => {
+  const createNFT = async (event: any) => {
     event.preventDefault();
     if (!image || !price || !name || !description) return;
     try {

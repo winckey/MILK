@@ -76,11 +76,11 @@ const Product: NextPage = () => {
     // console.log(marketplace);
   };
 
-  const buyMarketItem = async (item) => {
-    await (
-      await marketplace.purchaseItem(item.itemid, { value: item.totalPrice })
-    ).wait();
-  };
+  // const buyMarketItem = async (item) => {
+  //   await (
+  //     await marketplace.purchaseItem(item.itemid, { value: item.totalPrice })
+  //   ).wait();
+  // };
 
   console.log(response);
 
@@ -364,9 +364,7 @@ const Product: NextPage = () => {
         </div>
 
         {/* Modal */}
-        {selectedOrder && (
-          <OrderModal response={response} onClose={cleanupModal} />
-        )}
+        {selectedOrder && <OrderModal onClose={cleanupModal} />}
         {selectedRealization && (
           <RealizationModal
             nft={selectedRealization}
