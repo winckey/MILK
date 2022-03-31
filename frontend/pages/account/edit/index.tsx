@@ -115,7 +115,7 @@ const EditProfile: NextPage = () => {
           <div className="flex flex-wrap justify-between mt-9">
             <h1 className="font-semibold text-[40px]">프로필 수정</h1>
             <div className="flex items-center">
-              <Link href={`/user/${user?.nickname}`} key={user?.nickname}>
+              <Link href={`/profile/${user?.nickname}`} key={user?.nickname}>
                 <a className="px-5 py-3 inline-flex flex-row items-center justify-center font-semibold rounded-[10px] bg-white text-textGray border hover:text-textBlack hover:shadow-md cursor-pointer">
                   <div className="mr-3">
                     <svg

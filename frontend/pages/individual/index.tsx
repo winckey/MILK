@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import useSWR from "swr";
 
-const User: NextPage = () => {
+const Individual: NextPage = () => {
   return (
     <Layout seoTitle="개인관">
       <div className="pb-20">
@@ -48,7 +48,10 @@ const User: NextPage = () => {
             Trending collections
           </p>
           <div className="px-[52px]">
-            <div className=" grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
+              <div className="bg-blue-500 h-[300px]"></div>
+              <div className="bg-blue-500 h-[300px]"></div>
+              <div className="bg-blue-500 h-[300px]"></div>
               <div className="bg-blue-500 h-[300px]"></div>
               <div className="bg-blue-500 h-[300px]"></div>
               <div className="bg-blue-500 h-[300px]"></div>
@@ -62,4 +65,4 @@ const User: NextPage = () => {
   );
 };
 
-export default User;
+export default Individual;

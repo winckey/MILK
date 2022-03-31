@@ -211,7 +211,7 @@ export default function Header({ mobileMenu }) {
         <Nav>
           <ul>
             <li>
-              <Link href="/user">
+              <Link href="/individual">
                 <NavItem className="cursor-pointer p-2 px-3 rounded-md">
                   개인관
                 </NavItem>
