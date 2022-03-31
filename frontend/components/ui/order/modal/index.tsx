@@ -44,22 +44,22 @@ interface RealizationModalProps {
 }
 
 interface Iresponse {
-  response: {
-    name: string | undefined;
-    image: string | undefined;
-    description: string | undefined;
-    price: number;
-    edition: number;
-    type: string | undefined;
-    balance: number;
-    nftId: string;
-  };
+  // response: {
+  //   name: string | undefined;
+  //   image: string | undefined;
+  //   description: string | undefined;
+  //   price: number;
+  //   edition: number;
+  //   type: string | undefined;
+  //   balance: number;
+  //   nftId: string;
+  // };
   onClose: Function;
 }
 
-export default function OrderModal({ response, onClose }: Iresponse) {
+export default function OrderModal({ onClose }: Iresponse) {
   const [isOpen, setIsOpen] = useState(true);
-  console.log(response);
+  // console.log(response);
   // const [order, setOrder] = useState(defaultOrder);
   // const [enablePrice, setEnablePrice] = useState(false);
   // const [hasAgreedTOS, setHasAgreedTOS] = useState(false);
@@ -113,19 +113,19 @@ export default function OrderModal({ response, onClose }: Iresponse) {
               <div className="mt-1 relative rounded-md flex items-center">
                 <div className="">
                   <div className="mb-1">
-                    <img
+                    {/* <img
                       src={response.image}
                       className="w-[200px] h-[200px]"
                       alt=""
-                    />
+                    /> */}
                   </div>
                 </div>
                 <div className="block pl-4">
-                  <div className="text-sm font-bold">
+                  {/* <div className="text-sm font-bold">
                     Edition {response.edition} of Total Edition
-                  </div>
+                  </div> */}
                   <div className="text-xs text-textGray pt-4">Product Name</div>
-                  <div className="text-xl">{response.name}</div>
+                  {/* <div className="text-xl">{response.name}</div> */}
                   <div className="text-xs text-textGray pt-4">Price</div>
                   <div className="flex">
                     {" "}
@@ -138,13 +138,13 @@ export default function OrderModal({ response, onClose }: Iresponse) {
                         />
                       </a>
                     </div>
-                    <div>{response.price.toFixed(1)} (₩ 이더가격)</div>
+                    {/* <div>{response.price.toFixed(1)} (₩ 이더가격)</div> */}
                   </div>
                 </div>
               </div>
               {/* {isNewPurchase && (
                 <> */}
-              <div>{response.balance}</div>
+              {/* <div>{response.balance}</div> */}
             </div>
           </div>
         </div>
