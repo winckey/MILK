@@ -2,6 +2,7 @@ import { Layout } from "@components/ui/layout";
 import { OrderModal } from "@components/ui/order";
 import { RealizationModal } from "@components/ui/realization";
 import { ethers } from "ethers";
+import useUser from "@libs/client/useUser";
 import type { NextPage } from "next";
 // import Image from "next/image";
 import { useRouter } from "next/router";
@@ -13,7 +14,10 @@ import useMutation from "@libs/client/useMutation";
 declare let window: any;
 
 const Product: NextPage = () => {
-  const [isOwner, setIsOwner] = useState(false); // 본인 상품인지 여부
+  const { user, isLoading } = useUser();
+  // console.log(user);
+
+  const [isOwner, setIsOwner] = useState(true); // 본인 상품인지 여부
   const [selectedOrder, setSelectedOrder] = useState<null | object>(null);
   const [selectedRealization, setSelectedRealization] = useState<null | object>(
     null
@@ -32,8 +36,13 @@ const Product: NextPage = () => {
   const router = useRouter();
   // const brand = "Celine";
   console.log(router);
+  // console.log(router);
+  const image: string | undefined = router.query.image?.toString();
+  // console.log(image);
+  // console.log(typeof image);
 
   // router에서 받아온 id로 요청 후 받은 데이터 (임시 참고용)
+  const nftId = "zxs123123123";
   const response = {
     name: router.query.name?.toString(),
     image: router.query.image?.toString(),
@@ -43,6 +52,13 @@ const Product: NextPage = () => {
     type: router.query.type?.toString(),
     balance: router.query.balance,
     nftId: router.query.nftId,
+    // name: "구찌 가방",
+    // brand: "루이비똥",
+    // image: "http~~~~",
+    // description: "string",
+    // price: "GUCCI",
+    // edition: "string",
+    // type: "boolean",
   };
 
   const loadContracts = async () => {
@@ -348,10 +364,22 @@ const Product: NextPage = () => {
         </div>
 
         {/* Modal */}
+<<<<<<< HEAD
         {selectedOrder && (
           <OrderModal response={response} onClose={cleanupModal} />
         )}
         {selectedRealization && <RealizationModal onClose={cleanupModal} />}
+=======
+        {selectedOrder && <OrderModal onClose={cleanupModal} />}
+        {selectedRealization && (
+          <RealizationModal
+            nft={selectedRealization}
+            onClose={cleanupModal}
+            user={user}
+            nftId={nftId}
+          />
+        )}
+>>>>>>> 64cdc33ce490dbc7d6d9ec896c8a559ccef212a7
       </div>
     </Layout>
   );

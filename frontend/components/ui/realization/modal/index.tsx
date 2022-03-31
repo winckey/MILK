@@ -1,5 +1,8 @@
+import useMutation from "@libs/client/useMutation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+
 import { Modal } from "../../common";
 
 // const defaultOrder = {
@@ -40,19 +43,48 @@ import { Modal } from "../../common";
 //   return _createFormState();
 // };
 
+// interface Nft {
+//   brand: string;
+//   description: string;
+//   edition: string;
+//   image: string;
+//   name: string;
+//   price: string;
+//   type: boolean;
+// }
+
 interface RealizationModalProps {
+  nft: any;
   onClose: Function;
+  user: any;
+  nftId: string;
 }
 
 interface IRealizationForm {
+  nftId: string;
   check1: boolean;
   check2: boolean;
   check3: boolean;
   check4: boolean;
 }
 
-export default function RealizationModal({ onClose }: RealizationModalProps) {
+interface IRealizationResponse {
+  message: string;
+  statusCode: number;
+}
+
+export default function RealizationModal({
+  nft,
+  onClose,
+  user,
+  nftId,
+}: RealizationModalProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
+  // console.log(user);
+  // console.log(nft);
+  // console.log(nftId);
 
   // input 값 받아옴
   const {
@@ -63,11 +95,16 @@ export default function RealizationModal({ onClose }: RealizationModalProps) {
     watch,
   } = useForm<IRealizationForm>();
 
+  // request
+  const [requestRealization, { loading, data, error }] =
+    useMutation<IRealizationResponse>("/api/realization_board");
+
   // data 초기화
   useEffect(() => {
     // if (!!course) {
     setIsOpen(true);
     // }
+    setValue("nftId", nftId);
     setValue("check1", false);
     setValue("check2", false);
     setValue("check3", false);
@@ -76,8 +113,20 @@ export default function RealizationModal({ onClose }: RealizationModalProps) {
 
   // form 제출 시 실행
   const onValid = (formData: IRealizationForm) => {
-    console.log(formData);
+    if (loading) return;
+    // console.log(nftId);
+    if (window.confirm("해당 정보로 실물화 신청을 하시겠습니까?") == true) {
+      requestRealization({ nftId });
+    }
   };
+
+  // server 응답 받았을 때 실행
+  useEffect(() => {
+    if (data && data.statusCode === 200) {
+      alert(`신청이 완료되었습니다!`);
+      router.push(`/account/realization`); // 실물화 내역 페이지로 이동
+    }
+  }, [data, router]);
 
   // 취소 버튼
   const closeModal = () => {
@@ -96,40 +145,39 @@ export default function RealizationModal({ onClose }: RealizationModalProps) {
             <form
               onSubmit={handleSubmit(onValid)}
               className="mt-3 sm:mt-0 sm:text-left"
-              id="form"
             >
               <h3 className="mb-7 font-semibold text-xl">실물화 신청</h3>
 
               <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
                 <div className="font-semibold px-4">상품명</div>
                 <div className="bg-[#fbfdff] border-t border-lightBg px-4">
-                  response.name
+                  {nft.name}
                 </div>
               </div>
               <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
                 <div className="font-semibold px-4">이름</div>
                 <div className="bg-[#fbfdff] border-t border-lightBg px-4">
-                  user.userName
+                  {user?.userName}
                 </div>
               </div>
               <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
                 <div className="font-semibold px-4">이메일</div>
                 <div className="bg-[#fbfdff] border-t border-lightBg px-4">
-                  user.email
+                  {user?.email}
                 </div>
               </div>
               <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
                 <div className="font-semibold px-4">휴대전화</div>
                 <div className="bg-[#fbfdff] border-t border-lightBg px-4">
-                  user.phone
+                  {user?.phone}
                 </div>
               </div>
               <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
                 <div className="font-semibold px-4">주소</div>
                 <div className="bg-[#fbfdff] border-t border-lightBg px-4">
-                  <div>user.zipCode</div>
-                  <div>user.address1</div>
-                  <div>user.address2</div>
+                  <div>{user?.zipCode}</div>
+                  <div>{user?.address1}</div>
+                  <div>{user?.address2}</div>
                 </div>
               </div>
 
@@ -203,19 +251,18 @@ export default function RealizationModal({ onClose }: RealizationModalProps) {
               <div className="flex">
                 <button
                   className="rounded-[10px] font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full mr-2"
-                  form="form"
                   // onClick={() => {
                   //   onSubmit(order, course);
                   // }}
                 >
                   신청
                 </button>
-                <button
+                <div
                   onClick={closeModal}
-                  className="rounded-[10px] font-semibold bg-red-300 hover:bg-red-600 px-5 py-3 text-white w-[100px]"
+                  className="rounded-[10px] font-semibold bg-red-300 hover:bg-red-600 px-5 py-3 text-white w-[100px] text-center cursor-pointer"
                 >
                   취소
-                </button>
+                </div>
               </div>
             </form>
           </div>

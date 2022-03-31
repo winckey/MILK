@@ -27,29 +27,33 @@ export default function useMutation<T = any>(
     methodType,
   });
   // console.log(methodType);
+
   const URL = `https://j6e206.p.ssafy.io:8080${url}`;
   const TOKEN = useRecoilValue(accessToken);
-  const [headers, setHeaders] = useState({});
+  // const [headers, setHeaders] = useState({});
 
-  useEffect(() => {
-    if (methodType === "PUT") {
-      setHeaders({
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${TOKEN}`,
-      });
-    } else {
-      setHeaders({
-        "Content-Type": "application/json",
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (methodType === "PUT") {
+  //     setHeaders({
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${TOKEN}`,
+  //     });
+  //   } else {
+  //     setHeaders({
+  //       "Content-Type": "application/json",
+  //     });
+  //   }
+  // }, []);
 
   function mutation(data: any) {
     setState((prev) => ({ ...prev, loading: true }));
 
     fetch(URL, {
       method: methodType,
-      headers: headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${TOKEN}`,
+      },
       body: JSON.stringify(data),
     })
       .then((response) => response.json().catch(() => {}))

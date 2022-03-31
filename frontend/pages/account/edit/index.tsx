@@ -39,7 +39,7 @@ interface IEditProfileForm {
 
 const EditProfile: NextPage = () => {
   const { user, isLoading } = useUser();
-  console.log(user);
+  // console.log(user);
 
   // input 값 받아옴
   const {
@@ -83,12 +83,7 @@ const EditProfile: NextPage = () => {
     if (loading) return;
 
     if (window.confirm("해당 정보로 수정하시겠습니까?") == true) {
-      const newData = {
-        ...formData,
-        email: getValues("email"),
-        userName: getValues("userName"),
-      };
-      editProfile(newData);
+      editProfile(formData);
     }
   };
 
@@ -105,7 +100,7 @@ const EditProfile: NextPage = () => {
       oncomplete: function (data) {
         setValue("zipCode", data.zonecode + "");
         setValue("address1", data.address);
-        setValue("address2", data.address);
+        setValue("address2", "");
       },
     }).open();
   };
@@ -113,146 +108,199 @@ const EditProfile: NextPage = () => {
   return (
     <Layout seoTitle="프로필 수정">
       <AccountLayout>
-        <div className="mt-7 mx-[52px] text-textBlack max-w-[800px] flex-1">
-          <div className="mt-9">
+        <div className="mt-7 mx-[52px] text-textBlack max-w-[800px] flex-1 relative">
+          <div className="flex flex-wrap justify-between mt-9">
             <h1 className="font-semibold text-[40px]">프로필 수정</h1>
+            <div className="flex items-center">
+              <a className="px-5 py-3 inline-flex flex-row items-center justify-center font-semibold rounded-[10px] bg-white text-textGray border hover:text-textBlack hover:shadow-md cursor-pointer">
+                <div className="mr-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path
+                      fillRule="evenodd"
+                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                My Profile
+              </a>
+            </div>
           </div>
           {/* 아래 */}
           <div className="mt-[30px]">
-            <form onSubmit={handleSubmit(onValid)} className="w-[60%]">
-              <div>
-                <h1 className="font-bold pb-1">닉네임</h1>
-                <input
-                  {...register("nickname", {
-                    required: "필수 정보입니다.",
-                    pattern: {
-                      value: /^[가-힣a-zA-Z0-9]{2,10}$/,
-                      message:
-                        "2~10자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
-                    },
-                    validate: {
-                      checkNickname: async (value) =>
-                        originNickname === value
-                          ? true
-                          : (await fetch(
-                              `https://j6e206.p.ssafy.io:8080/api/user/nickname/${value}`
-                            )
-                              .then((res) => res.json())
-                              .then((result) => result))
-                          ? startCheckNick
-                            ? true
-                            : changeStartCheckNick()
-                          : "이미 사용중인 닉네임 입니다.",
-                    },
-                  })}
-                  type="text"
-                  className="w-[100%] rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                  placeholder="닉네임을 입력해주세요."
-                />
-                {startCheckNick && !errors?.nickname?.message ? (
-                  <span className="text-xs text-[#05c46b]">
-                    사용 가능한 닉네임 입니다.
-                  </span>
-                ) : (
-                  <span className="text-xs text-[#ff5e57]">
-                    {errors?.nickname?.message}
-                  </span>
-                )}
-              </div>
-              <div>
-                <h1 className="font-bold pb-1">자기소개</h1>
-                <textarea
-                  {...register("description")}
-                  className="w-[100%] h-24 mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                  placeholder="자기소개를 입력해주세요."
-                />
-              </div>
-              {/* <div>
-                <h1 className="font-bold pb-1">이메일</h1>
-                <input
-                  type="email"
-                  className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300 cursor-not-allowed"
-                  // 유저 이메일이 나타납니데잉
-                  placeholder="이메일을 입력해주세요."
-                />
-              </div>
-              <div>
-                <h1 className="font-bold pb-1">지갑주소</h1>
-                <input
-                  type="text"
-                  className="w-[100%] rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                  // 유저 닉네임이 나타나야 합니데잉
-                  placeholder="지갑을 연동해주세요."
-                />
-                <button className="mb-4 rounded-md text-sm text-white font-bold px-2 py-1 mt-1 bg-gradient-to-r from-gold to-lightGold">
-                  지갑연결
-                </button>
-              </div> */}
-              <div>
-                <h1 className="font-bold pb-1">주소</h1>
-                <div className="flex items-center">
-                  <input
-                    {...register("zipCode")}
-                    type="text"
-                    className="w-[50%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                    placeholder="우편번호"
-                  />
-                  <div
-                    onClick={findAddress}
-                    className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold cursor-pointer"
-                  >
-                    주소검색
+            <div className="pb-6">
+              <div className="flex flex-col lg:flex-row">
+                {/* 좌 */}
+                <form onSubmit={handleSubmit(onValid)} className="w-full">
+                  <div className="mb-6 flex flex-col">
+                    <div className="flex flex-col">
+                      <div className="mb-2">
+                        <label className="font-semibold">이름</label>
+                      </div>
+                      <div className="flex bg-[#8a939b]/[.06] rounded-[10px] border w-full p-3">
+                        <input
+                          {...register("userName")}
+                          className="w-full"
+                          disabled
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <input
-                  {...register("address1")}
-                  type="text"
-                  className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                  placeholder="주소"
-                />
-                <br />
-                <input
-                  {...register("address2")}
-                  type="text"
-                  className="w-[100%] mb-4 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                  placeholder="상세주소"
-                />
-                <br />
-              </div>
-              <div>
-                <h1 className="font-bold pb-1">전화번호</h1>
-                <div className="">
-                  <input
-                    {...register("phone", {
-                      required: "필수 정보입니다.",
-                      pattern: {
-                        value: /^\d{3}-\d{3,4}-\d{4}$/,
-                        message: "전화번호 양식을 지켜주세요.",
-                      },
-                    })}
-                    className="w-[100%] mb-1 rounded-md text-ourBlack placeholder:text-sm placeholder:text-textGray border-solid border-gray-300"
-                    placeholder="010-0000-0000"
+                  <div className="mb-6 flex flex-col">
+                    <div className="flex flex-col">
+                      <div className="mb-2">
+                        <label className="font-semibold">아이디</label>
+                      </div>
+                      <div className="flex bg-[#8a939b]/[.06] rounded-[10px] border w-full p-3">
+                        <input
+                          {...register("email")}
+                          className="w-full"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mb-6 flex flex-col">
+                    <div className="flex flex-col">
+                      <div className="mb-2">
+                        <label className="font-semibold">닉네임</label>
+                      </div>
+                      <div className="bg-white rounded-[10px] border w-full p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold">
+                        <input
+                          {...register("nickname", {
+                            required: "필수 정보입니다.",
+                            pattern: {
+                              value: /^[가-힣a-zA-Z0-9]{2,10}$/,
+                              message:
+                                "2~10자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
+                            },
+                            validate: {
+                              checkNickname: async (value) =>
+                                originNickname === value
+                                  ? true
+                                  : (await fetch(
+                                      `https://j6e206.p.ssafy.io:8080/api/user/nickname/${value}`
+                                    )
+                                      .then((res) => res.json())
+                                      .then((result) => result))
+                                  ? startCheckNick
+                                    ? true
+                                    : changeStartCheckNick()
+                                  : "이미 사용중인 닉네임 입니다.",
+                            },
+                          })}
+                          className="w-full outline-none placeholder:text-sm placeholder:text-textGray"
+                          placeholder="한글/영문/숫자 중 2~10자를 입력해주세요."
+                        />
+                        {startCheckNick && !errors?.nickname?.message ? (
+                          <p className="mt-[3px] text-xs text-[#05c46b]">
+                            사용 가능한 닉네임 입니다.
+                          </p>
+                        ) : (
+                          <p className="mt-[3px] text-xs text-[#ff5e57]">
+                            {errors?.nickname?.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mb-6 flex flex-col">
+                    <div className="flex flex-col">
+                      <div className="mb-2">
+                        <label className="font-semibold">소개</label>
+                      </div>
+                      <textarea
+                        {...register("description")}
+                        className="w-full h-auto flex bg-white rounded-[10px] border border-[#e5e8eb] p-3 focus:ring-1 focus:ring-lightGold focus:border-lightGold focus:shadow-md placeholder:text-sm placeholder:text-textGray foc"
+                        placeholder="자기소개를 입력해주세요."
+                      />
+                    </div>
+                  </div>
+                  <div className="mb-6 flex flex-col">
+                    <div className="flex flex-col">
+                      <div className="mb-2">
+                        <label className="font-semibold">주소</label>
+                      </div>
+                      <div className="flex">
+                        <div className="flex bg-white border w-[50%] p-3 rounded-l-[10px]">
+                          <input
+                            {...register("zipCode")}
+                            className="w-full outline-none bg-white"
+                            placeholder="우편번호"
+                            disabled
+                          />
+                        </div>
+                        <div
+                          onClick={findAddress}
+                          className="flex justify-center items-center rounded-r-[10px] w-[50%] bg-white hover:bg-lightBg border border-lightGold text-lightGold font-semibold cursor-pointer"
+                        >
+                          주소 검색
+                        </div>
+                      </div>
+                      <div className="flex bg-white rounded-[10px] border w-full p-3">
+                        <input
+                          {...register("address1")}
+                          className="w-full outline-none bg-white"
+                          placeholder="주소"
+                          disabled
+                        />
+                      </div>
+                      <div className="flex bg-white rounded-[10px] border w-full p-3 focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold">
+                        <input
+                          {...register("address2")}
+                          className="w-full outline-none bg-white placeholder:text-sm placeholder:text-textGray"
+                          placeholder="상세주소"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mb-6 flex flex-col">
+                    <div className="flex flex-col">
+                      <div className="mb-2">
+                        <label className="font-semibold">휴대전화</label>
+                      </div>
+                      <div className="bg-white rounded-[10px] border w-full p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold">
+                        <input
+                          {...register("phone", {
+                            required: "필수 정보입니다.",
+                            pattern: {
+                              value: /^\d{3}-\d{3,4}-\d{4}$/,
+                              message: "전화번호 양식을 지켜주세요.",
+                            },
+                          })}
+                          className="w-full outline-none placeholder:text-sm placeholder:text-textGray"
+                          placeholder="하이픈(-)을 넣어서 작성해주세요."
+                        />
+                        <p className="mt-[3px] text-xs text-[#ff5e57]">
+                          {errors?.phone?.message}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  {/* form button */}
+                  <div className="my-[30px]">
+                    <button className="font-semibold px-5 py-3 rounded-[10px] bg-lightGold border border-lightGold text-white hover:bg-gold hover:shadow-md focus:bg-gold focus:outline-none">
+                      저장
+                    </button>
+                  </div>
+                </form>
+                {/* 우 */}
+                <div className="flex flex-row space-x-24 lg:flex-col lg:ml-20 lg:space-x-0">
+                  {/* 프로필 사진 */}
+                  <ProfileImg proImg={user?.proImg} userId={user?.id} />
+                  {/* 배경 사진 */}
+                  <BackgroundImg
+                    backgroundImg={user?.backgroundImg}
+                    userId={user?.id}
                   />
-                  <span className="text-xs text-[#ff5e57]">
-                    {errors?.phone?.message}
-                  </span>
-                  {/* <button className="w-20 h-8 ml-2 px-2 mb-1 text-white font-bold text-sm rounded-md bg-gradient-to-r from-gold to-lightGold">
-                    인증
-                  </button> */}
                 </div>
               </div>
-              <div className="my-8">
-                <button className="w-[100%] flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-lg font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white">
-                  프로필 수정
-                </button>
-              </div>
-            </form>
-            <div className="w-auto hidden md:block pt-32 pl-16 text-center">
-              <ProfileImg proImg={user?.proImg} userId={user?.id} />
-              <BackgroundImg
-                backgroundImg={user?.backgroundImg}
-                userId={user?.id}
-              />
             </div>
           </div>
         </div>

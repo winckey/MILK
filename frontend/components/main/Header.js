@@ -228,7 +228,7 @@ export default function Header({ mobileMenu }) {
             {TOKEN ? (
               <>
                 <li>
-                  <Link href="/stream">
+                  <Link href="/streams/:id">
                     <NavItem className="cursor-pointer p-2 px-3 rounded-md">
                       라이브 경매
                     </NavItem>

@@ -1,7 +1,10 @@
 import { AccountLayout, Layout } from "@components/ui/layout";
+import useUser from "@libs/client/useUser";
 import { NextPage } from "next";
 
 const Question: NextPage = () => {
+  const { user, isLoading } = useUser();
+
   return (
     <Layout seoTitle="문의">
       <AccountLayout>
@@ -11,7 +14,7 @@ const Question: NextPage = () => {
           </div>
           {/* 아래 */}
           <div className="mt-[30px]">
-            <div className="pt-8">
+            <div>
               <h1 className="font-bold pb-1">문의유형</h1>
 
               <select
