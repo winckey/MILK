@@ -1,4 +1,4 @@
-import Layout from "@components/ui/layout";
+import { Layout } from "@components/ui/layout";
 import useMutation from "libs/client/useMutation";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -27,6 +27,7 @@ interface IUser {
 
 interface ILoginResponse {
   accessToken: string;
+  refreshToken: string;
   message: string;
   statusCode: number;
   user: IUser;
@@ -55,7 +56,6 @@ export default function Login() {
     if (loading) return;
     login(formData);
   };
-  console.log(data);
 
   // server 응답 받았을 때 실행
   useEffect(() => {
