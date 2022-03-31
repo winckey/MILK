@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { CgSearch } from "react-icons/cg";
 import { Colors, Devices } from "../Theme";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 
 // hi
 
@@ -22,7 +24,7 @@ const SearchBarEl = styled.article`
   }
 `;
 
-const SearchBarBg = styled.div`
+const SearchBarBg = styled.form`
   background-color: ${Colors.White};
   display: flex;
   width: 100%;
@@ -50,13 +52,25 @@ const HideSearchBar = styled.span`
   cursor: pointer;
   color: ${Colors.White};
 `;
+interface IForm {
+  keyword: string;
+}
+export default function SearchBarMob({ setSearchIsOpen }: any) {
+  const router = useRouter();
+  const { register, handleSubmit } = useForm<IForm>();
 
-export default function SearchBarMob({ setSearchIsOpen }) {
+  const onValid = (data: IForm) => {
+    router.push(`/search?keyword=${data.keyword}`);
+  };
   return (
     <SearchBarEl>
-      <SearchBarBg>
+      <SearchBarBg onSubmit={handleSubmit(onValid)}>
         <CgSearch />
-        <SearchInput placeholder="당신의 NFT를 찾아보세요" />
+        <SearchInput
+          className="text-black"
+          {...register("keyword", { required: true, minLength: 2 })}
+          placeholder="당신의 NFT를 찾아보세요"
+        />
       </SearchBarBg>
       <HideSearchBar
         onClick={() => {
