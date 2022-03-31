@@ -110,13 +110,13 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
             <div className="p-1 absolute inset-0 rounded-[10px] cursor-pointer border-none z-[2] flex flex-col justify-center items-center">
               <input
                 {...register("backgroundImg")}
-                id="proImg"
+                id="backgroundImg"
                 type="file"
                 className="hidden"
                 accept="image/*"
               />
               <label
-                htmlFor="proImg"
+                htmlFor="backgroundImg"
                 className="absolute inset-0 z-[70] opacity-0 hover:opacity-[1] hover:h-full rounded-[10px] bg-black/[.15] cursor-pointer"
               >
                 <div className="flex flex-col justify-center items-center h-full">

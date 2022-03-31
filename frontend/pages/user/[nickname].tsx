@@ -2,6 +2,8 @@ import type { NextPage } from "next";
 import { Layout } from "@components/ui/layout";
 import useSWR from "swr";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import Image from "next/image";
 
 interface IUser {
   address1: string;
@@ -19,22 +21,34 @@ interface IUser {
 
 interface UserProfileResponse {
   message: string;
-  statusCode: number;
-  user: IUser;
+
+  // success
+  statusCode?: number;
+  user?: IUser;
+
+  // error
+  code?: string;
+  error?: string;
+  requestUrl?: string;
+  status?: number;
 }
 
 const UserProfile: NextPage = () => {
   const router = useRouter();
-  console.log(router.query.nickname);
 
   const { data } = useSWR<UserProfileResponse>(
     router.query.nickname
       ? `https://j6e206.p.ssafy.io:8080/api/user/info/${router.query.nickname}`
       : null
   );
-  console.log(data);
 
-  // 나중에 useEffect로 404 처리
+  // 존재하지 않는 회원 url 직접 입력 방지
+  useEffect(() => {
+    if (data && data?.status === 404) {
+      alert("존재하지 않는 회원입니다.");
+      router.replace("/"); // 메인 페이지로 이동
+    }
+  }, [data, router]);
 
   return (
     <Layout seoTitle="개인 프로필">
@@ -44,10 +58,14 @@ const UserProfile: NextPage = () => {
           <div className="relative z-0">
             <div className="h-[225px] overflow-hidden bg-basicImage shadow-lg">
               <div className="h-[600px] w-full max-h-full max-w-full">
-                <img
-                  src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${data?.user.backgroundImg}/public`}
-                  className="h-full w-full object-cover "
-                />
+                {data?.user?.backgroundImg ? (
+                  <img
+                    src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${data?.user.backgroundImg}/public`}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div></div>
+                )}
               </div>
             </div>
           </div>
@@ -56,16 +74,20 @@ const UserProfile: NextPage = () => {
             <div className="relative -mt-16">
               <div className="inline-flex items-center">
                 <div className="h-[130px] w-[130px] bg-basicImage border-2 border-lightBg flex justify-center items-center max-w-full max-h-full overflow-hidden relative rounded-full cursor-pointer shadow-md">
-                  <img
-                    src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${data?.user.proImg}/avatar`}
-                    className="h-full w-full object-cover"
-                  />
+                  {data?.user?.proImg ? (
+                    <img
+                      src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${data?.user.proImg}/avatar`}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div></div>
+                  )}
                 </div>
               </div>
             </div>
             <div>
               <p className="font-semibold text-[40px] text-textBlack text-center px-4 mt-1">
-                {data?.user.nickname}
+                {data?.user?.nickname}
               </p>
             </div>
             {/* <div className="mt-4">
@@ -113,7 +135,7 @@ const UserProfile: NextPage = () => {
             </div>
           </div> */}
             <div className="break-words p-5 text-textGray text-center max-w-[800px]">
-              <span>{data?.user.description}</span>
+              <span>{data?.user?.description}</span>
             </div>
           </div>
 
