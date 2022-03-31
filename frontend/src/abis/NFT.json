@@ -15631,39 +15631,17 @@
   "ast": {
     "absolutePath": "project:/src/contracts/NFT.sol",
     "exportedSymbols": {
-      "Address": [
-        1489
-      ],
-      "Context": [
-        1511
-      ],
-      "ERC165": [
-        1738
-      ],
-      "ERC721": [
-        905
-      ],
-      "ERC721URIStorage": [
-        1167
-      ],
-      "IERC165": [
-        1750
-      ],
-      "IERC721": [
-        1021
-      ],
-      "IERC721Metadata": [
-        1194
-      ],
-      "IERC721Receiver": [
-        1039
-      ],
-      "NFT": [
-        2087
-      ],
-      "Strings": [
-        1714
-      ]
+      "Address": [1489],
+      "Context": [1511],
+      "ERC165": [1738],
+      "ERC721": [905],
+      "ERC721URIStorage": [1167],
+      "IERC165": [1750],
+      "IERC721": [1021],
+      "IERC721Metadata": [1194],
+      "IERC721Receiver": [1039],
+      "NFT": [2087],
+      "Strings": [1714]
     },
     "id": 2088,
     "license": "MIT",
@@ -15671,12 +15649,7 @@
     "nodes": [
       {
         "id": 2048,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".4"
-        ],
+        "literals": ["solidity", "^", "0.8", ".4"],
         "nodeType": "PragmaDirective",
         "src": "32:23:13"
       },
@@ -15714,14 +15687,7 @@
         "fullyImplemented": true,
         "id": 2087,
         "linearizedBaseContracts": [
-          2087,
-          1167,
-          905,
-          1194,
-          1021,
-          1738,
-          1750,
-          1511
+          2087, 1167, 905, 1194, 1021, 1738, 1750, 1511
         ],
         "name": "NFT",
         "nameLocation": "701:3:13",
@@ -15929,10 +15895,7 @@
                       "id": 2071,
                       "name": "_safeMint",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        534,
-                        563
-                      ],
+                      "overloadedDeclarations": [534, 563],
                       "referencedDeclaration": 534,
                       "src": "1998:9:13",
                       "typeDescriptions": {
@@ -16157,39 +16120,17 @@
   "legacyAST": {
     "absolutePath": "project:/src/contracts/NFT.sol",
     "exportedSymbols": {
-      "Address": [
-        1489
-      ],
-      "Context": [
-        1511
-      ],
-      "ERC165": [
-        1738
-      ],
-      "ERC721": [
-        905
-      ],
-      "ERC721URIStorage": [
-        1167
-      ],
-      "IERC165": [
-        1750
-      ],
-      "IERC721": [
-        1021
-      ],
-      "IERC721Metadata": [
-        1194
-      ],
-      "IERC721Receiver": [
-        1039
-      ],
-      "NFT": [
-        2087
-      ],
-      "Strings": [
-        1714
-      ]
+      "Address": [1489],
+      "Context": [1511],
+      "ERC165": [1738],
+      "ERC721": [905],
+      "ERC721URIStorage": [1167],
+      "IERC165": [1750],
+      "IERC721": [1021],
+      "IERC721Metadata": [1194],
+      "IERC721Receiver": [1039],
+      "NFT": [2087],
+      "Strings": [1714]
     },
     "id": 2088,
     "license": "MIT",
@@ -16197,12 +16138,7 @@
     "nodes": [
       {
         "id": 2048,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".4"
-        ],
+        "literals": ["solidity", "^", "0.8", ".4"],
         "nodeType": "PragmaDirective",
         "src": "32:23:13"
       },
@@ -16240,14 +16176,7 @@
         "fullyImplemented": true,
         "id": 2087,
         "linearizedBaseContracts": [
-          2087,
-          1167,
-          905,
-          1194,
-          1021,
-          1738,
-          1750,
-          1511
+          2087, 1167, 905, 1194, 1021, 1738, 1750, 1511
         ],
         "name": "NFT",
         "nameLocation": "701:3:13",
@@ -16455,10 +16384,7 @@
                       "id": 2071,
                       "name": "_safeMint",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        534,
-                        563
-                      ],
+                      "overloadedDeclarations": [534, 563],
                       "referencedDeclaration": 534,
                       "src": "1998:9:13",
                       "typeDescriptions": {
