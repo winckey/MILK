@@ -17,7 +17,7 @@ const Product: NextPage = () => {
   const { user, isLoading } = useUser();
   // console.log(user);
 
-  const [isOwner, setIsOwner] = useState(true); // 본인 상품인지 여부
+  const [isOwner, setIsOwner] = useState(false); // 본인 상품인지 여부
   const [selectedOrder, setSelectedOrder] = useState<null | object>(null);
   const [selectedRealization, setSelectedRealization] = useState<null | object>(
     null
@@ -42,7 +42,7 @@ const Product: NextPage = () => {
   // console.log(typeof image);
 
   // router에서 받아온 id로 요청 후 받은 데이터 (임시 참고용)
-  const nftId = "zxs123123123";
+  const nftId = router.query.nftId?.toString();
   const response = {
     name: router.query.name?.toString(),
     image: router.query.image?.toString(),
@@ -68,8 +68,8 @@ const Product: NextPage = () => {
     const res2 = await nftContract(signer);
     const items = await loadMarketItems(res1, res2);
     // setitems(items);
-    // setMarketplace(res1);
-    // setNFT(res2);
+    setMarketplace(res1);
+    setNFT(res2);
     // setLoading(false);
     // setId(items.id);
     // console.log(id);
