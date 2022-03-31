@@ -1,13 +1,10 @@
 package com.jpmp.db.entity.board;
 
-import com.jpmp.db.entity.nft.NFT;
+import com.jpmp.db.entity.nft.Nft;
 import com.jpmp.db.entity.user.User;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
-import static javax.persistence.FetchType.LAZY;
-
 
 
 @Getter
@@ -27,7 +24,7 @@ public class RealizationBoard  {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nft", referencedColumnName = "id")
-    private NFT nft;
+    private Nft nft;
 
     //신청자
     @ManyToOne(fetch = FetchType.LAZY)
@@ -53,7 +50,7 @@ public class RealizationBoard  {
     }
 
     @Builder
-    public RealizationBoard(NFT nft,   User consumer , User enterprise ) {
+    public RealizationBoard(Nft nft, User consumer , User enterprise ) {
        this.status = RBoardStatus.STATUS_NOTADM;
        this.nft = nft;
        changeConsumer(consumer);

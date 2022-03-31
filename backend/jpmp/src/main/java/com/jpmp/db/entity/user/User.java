@@ -5,8 +5,8 @@ import com.jpmp.api.dto.request.user.UserModifyReqDto;
 import com.jpmp.api.dto.request.user.UserRegisterReqDto;
 import com.jpmp.db.entity.board.RealizationBoard;
 import com.jpmp.db.entity.common.Authority;
-import com.jpmp.db.entity.nft.NFT;
-import com.jpmp.db.entity.nft.NFTUserLike;
+import com.jpmp.db.entity.nft.Nft;
+import com.jpmp.db.entity.nft.NftUserLike;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -78,10 +78,10 @@ public class User  {
     private List<RealizationBoard> enterpriseBoards = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner", cascade = ALL  )// 이건 생각좀
-    private List<NFT> nftList = new ArrayList<>();
+    private List<Nft> nftList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = ALL  )
-    private List<NFTUserLike> nftUserLikes = new ArrayList<>();
+    private List<NftUserLike> nftUserLikes = new ArrayList<>();
 
 
 

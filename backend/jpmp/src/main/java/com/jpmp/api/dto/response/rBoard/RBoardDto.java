@@ -1,15 +1,11 @@
 package com.jpmp.api.dto.response.rBoard;
 
-import com.jpmp.api.dto.UserInfoDto;
 import com.jpmp.db.entity.board.RBoardStatus;
 import com.jpmp.db.entity.board.RealizationBoard;
-import com.jpmp.db.entity.nft.NFT;
-import com.jpmp.db.entity.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
