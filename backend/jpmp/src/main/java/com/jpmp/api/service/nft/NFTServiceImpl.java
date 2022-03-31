@@ -1,10 +1,13 @@
 package com.jpmp.api.service.nft;
 
 import com.jpmp.api.dto.request.nft.NFTDto;
+import com.jpmp.api.dto.request.nft.NFTSearchReqDto;
 import com.jpmp.db.entity.nft.NFT;
 import com.jpmp.db.entity.user.User;
+import com.jpmp.db.repository.nft.NFTQueryRepository;
 import com.jpmp.db.repository.nft.NFTRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,7 @@ public class NFTServiceImpl implements NFTService {
 
 
     private final NFTRepository nftRepository;
+    private final NFTQueryRepository nftQueryRepository;
 
     @Override
     public void createNFT(User user, NFTDto nftDto) {
@@ -40,6 +44,11 @@ public class NFTServiceImpl implements NFTService {
         System.out.println("nft controller  40 : " + userDetails.getNftList().size());
 
         return userDetails.getNftList();
+    }
+
+    @Override
+    public List<NFT> getNftList(NFTSearchReqDto nftSearchReqDto, Pageable pageable) {
+        return nftQueryRepository.findByNFTSearchDto(nftSearchReqDto , pageable);
     }
 
     @Override

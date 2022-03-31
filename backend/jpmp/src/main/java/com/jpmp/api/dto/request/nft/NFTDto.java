@@ -1,13 +1,20 @@
 package com.jpmp.api.dto.request.nft;
 
+import com.jpmp.api.dto.response.rBoard.RBoardDto;
+import com.jpmp.db.entity.board.RealizationBoard;
+import com.jpmp.db.entity.nft.NFT;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
+@Setter
 @ToString
+@Builder
 public class NFTDto {
 
     @NotBlank
@@ -19,7 +26,7 @@ public class NFTDto {
     private String nftName;
 
     @NotBlank
-    @ApiModelProperty(name = "기업 이름", example = "GUCCI")
+    @ApiModelProperty(name = "가격", example = "123123")
     private String price;
 
     @NotBlank
@@ -28,4 +35,26 @@ public class NFTDto {
 
 
 
+    private Boolean realStatus;
+
+
+    private Boolean seleStatus;
+
+
+    private String owner;
+
+    private String enterprise;
+
+    public static NFTDto of(NFT nft) {
+
+        return NFTDto.builder()
+                .nftId(nft.getNftId())
+                .nftName(nft.getNftName())
+                .price(nft.getPrice())
+                .realStatus(nft.getRealizationStatus())
+                .seleStatus(nft.getSeleStatus())
+                .owner(nft.getOwner().getNickname())
+                .enterprise(nft.getEnterprise().getNickname())
+                .build();
+    }
 }
