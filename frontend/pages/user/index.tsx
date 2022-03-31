@@ -1,6 +1,7 @@
 import { Layout } from "@components/ui/layout";
 import type { NextPage } from "next";
 import Image from "next/image";
+import useSWR from "swr";
 
 const User: NextPage = () => {
   return (

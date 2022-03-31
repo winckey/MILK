@@ -5,6 +5,8 @@ import { BackgroundImg, ProfileImg } from "@components/cloudflare";
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { Layout, AccountLayout } from "@components/ui/layout";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 interface IUser {
   address1: string;
@@ -38,8 +40,9 @@ interface IEditProfileForm {
 }
 
 const EditProfile: NextPage = () => {
+  const router = useRouter();
   const { user, isLoading } = useUser();
-  // console.log(user);
+  console.log(user);
 
   // input 값 받아옴
   const {
@@ -94,13 +97,13 @@ const EditProfile: NextPage = () => {
     }
   }, [data]);
 
-  // 주소 찾기 API
+  // 주소 검색 API
   const findAddress = () => {
     new window.daum.Postcode({
       oncomplete: function (data) {
         setValue("zipCode", data.zonecode + "");
         setValue("address1", data.address);
-        setValue("address2", "");
+        setValue("address2", ""); // 주소 검색 완료 시 상세주소 비움
       },
     }).open();
   };
@@ -112,24 +115,26 @@ const EditProfile: NextPage = () => {
           <div className="flex flex-wrap justify-between mt-9">
             <h1 className="font-semibold text-[40px]">프로필 수정</h1>
             <div className="flex items-center">
-              <a className="px-5 py-3 inline-flex flex-row items-center justify-center font-semibold rounded-[10px] bg-white text-textGray border hover:text-textBlack hover:shadow-md cursor-pointer">
-                <div className="mr-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                    <path
-                      fillRule="evenodd"
-                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                My Profile
-              </a>
+              <Link href={`/user/${user?.nickname}`} key={user?.nickname}>
+                <a className="px-5 py-3 inline-flex flex-row items-center justify-center font-semibold rounded-[10px] bg-white text-textGray border hover:text-textBlack hover:shadow-md cursor-pointer">
+                  <div className="mr-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path
+                        fillRule="evenodd"
+                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  My Profile
+                </a>
+              </Link>
             </div>
           </div>
           {/* 아래 */}

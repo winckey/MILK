@@ -69,7 +69,7 @@ const Question: NextPage = () => {
             <div className="">
               <h1 className="font-bold pb-1">파일첨부</h1>
               <div className="flex w-full items-center justify-center bg-grey-lighter">
-                <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
+                <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg hover:shadow-md tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white">
                   <svg
                     className="w-8 h-8 text-gold"
                     fill="currentColor"

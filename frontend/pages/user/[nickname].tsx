@@ -1,7 +1,41 @@
-import { Layout } from "@components/ui/layout";
 import type { NextPage } from "next";
+import { Layout } from "@components/ui/layout";
+import useSWR from "swr";
+import { useRouter } from "next/router";
 
-const userProfile: NextPage = () => {
+interface IUser {
+  address1: string;
+  address2: string;
+  backgroundImg: string;
+  description: string;
+  email: string;
+  id: number;
+  nickname: string;
+  phone: string;
+  proImg: string;
+  userName: string;
+  zipCode: string;
+}
+
+interface UserProfileResponse {
+  message: string;
+  statusCode: number;
+  user: IUser;
+}
+
+const UserProfile: NextPage = () => {
+  const router = useRouter();
+  console.log(router.query.nickname);
+
+  const { data } = useSWR<UserProfileResponse>(
+    router.query.nickname
+      ? `https://j6e206.p.ssafy.io:8080/api/user/info/${router.query.nickname}`
+      : null
+  );
+  console.log(data);
+
+  // 나중에 useEffect로 404 처리
+
   return (
     <Layout seoTitle="개인 프로필">
       <div className="pb-20">
@@ -10,10 +44,10 @@ const userProfile: NextPage = () => {
           <div className="relative z-0">
             <div className="h-[225px] overflow-hidden bg-basicImage shadow-lg">
               <div className="h-[600px] w-full max-h-full max-w-full">
-                {/* <img
-                src="https://lh3.googleusercontent.com/Vw6MpADIga_ZwmXOmclK87L8ax6pI_DylBcn-69kcr1Uhgw5Ij2RvXJD2MFJ0VarfIGeoFZw7NvpGLePX3e2VMztvg7XCQDNo12dLQ=h600"
-                className="w-full h-full object-cover "
-              /> */}
+                <img
+                  src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${data?.user.backgroundImg}/public`}
+                  className="h-full w-full object-cover "
+                />
               </div>
             </div>
           </div>
@@ -22,16 +56,16 @@ const userProfile: NextPage = () => {
             <div className="relative -mt-16">
               <div className="inline-flex items-center">
                 <div className="h-[130px] w-[130px] bg-basicImage border-2 border-lightBg flex justify-center items-center max-w-full max-h-full overflow-hidden relative rounded-full cursor-pointer shadow-md">
-                  {/* <img
-                  src="https://lh3.googleusercontent.com/Vw6MpADIga_ZwmXOmclK87L8ax6pI_DylBcn-69kcr1Uhgw5Ij2RvXJD2MFJ0VarfIGeoFZw7NvpGLePX3e2VMztvg7XCQDNo12dLQ=h600"
-                  className="w-full h-full object-cover "
-                /> */}
+                  <img
+                    src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${data?.user.proImg}/avatar`}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
               </div>
             </div>
             <div>
               <p className="font-semibold text-[40px] text-textBlack text-center px-4 mt-1">
-                won
+                {data?.user.nickname}
               </p>
             </div>
             {/* <div className="mt-4">
@@ -79,10 +113,7 @@ const userProfile: NextPage = () => {
             </div>
           </div> */}
             <div className="break-words p-5 text-textGray text-center max-w-[800px]">
-              <span>
-                안녕하세요. 장원종입니다.
-                testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
-              </span>
+              <span>{data?.user.description}</span>
             </div>
           </div>
 
@@ -128,4 +159,4 @@ const userProfile: NextPage = () => {
   );
 };
 
-export default userProfile;
+export default UserProfile;
