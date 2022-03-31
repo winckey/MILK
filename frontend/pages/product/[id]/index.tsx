@@ -364,13 +364,9 @@ const Product: NextPage = () => {
         </div>
 
         {/* Modal */}
-<<<<<<< HEAD
         {selectedOrder && (
           <OrderModal response={response} onClose={cleanupModal} />
         )}
-        {selectedRealization && <RealizationModal onClose={cleanupModal} />}
-=======
-        {selectedOrder && <OrderModal onClose={cleanupModal} />}
         {selectedRealization && (
           <RealizationModal
             nft={selectedRealization}
@@ -379,7 +375,6 @@ const Product: NextPage = () => {
             nftId={nftId}
           />
         )}
->>>>>>> 64cdc33ce490dbc7d6d9ec896c8a559ccef212a7
       </div>
     </Layout>
   );
