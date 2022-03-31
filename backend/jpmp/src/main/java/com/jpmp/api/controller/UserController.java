@@ -125,7 +125,7 @@ public class UserController {
     })
     public ResponseEntity<UserResDto> getUserInfoBynickName(@ApiIgnore Authentication authentication , @NotNull @PathVariable String nickname) {
 
-        User userDetails = userRepository.findByNickname(nickname).get();
+        User userDetails = userRepository.findByNickname(nickname).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", userDetails));
     }
 

@@ -9,11 +9,13 @@ import com.jpmp.api.dto.request.user.UserLoginReqDto;
 import com.jpmp.api.dto.request.user.UserModifyReqDto;
 import com.jpmp.api.dto.request.user.UserRegisterReqDto;
 import com.jpmp.api.dto.response.BaseResponseBody;
+import com.jpmp.api.dto.response.nft.NFTListResDto;
 import com.jpmp.api.dto.response.user.UserLoginResDto;
 import com.jpmp.api.dto.response.user.UserResDto;
 import com.jpmp.api.service.nft.NFTService;
 import com.jpmp.api.service.user.UserService;
 import com.jpmp.common.util.JwtTokenUtil;
+import com.jpmp.db.entity.nft.NFT;
 import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.user.UserRepository;
 import com.jpmp.exception.CustomException;
@@ -22,6 +24,9 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.jpmp.common.util.SecurityUtils;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +35,8 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -57,7 +64,7 @@ public class NFTController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> createNft(@ApiIgnore Authentication authentication,
-                                                @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true ) NFTDto nftDto) {
+                                                      @Valid @RequestBody @ApiParam(value = "nft 토큰 id", required = true) NFTDto nftDto) {
         User userDetails = userRepository.findByUsername(getUsername());
 
         nftService.createNFT(userDetails, nftDto);
@@ -74,7 +81,7 @@ public class NFTController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> transferNft(@ApiIgnore Authentication authentication,
-                                                      @Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true ) NFTDto nftDto) {
+                                                        @Valid @RequestBody @ApiParam(value = "nft 토큰 id", required = true) NFTDto nftDto) {
 
         User userDetails = userRepository.findByUsername(getUsername());
         nftService.transferNFT(userDetails, nftDto);
@@ -90,7 +97,7 @@ public class NFTController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> getNftMyList(@ApiIgnore Authentication authentication ) {
+    public ResponseEntity<BaseResponseBody> getNftMyList(@ApiIgnore Authentication authentication) {
         User userDetails = userRepository.findByUsername(getUsername());
 
         nftService.getNftList(userDetails);
@@ -106,14 +113,29 @@ public class NFTController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> getNftList(@RequestParam NFTSearchReqDto nftSearchReqDto) {//https://brunch.co.kr/@kd4/158
-        User userDetails = userRepository.findByUsername(getUsername());
+    public ResponseEntity<NFTListResDto> getNftList(@RequestParam(value = "keyword",  defaultValue = "") String keyword,
+                                                       @RequestParam(value = "enterprise",  defaultValue = "") String enterprise,
+                                                       @RequestParam(value = "max",  defaultValue = "99999") String max,
+                                                       @RequestParam(value = "min",  defaultValue = "0") String min,
+                                                       @RequestParam(value = "seleOwner", defaultValue = "") Boolean seleOwner,
+                                                       @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {//https://brunch.co.kr/@kd4/158
+        ///members?page=0&size=3&sort=id,desc&sort=username,desc
+        System.out.println("enterprise : " +enterprise);
 
-        nftService.getNftList(userDetails);
+        NFTSearchReqDto nftSearchReqDto
+                = NFTSearchReqDto.builder()
+                .keyword(keyword)
+                .enterprise(userRepository.findByNickname(enterprise).orElse(null))// 이거 왜 realname은 안댐
+                .max(max)
+                .min(min)
+                .ownerIsEnterprise(seleOwner)
+                .build();
 
-        return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
+        List<NFT> nftList = nftService.getNftList(nftSearchReqDto, pageable);
+
+
+        return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
     }
-
 
 
     @GetMapping("/{owner}")
@@ -124,18 +146,16 @@ public class NFTController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> getNft(@ApiIgnore Authentication authentication ,@NotBlank @PathVariable Boolean ownerIsEnterprise) {
+    public ResponseEntity<BaseResponseBody> getNft(@ApiIgnore Authentication authentication, @NotBlank @PathVariable Boolean ownerIsEnterprise) {
         User userDetails = userRepository.findByUsername(getUsername());
 
-        nftService.getNftList(userDetails , ownerIsEnterprise);
+        nftService.getNftList(userDetails, ownerIsEnterprise);
 
         return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
     }
 
 
-
-
-    public String getUsername(){
+    public String getUsername() {
         return SecurityUtils.getCurrentUsername()
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
