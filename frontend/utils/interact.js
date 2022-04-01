@@ -1,6 +1,7 @@
 import NFT from "../src/abis/NFT.json";
 import Marketplace from "../src/abis/Marketplace.json";
 import { ethers } from "ethers";
+import Web3 from "web3";
 
 export const connectWallet = async () => {
   if (window.ethereum) {
@@ -103,4 +104,14 @@ export const purchaseMarketItem = async (item, marketplace) => {
   await (
     await marketplace.purchaseItem(item.itemId, { value: item.totalPrice })
   ).wait();
+};
+
+export const getUserBalance = async () => {
+  if (typeof window.ethereum !== "undefined") {
+    const web3 = new Web3(window.ethereum);
+    const wallet = await connectWallet();
+    const balance = await web3.eth.getBalance(wallet.address);
+    const balanceEth = ethers.utils.formatEther(balance);
+    return balanceEth;
+  }
 };

@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import { create, CID, Options, IPFSHTTPClient } from "ipfs-http-client";
 import {
   connectWallet,
+  getUserBalance,
   loadMarketItems,
   marketContract,
   nftContract,
@@ -101,15 +102,17 @@ const Create: NextPage = () => {
   }
 
   const connectMeta = async () => {
-    const wallet = await connectWallet();
-    if (wallet.address) {
-      setAccount(wallet.address);
-    } else {
-      alert("지갑을 연결해주세요");
+    if (typeof window.ethereum !== "undefined") {
+      const wallet = await connectWallet();
+      if (wallet.address) {
+        setAccount(wallet.address);
+      } else {
+        alert("지갑을 연결해주세요");
+      }
+      // const provider = await detectEthereumProvider();
+      // setAccountListener(provider);
+      console.log(wallet);
     }
-    // const provider = await detectEthereumProvider();
-    // setAccountListener(provider);
-    console.log(wallet);
   };
 
   // const loadContracts = async () => {
@@ -217,6 +220,7 @@ const Create: NextPage = () => {
     const test = { imgUrl: image, nftId: itemId2, nftName: name, price: price };
     const newFormData = Object.assign(test);
     console.log(newFormData);
+    const balance = await getUserBalance();
     await (
       await res1.makeItem(res2.address, id, listingPrice)
     )
@@ -225,7 +229,16 @@ const Create: NextPage = () => {
       .then(
         router.push({
           pathname: `/product/${itemId2}`,
-          query: { name, image, description, price, edition, type, nftId },
+          query: {
+            name,
+            image,
+            description,
+            price,
+            edition,
+            type,
+            itemId2,
+            balance,
+          },
         })
       );
     console.log(res1.itemCount());
