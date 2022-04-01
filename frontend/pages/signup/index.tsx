@@ -281,7 +281,7 @@ export default function Signup() {
                         validate: {
                           checkNickname: async (value) =>
                             (await fetch(
-                              `https://j6e206.p.ssafy.io:8080/api/user/nickname/${value}`
+                              `${process.env.BASE_URL}/user/nickname/${value}`
                             )
                               .then((res) => res.json())
                               .then((result) => result))
