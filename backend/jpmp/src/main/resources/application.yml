@@ -38,7 +38,7 @@ server:
     key-store-type : PKCS12
     key-store : /home/ubuntu/docker-volume/ssl2/key.p12
     key-store-password : ssafy
-    인증서 비밀번호
+    #인증서 비밀번호
 
 mybatis:
   config-location : classpath:/config/mybatis-config.xml
