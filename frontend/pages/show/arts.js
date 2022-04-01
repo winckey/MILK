@@ -15,6 +15,7 @@ import {
 } from "@react-three/drei";
 import { useRoute, useLocation, Link } from "wouter";
 import getUuid from "uuid-by-string";
+import Goods from "../../components/show/Goods";
 
 const pexel = (id) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`;
@@ -59,8 +60,6 @@ const images = [
 ];
 
 const GOLDENRATIO = 1.61803398875;
-
-useGLTF.preload("/shoe.gltf");
 
 export default function arts() {
   function toggleFullScreen() {
@@ -152,33 +151,33 @@ function Frames({
   );
 }
 
-function Goods(props) {
-  const ref = useRef();
-  const { nodes, materials } = useGLTF("/watch-v1.glb");
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime();
-    ref.current.rotation.x = -Math.PI / 1.75 + Math.cos(t / 4) / 8;
-    ref.current.rotation.y = Math.sin(t / 4) / 10;
-    ref.current.rotation.z = (1 + Math.sin(t / 1.5)) / 20;
-    ref.current.position.y = (1 + Math.sin(t / 1.5)) / 30;
-  });
-  return (
-    <group ref={ref} {...props} dispose={null}>
-      <mesh
-        rotation={[-Math.PI / 2, 0, 0]}
-        geometry={nodes.Object005_glass_0.geometry}
-        material={materials.glass}
-        onWheel={(e) => console.log("wheel spins")}
-      ></mesh>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Object006_watch_0.geometry}
-        material={materials.watch}
-      />
-    </group>
-  );
-}
+// function Goods(props) {
+//   const ref = useRef();
+//   const { nodes, materials } = useGLTF("/watch-v1.glb");
+//   useFrame((state) => {
+//     const t = state.clock.getElapsedTime();
+//     ref.current.rotation.x = -Math.PI / 1.75 + Math.cos(t / 4) / 8;
+//     ref.current.rotation.y = Math.sin(t / 4) / 10;
+//     ref.current.rotation.z = (1 + Math.sin(t / 1.5)) / 20;
+//     ref.current.position.y = (1 + Math.sin(t / 1.5)) / 30;
+//   });
+//   return (
+//     <group ref={ref} {...props} dispose={null}>
+//       <mesh
+//         rotation={[-Math.PI / 2, 0, 0]}
+//         geometry={nodes.Object005_glass_0.geometry}
+//         material={materials.glass}
+//         onWheel={(e) => console.log("wheel spins")}
+//       ></mesh>
+//       <mesh
+//         castShadow
+//         receiveShadow
+//         geometry={nodes.Object006_watch_0.geometry}
+//         material={materials.watch}
+//       />
+//     </group>
+//   );
+// }
 
 function Frame({ url, ...props }) {
   const [hovered, hover] = useState(false);
@@ -233,7 +232,7 @@ function Frame({ url, ...props }) {
             polar={[-Math.PI / 3, Math.PI / 3]}
             azimuth={[-Math.PI / 1.4, Math.PI / 2]}
           >
-            <Goods scale={new Array(3).fill(0.0009)} position={[-0.7, 0, 1]} />
+            <Goods />
           </PresentationControls>
           <meshBasicMaterial toneMapped={false} fog={false} />
         </mesh>

@@ -60,7 +60,7 @@ export default function SearchBarMob({ setSearchIsOpen }: any) {
   const { register, handleSubmit } = useForm<IForm>();
 
   const onValid = (data: IForm) => {
-    router.push(`/search?keyword=${data.keyword}`);
+    router.push(`/search/${data.keyword}`);
   };
   return (
     <SearchBarEl>

@@ -3,7 +3,7 @@ import Button from "../styled/Button.styled";
 import { Colors, Devices } from "../Theme";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 // hi
 
@@ -118,13 +118,27 @@ export default function Carousel() {
   const ItemContainerRef = useRef(null);
   // b => beginning | m => middle | e => end
   const [ScrollInd, setScrollInd] = useState("b");
+  const [list, setList] = useState([]);
+
+  async function handler() {
+    const data = await (
+      await fetch(
+        `${process.env.BASE_URL}/nft/search?&ownerIsEnterprise=true&sort=likeCount,desc`
+      )
+    ).json();
+    setList(data.nftDtoList);
+  }
+  useEffect(() => {
+    handler();
+  }, []);
+  console.log(list);
+  // list map  돌리면서 브랜드명이랑 사진 가져오기
   return (
     <CarouselEl
       data-aos-easing="ease-in-sine"
       data-aos-duration="600"
       className="duration-500"
     >
-      <Button>Best Selling</Button>
       <Title>Top Creators</Title>
       <Controls>
         <CtrlBtn
