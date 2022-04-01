@@ -24,3 +24,5 @@ services:
     volumes:
       - /home/ubuntu/docker-volume/ssl2:/root
     container_name: "backend"
+  Options:
+    --remove-orphans
