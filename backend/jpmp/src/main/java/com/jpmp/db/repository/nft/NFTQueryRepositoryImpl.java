@@ -50,7 +50,9 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
                 .where(eqNntName(reqDto.getKeyword()),
                         eqEnterprise(reqDto.getEnterprise()),
                         eqSeleOwner(reqDto.getOwnerIsEnterprise()),
-                        qnft.price.between(reqDto.getMin(), reqDto.getMax())
+                        qnft.price.between(reqDto.getMin(), reqDto.getMax()),
+                        qnft.seleStatus.eq(true)
+
                 );
 
 
@@ -71,6 +73,9 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
                         .from(qNftUserLike)
                         .where(qNftUserLike.user.eq(userDetails)))
                 ).fetch();
+
+
+        // 클래스 이름 컨벤션에 맞게 짜기 // q클래스는 무조건 썻으면 사용해야함
     }
 
 
