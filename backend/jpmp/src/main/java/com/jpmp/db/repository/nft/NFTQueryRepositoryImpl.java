@@ -4,9 +4,12 @@ package com.jpmp.db.repository.nft;
 import com.jpmp.api.dto.request.nft.NFTSearchReqDto;
 import com.jpmp.db.entity.nft.Nft;
 import com.jpmp.db.entity.nft.QNft;
+import com.jpmp.db.entity.nft.QNftUserLike;
+import com.jpmp.db.entity.user.QUser;
 import com.jpmp.db.entity.user.User;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +30,8 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
 
     private final JPAQueryFactory queryFactory;
     private QNft qnft = new QNft("nft");
+    private QUser qUser = new QUser("quser");
+    private QNftUserLike qNftUserLike = new QNftUserLike("qNftUserLike");
     private final EntityManager em;
 
 
@@ -55,6 +60,18 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
         return getQuerydsl().applyPagination(pageable ,query).fetch();
     }
 
+    @Override
+    public List<Nft> findByCoustomUserLikes(User userDetails) {
+        return   queryFactory
+                .select(qnft)
+                .from(qnft)
+                .where(qnft.in(
+                        JPAExpressions
+                        .select(qNftUserLike.nft)
+                        .from(qNftUserLike)
+                        .where(qNftUserLike.user.eq(userDetails)))
+                ).fetch();
+    }
 
 
     private <T> Predicate condition(T value, Function<T, Predicate> function) {

@@ -89,13 +89,30 @@ public class NFTController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> getNftMyList(@ApiIgnore Authentication authentication) {
+    public ResponseEntity<NFTListResDto> getNftMyList(@ApiIgnore Authentication authentication) {
         User userDetails = userRepository.findByUsername(getUsername());
 
-        nftService.getNftList(userDetails);
+        List<Nft> nftList = nftService.getNftList(userDetails);
 
-        return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
+        return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
     }
+
+    @GetMapping("/like")
+    @ApiOperation(value = "나의 좋아요 nft 조회", notes = "자신이 좋아요한 nft 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<NFTListResDto> getNftMyLikeList(@ApiIgnore Authentication authentication) {
+        User userDetails = userRepository.findByUsername(getUsername());
+
+        List<Nft> nftList = nftService.getNftLikeList(userDetails);
+
+        return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+    }
+
 
     @GetMapping("/search")
     @ApiOperation(value = "nft 조회 조건 검색", notes = "nft 조회 ex)sort=price,desc&sort=like_count,desc ")

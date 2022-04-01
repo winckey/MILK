@@ -3,6 +3,7 @@ package com.jpmp.db.repository.nft;
 
 
 import com.jpmp.db.entity.nft.Nft;
+import com.jpmp.db.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,4 +17,5 @@ public interface NFTRepository extends JpaRepository<Nft, Long> {
 
     @Transactional(readOnly = true)
     Optional<Nft> findByOwnerIsEnterprise(Boolean ownerIsEnterprise);
+
 }
