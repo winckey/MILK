@@ -24,7 +24,7 @@ export default function useUser() {
   const TOKEN = useRecoilValue(accessToken);
 
   const { data, error } = useSWR<IEditProfileResponse>(
-    ["https://j6e206.p.ssafy.io:8080/api/user/info", TOKEN],
+    [`${process.env.BASE_URL}/user/info`, TOKEN],
     tokenFetcher
   );
 
@@ -32,6 +32,7 @@ export default function useUser() {
   const router = useRouter();
   useEffect(() => {
     if (data && data.statusCode !== 200) {
+      alert("회원 전용 페이지입니다. 로그인해 주십시오.");
       router.replace("/login"); // 로그인 페이지로 이동 (replace가 브라우저 history 남기지 않음)
     }
   }, [data, router]);
