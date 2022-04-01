@@ -2,15 +2,18 @@ package com.jpmp.api.dto.request.chat;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class Message {
+
+    private int roomId;
     private String senderName;
-    private String receiverName;
     private String message;
-    private String date;
+    private int cost;
     private Status status;
 }
