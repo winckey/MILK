@@ -36,9 +36,18 @@ public class NFTServiceImpl implements NFTService {
     public void transferNFT(User userDetails, NFTDto nftDto) {
 
         Nft nft = nftRepository.findByNftId(nftDto.getNftId()).get();// 컨텍스트는 한 트렉젝션 내애서만 유지됨
-        nft.addNFT(userDetails);
-
+        nft.buyNFT(userDetails);
+        nftRepository.save(nft);
     }
+
+    @Override
+    public void sellNFT(User userDetails, NFTDto nftDto) {
+
+        Nft nft = nftRepository.findByNftId(nftDto.getNftId()).get();// 컨텍스트는 한 트렉젝션 내애서만 유지됨
+        nft.sellNFT(userDetails);
+        nftRepository.save(nft);
+    }
+
 
     @Override
     public List<Nft> getNftList(User userDetails) {
@@ -57,7 +66,7 @@ public class NFTServiceImpl implements NFTService {
         return nftQueryRepository.findByNFTSearchDto(nftSearchReqDto , pageable);
     }
 
-    @Override
+    @Override///////// 필요없는거
     public void getNftList(User userDetails, Boolean ownerIsEnterprise) {
         nftRepository.findByOwnerIsEnterprise(ownerIsEnterprise);
     }

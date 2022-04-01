@@ -16,11 +16,11 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class NFTDto {
 
-    @NotBlank
+
     @ApiModelProperty(name = "유저 nftId", example = "zxs123123123")
     private String nftId;
 
-    @NotBlank
+
     @ApiModelProperty(name = "nftName", example = "구찌 가방")
     private String nftName;
 
@@ -28,7 +28,6 @@ public class NFTDto {
     @ApiModelProperty(name = "가격", example = "123123")
     private int price;
 
-    @NotBlank
     @ApiModelProperty(name = "이미지 Url", example = "http~~~~")
     private String imgUrl;
 
@@ -39,10 +38,10 @@ public class NFTDto {
     @ApiModelProperty(example = "전달 xxxxxx")
     private Boolean seleStatus;
 
-    @ApiModelProperty(example = "전달 xxxxxx")
+    @ApiModelProperty(example = "1")
     private int likeCount;
 
-    @ApiModelProperty(example = "전달 xxxxxx")
+    @ApiModelProperty(example = "전달xxxxxx")
     private String owner;
 
     @ApiModelProperty(example = "전달 xxxxxx")

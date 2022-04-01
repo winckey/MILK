@@ -16,6 +16,8 @@ public interface NFTService {
 
     void transferNFT(User userDetails, NFTDto nftDto);
 
+    void sellNFT(User userDetails, NFTDto nftDto);
+
     List<Nft> getNftList(User userDetails);
 
     List<Nft> getNftLikeList(User userDetails);

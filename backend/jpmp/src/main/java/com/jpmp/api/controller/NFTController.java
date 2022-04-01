@@ -81,6 +81,23 @@ public class NFTController {
 
     }
 
+    @PutMapping("/sell")
+    @ApiOperation(value = "nft 판매 등록 (개인)", notes = "개인이 nft 판매등록 기업은 생성과 동시에 등록")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> sellNft(@ApiIgnore Authentication authentication,
+                                                        @Valid @RequestBody @ApiParam(value = "nft 토큰 id", required = true) NFTDto nftDto) {
+
+        User userDetails = userRepository.findByUsername(getUsername());
+        nftService.sellNFT(userDetails, nftDto);
+        return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
+
+    }
+
     @GetMapping()
     @ApiOperation(value = "나의 nft 조회", notes = "자신이 소유한 nft 조회")
     @ApiResponses({
@@ -127,7 +144,7 @@ public class NFTController {
                                                        @RequestParam(value = "max",  defaultValue = "99999") int max,
                                                        @RequestParam(value = "min",  defaultValue = "0") int min,
                                                        @RequestParam(value = "ownerIsEnterprise", defaultValue = "") Boolean ownerIsEnterprise,
-                                                       @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {//https://brunch.co.kr/@kd4/158
+                                                       @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {//https://brunch.co.kr/@kd4/158
         ///members?page=0&size=3&sort=id,desc&sort=username,desc
         System.out.println("enterprise : " +enterprise);
 

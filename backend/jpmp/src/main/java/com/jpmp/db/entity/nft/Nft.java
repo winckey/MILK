@@ -69,10 +69,24 @@ public class Nft {
     }
 
     public void addNFT(User owner) {
+
         this.owner = owner;
         owner.getNftList().add(this);
     }
+    public void buyNFT(User owner) {
+
+        this.seleStatus =false;
+        this.ownerIsEnterprise = false;
+        this.owner = owner;
+        owner.getNftList().add(this);
+    }
+
     public void addLike() {
         likeCount++;
+    }
+
+    public void sellNFT(User userDetails) {
+        this.seleStatus =true;
+
     }
 }
