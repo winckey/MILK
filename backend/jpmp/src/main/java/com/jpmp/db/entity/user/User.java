@@ -135,6 +135,7 @@ public class User  {
                 .address1(joinDto.getAddress1())//
                 .address2(joinDto.getAddress2())//
                 .zipCode(joinDto.getZipCode())//
+                .userRole(UserRole.ROLE_CONSUMER)
                 .build();
 
         member.addAuthority(Authority.ofUser(member));
@@ -153,6 +154,7 @@ public class User  {
                 .address1(joinDto.getAddress1())//
                 .address2(joinDto.getAddress2())//
                 .zipCode(joinDto.getZipCode())//
+                .userRole(UserRole.ROLE_ENTERPRISE)
                 .build();
 
         member.addAuthority(Authority.ofAdmin(member));

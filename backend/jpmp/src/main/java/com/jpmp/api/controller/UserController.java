@@ -64,6 +64,23 @@ public class UserController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
+    @PostMapping("/enterpirse")
+    @ApiOperation(value = "기업 회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<BaseResponseBody> registerAdmin(
+            @Valid @RequestBody @ApiParam(value="회원가입 정보<br>birthDate 칼럼은 yyyy-MM-dd 포맷<br>gender 칼럼은 M 또는 F 값으로 전달", required = true) UserRegisterReqDto registerInfo) {
+
+        userService.createAdmin(registerInfo);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+
+
     @PostMapping("/login")
     @ApiOperation(value = "로그인", notes = "<strong>아이디와 패스워드</strong>를 통해 로그인 한다.")
     @ApiResponses({
