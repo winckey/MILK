@@ -22,7 +22,7 @@ export default function Signup() {
 
   // request
   const [signup, { loading, data, error }] =
-    useMutation<ISignupResponse>("/api/user");
+    useMutation<ISignupResponse>("/user");
 
   // input 값 받아옴
   const {

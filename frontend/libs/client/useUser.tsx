@@ -24,7 +24,7 @@ export default function useUser() {
   const TOKEN = useRecoilValue(accessToken);
 
   const { data, error } = useSWR<IEditProfileResponse>(
-    ["https://j6e206.p.ssafy.io:8080/api/user/info", TOKEN],
+    [`${process.env.BASE_URL}/user/info`, TOKEN],
     tokenFetcher
   );
 

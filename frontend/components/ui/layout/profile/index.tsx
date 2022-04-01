@@ -67,13 +67,14 @@ const ActiveLink = ({ children, href }: LinkProps) => {
   );
 };
 
-export default function IndividualProfileLayout({ children }: LayoutProps) {
+// 나중에 여기서 어떤 유저냐에 따라 렌더링 해주기
+export default function ProfileLayout({ children }: LayoutProps) {
   const router = useRouter();
 
   // 해당 nickname을 가진 유저 정보 가져오기
   const { data } = useSWR<UserProfileResponse>(
     router.query.nickname
-      ? `https://j6e206.p.ssafy.io:8080/api/user/info/${router.query.nickname}`
+      ? `${process.env.BASE_URL}/user/info/${router.query.nickname}`
       : null
   );
 

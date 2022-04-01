@@ -25,7 +25,7 @@ const Realization: NextPage = () => {
   const TOKEN = useRecoilValue(accessToken);
 
   const { data } = useSWR<RealizationListResponse>(
-    [`https://j6e206.p.ssafy.io:8080/api/realization_board/user`, TOKEN],
+    [`${process.env.BASE_URL}/realization_board/user`, TOKEN],
     tokenFetcher
   );
 
