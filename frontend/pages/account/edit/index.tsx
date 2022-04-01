@@ -77,7 +77,7 @@ const EditProfile: NextPage = () => {
 
   // onValid form data DB에 요청
   const [editProfile, { data, loading }] = useMutation<IEditProfileResponse>(
-    `/api/user`,
+    `/user`,
     "PUT"
   );
 
@@ -190,7 +190,7 @@ const EditProfile: NextPage = () => {
                                 originNickname === value
                                   ? true
                                   : (await fetch(
-                                      `https://j6e206.p.ssafy.io:8080/api/user/nickname/${value}`
+                                      `${process.env.BASE_URL}/user/nickname/${value}`
                                     )
                                       .then((res) => res.json())
                                       .then((result) => result))

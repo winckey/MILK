@@ -48,7 +48,7 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
 
   // onValid form data DB에 요청
   const [editBackgroundImg, { data, loading }] =
-    useMutation<IEditBackgroundImgResponse>(`/api/user/back`, "PUT");
+    useMutation<IEditBackgroundImgResponse>(`/user/back`, "PUT");
 
   // Mutation 응답 받았을 때 실행
   useEffect(() => {

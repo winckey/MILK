@@ -48,7 +48,7 @@ export default function Login() {
 
   // onValid form data DB에 요청
   const [login, { loading, data, error }] =
-    useMutation<ILoginResponse>("/api/user/login");
+    useMutation<ILoginResponse>("/user/login");
 
   // form 제출 시 실행
   const onValid = (formData: ILoginForm) => {

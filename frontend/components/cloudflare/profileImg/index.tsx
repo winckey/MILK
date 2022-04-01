@@ -49,7 +49,7 @@ export default function ProfileImg({ proImg, userId }: IUserProps) {
 
   // onValid form data DB에 요청
   const [editProfileImg, { data, loading }] =
-    useMutation<IEditProfileImgResponse>(`/api/user/pro`, "PUT");
+    useMutation<IEditProfileImgResponse>(`/user/pro`, "PUT");
 
   // Mutation 응답 받았을 때 실행
   useEffect(() => {
