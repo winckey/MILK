@@ -45,6 +45,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User createAdmin(UserRegisterReqDto registerRequestDto) {
+        registerRequestDto.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
+        return userRepository.save(User.ofAdmin(registerRequestDto));
+    }
+    @Override
     public User getUserByEmail(String email) {
 
         return userRepository.findByEmail(email).get();
@@ -148,6 +153,7 @@ public class UserServiceImpl implements UserService {
     public Boolean checkDuplicateNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
+
 
 
 }

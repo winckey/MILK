@@ -36,6 +36,7 @@ public class UserRegisterReqDto {
 
     @ApiModelProperty(name="전화번호", example="010-1234-5678")
     private String phone;
+    
 
     @ApiModelProperty(name="자기소개", example="안녕하세요")
     private String description;

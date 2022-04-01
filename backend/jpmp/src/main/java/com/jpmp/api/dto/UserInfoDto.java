@@ -2,6 +2,7 @@ package com.jpmp.api.dto;
 
 import com.jpmp.db.entity.user.User;
 
+import com.jpmp.db.entity.user.UserRole;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class UserInfoDto {
     private String address1;
     private String address2;
     private String zipCode;
+    private UserRole userRole;
 
 
     public static UserInfoDto of(User user) {
@@ -40,6 +42,7 @@ public class UserInfoDto {
         userInfoDto.setAddress1(user.getAddress1());
         userInfoDto.setAddress2(user.getAddress2());
         userInfoDto.setZipCode(user.getZipCode());
+        userInfoDto.setUserRole(user.getUserRole());
         return userInfoDto;
     }
 }

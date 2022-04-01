@@ -24,4 +24,5 @@ public interface UserService {
     TokenDto reissue(String refreshToken , String username);
     Boolean checkDuplicateNickname(String nickname);
 
+    User createAdmin(UserRegisterReqDto registerInfo);
 }
