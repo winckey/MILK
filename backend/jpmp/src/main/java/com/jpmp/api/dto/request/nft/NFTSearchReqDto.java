@@ -24,9 +24,9 @@ public class NFTSearchReqDto {
 
     private Boolean ownerIsEnterprise;
 
-    private String max;
+    private int max;
 
-    private String min;
+    private int min;
 
 
 

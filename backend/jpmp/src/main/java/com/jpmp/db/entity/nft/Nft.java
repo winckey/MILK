@@ -2,18 +2,13 @@ package com.jpmp.db.entity.nft;
 
 
 import com.jpmp.api.dto.request.nft.NFTDto;
-import com.jpmp.api.dto.request.nft.NtfRequestReqDto;
-import com.jpmp.db.entity.common.Authority;
+import com.jpmp.api.dto.request.nft.NFTReqDto;
 import com.jpmp.db.entity.user.User;
 import lombok.*;
 
 
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import static javax.persistence.CascadeType.ALL;
 
 
 @Builder
@@ -21,7 +16,7 @@ import static javax.persistence.CascadeType.ALL;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class NFT  {
+public class Nft {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,7 +30,7 @@ public class NFT  {
 
 
     @Column(nullable = false)
-    private String price;
+    private int price;
 
     @Column(nullable = false)
     private Boolean ownerIsEnterprise;
@@ -48,6 +43,8 @@ public class NFT  {
 
     private String imgUrl;
 
+    private int likeCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner", referencedColumnName = "id")
     private User owner;
@@ -57,8 +54,8 @@ public class NFT  {
     private User enterprise;
 
 
-    public static NFT ofCreateNft(User owner , NFTDto nftDto) {
-        return NFT.builder()
+    public static Nft ofCreateNft(User owner , NFTReqDto nftDto) {
+        return Nft.builder()
                 .nftId(nftDto.getNftId())
                 .nftName(nftDto.getNftName())
                 .price(nftDto.getPrice())
@@ -75,5 +72,7 @@ public class NFT  {
         this.owner = owner;
         owner.getNftList().add(this);
     }
-
+    public void addLike() {
+        likeCount++;
+    }
 }

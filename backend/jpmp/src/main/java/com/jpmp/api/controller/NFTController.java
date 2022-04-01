@@ -1,21 +1,15 @@
 package com.jpmp.api.controller;
 
 
-import com.jpmp.api.dto.TokenDto;
 import com.jpmp.api.dto.request.nft.NFTDto;
+import com.jpmp.api.dto.request.nft.NFTReqDto;
 import com.jpmp.api.dto.request.nft.NFTSearchReqDto;
-import com.jpmp.api.dto.request.user.UserImgReqDto;
-import com.jpmp.api.dto.request.user.UserLoginReqDto;
-import com.jpmp.api.dto.request.user.UserModifyReqDto;
-import com.jpmp.api.dto.request.user.UserRegisterReqDto;
 import com.jpmp.api.dto.response.BaseResponseBody;
 import com.jpmp.api.dto.response.nft.NFTListResDto;
-import com.jpmp.api.dto.response.user.UserLoginResDto;
-import com.jpmp.api.dto.response.user.UserResDto;
 import com.jpmp.api.service.nft.NFTService;
 import com.jpmp.api.service.user.UserService;
 import com.jpmp.common.util.JwtTokenUtil;
-import com.jpmp.db.entity.nft.NFT;
+import com.jpmp.db.entity.nft.Nft;
 import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.user.UserRepository;
 import com.jpmp.exception.CustomException;
@@ -35,16 +29,14 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
 
 
 @Slf4j
 @Validated
 @Api(tags = "NFT")
 @RestController
-@RequestMapping("/Mlik/nft")
+@RequestMapping("/api/nft")
 @RequiredArgsConstructor
 public class NFTController {
 
@@ -64,10 +56,10 @@ public class NFTController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> createNft(@ApiIgnore Authentication authentication,
-                                                      @Valid @RequestBody @ApiParam(value = "nft 토큰 id", required = true) NFTDto nftDto) {
+                                                      @Valid @RequestBody @ApiParam(value = "nft 토큰 id", required = true) NFTReqDto nftReqDto) {
         User userDetails = userRepository.findByUsername(getUsername());
 
-        nftService.createNFT(userDetails, nftDto);
+        nftService.createNFT(userDetails, nftReqDto);
 
         return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
     }
@@ -106,7 +98,7 @@ public class NFTController {
     }
 
     @GetMapping("/search")
-    @ApiOperation(value = "nft 조회 조건 검색", notes = "nft 조회")
+    @ApiOperation(value = "nft 조회 조건 검색", notes = "nft 조회 ex)sort=price,desc&sort=like_count,desc ")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
@@ -115,9 +107,9 @@ public class NFTController {
     })
     public ResponseEntity<NFTListResDto> getNftList(@RequestParam(value = "keyword",  defaultValue = "") String keyword,
                                                        @RequestParam(value = "enterprise",  defaultValue = "") String enterprise,
-                                                       @RequestParam(value = "max",  defaultValue = "99999") String max,
-                                                       @RequestParam(value = "min",  defaultValue = "0") String min,
-                                                       @RequestParam(value = "seleOwner", defaultValue = "") Boolean seleOwner,
+                                                       @RequestParam(value = "max",  defaultValue = "99999") int max,
+                                                       @RequestParam(value = "min",  defaultValue = "0") int min,
+                                                       @RequestParam(value = "ownerIsEnterprise", defaultValue = "") Boolean ownerIsEnterprise,
                                                        @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {//https://brunch.co.kr/@kd4/158
         ///members?page=0&size=3&sort=id,desc&sort=username,desc
         System.out.println("enterprise : " +enterprise);
@@ -128,10 +120,10 @@ public class NFTController {
                 .enterprise(userRepository.findByNickname(enterprise).orElse(null))// 이거 왜 realname은 안댐
                 .max(max)
                 .min(min)
-                .ownerIsEnterprise(seleOwner)
+                .ownerIsEnterprise(ownerIsEnterprise)
                 .build();
 
-        List<NFT> nftList = nftService.getNftList(nftSearchReqDto, pageable);
+        List<Nft> nftList = nftService.getNftList(nftSearchReqDto, pageable);
 
 
         return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));

@@ -1,7 +1,6 @@
 package com.jpmp.db.entity.nft;
 
 
-import com.jpmp.api.dto.request.nft.NFTDto;
 import com.jpmp.db.entity.user.User;
 import lombok.*;
 
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class NFTUserLike {
+public class NftUserLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +20,7 @@ public class NFTUserLike {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nft", referencedColumnName = "id")
-    private NFT nft;
+    private Nft nft;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user", referencedColumnName = "id")
@@ -32,9 +31,9 @@ public class NFTUserLike {
         user.getNftUserLikes().add(this);
     }
 
-    public static NFTUserLike ofCreateNftLike(User user , NFT nft) {
+    public static NftUserLike ofCreateNftLike(User user , Nft nft) {
 
-        NFTUserLike nftUserLike =  NFTUserLike.builder()
+        NftUserLike nftUserLike =  NftUserLike.builder()
                 .nft(nft)
                 .build();
 

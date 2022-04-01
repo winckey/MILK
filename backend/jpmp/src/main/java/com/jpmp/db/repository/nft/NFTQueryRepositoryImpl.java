@@ -2,18 +2,15 @@ package com.jpmp.db.repository.nft;
 
 
 import com.jpmp.api.dto.request.nft.NFTSearchReqDto;
-import com.jpmp.db.entity.nft.NFT;
-import com.jpmp.db.entity.nft.QNFT;
+import com.jpmp.db.entity.nft.Nft;
+import com.jpmp.db.entity.nft.QNft;
 import com.jpmp.db.entity.user.User;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,36 +23,39 @@ import java.util.function.Function;
 
 @Repository
 @Transactional(readOnly = true)
-public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements NFTQueryRepository{
+public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements NFTQueryRepository {
 
     private final JPAQueryFactory queryFactory;
-    private QNFT qnft = new QNFT("nft1");
+    private QNft qnft = new QNft("nft");
     private final EntityManager em;
 
 
-    public NFTQueryRepositoryImpl(JPAQueryFactory queryFactory , EntityManager entityManager) {
-        super(NFT.class);
+    public NFTQueryRepositoryImpl(JPAQueryFactory queryFactory, EntityManager entityManager) {
+        super(Nft.class);
         this.em = entityManager;
         this.queryFactory = queryFactory;
     }
 
     @Override
-    public List<NFT> findByNFTSearchDto(NFTSearchReqDto reqDto, Pageable pageable) {
+    public List<Nft> findByNFTSearchDto(NFTSearchReqDto reqDto, Pageable pageable) {
 
-        return (List<NFT>) queryFactory
+        JPAQuery<Nft> query = queryFactory
                 .select(qnft)
                 .from(qnft)
                 .where(eqNntName(reqDto.getKeyword()),
                         eqEnterprise(reqDto.getEnterprise()),
                         eqSeleOwner(reqDto.getOwnerIsEnterprise()),
-                        qnft.price.between(reqDto.getMin() , reqDto.getMax())
-                ).fetch();
-
-        //List<NFT> result = getQuerydsl().applyPagination(pageable, jpaQuery).fetch();
+                        qnft.price.between(reqDto.getMin(), reqDto.getMax())
+                );
 
 
-       // return result;
+
+
+
+        return getQuerydsl().applyPagination(pageable ,query).fetch();
     }
+
+
 
     private <T> Predicate condition(T value, Function<T, Predicate> function) {
         return Optional.ofNullable(value)
@@ -67,17 +67,15 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
         if ((name).equals("")) {
             return null;
         }
-        return qnft.nftName.eq(name);
+        return qnft.nftName.contains(name);
     }
-
-
 
 
     private BooleanExpression eqNntName(String name) {
         if ((name).equals("")) {
             return null;
         }
-        return qnft.nftName.eq(name);
+        return qnft.nftName.contains(name);
     }
 
     private BooleanExpression eqEnterprise(User enterprise) {

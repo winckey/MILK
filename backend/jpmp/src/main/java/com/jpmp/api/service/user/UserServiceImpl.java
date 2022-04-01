@@ -7,8 +7,8 @@ import com.jpmp.api.dto.request.user.UserRegisterReqDto;
 import com.jpmp.common.auth.JwtExpirationEnums;
 import com.jpmp.common.util.JwtTokenUtil;
 import com.jpmp.common.util.RefreshToken;
-import com.jpmp.db.entity.nft.NFT;
-import com.jpmp.db.entity.nft.NFTUserLike;
+import com.jpmp.db.entity.nft.Nft;
+import com.jpmp.db.entity.nft.NftUserLike;
 import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.jwt.RefreshTokenRedisRepository;
 import com.jpmp.db.repository.nft.NFTLikeRepository;
@@ -16,15 +16,11 @@ import com.jpmp.db.repository.nft.NFTRepository;
 import com.jpmp.db.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.jpmp.common.auth.JwtExpirationEnums.REFRESH_TOKEN_EXPIRATION_TIME;
@@ -104,8 +100,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User addUserNftLike(User userDetails, String nftId) {
 
-        NFT nft = nftRepository.findByNftId(nftId).get();//예외처리
-        NFTUserLike nftUserLike = NFTUserLike.ofCreateNftLike(userDetails , nft);// 이렇게 하면 못읽음 1:N 일떄 주체 인쪽에서 수정해야지!
+        Nft nft = nftRepository.findByNftId(nftId).get();//예외처리
+        nft.addLike();
+        NftUserLike nftUserLike = NftUserLike.ofCreateNftLike(userDetails , nft);// 이렇게 하면 못읽음 1:N 일떄 주체 인쪽에서 수정해야지!
+        nftRepository.save(nft);
         nftLikeRepository.save(nftUserLike);
 
         return userDetails;
@@ -115,7 +113,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User deleteUserNftLike(User userDetails, String nftId) {
-        NFT nft = nftRepository.findByNftId(nftId).get();//예외처리
+        Nft nft = nftRepository.findByNftId(nftId).get();//예외처리
         nftLikeRepository.deleteByUserAndNft(userDetails , nft);
         return userDetails;
     }

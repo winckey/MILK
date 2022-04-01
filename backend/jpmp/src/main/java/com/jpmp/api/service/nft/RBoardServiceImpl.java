@@ -3,7 +3,7 @@ package com.jpmp.api.service.nft;
 import com.jpmp.api.dto.request.nft.NtfRequestReqDto;
 
 import com.jpmp.db.entity.board.RealizationBoard;
-import com.jpmp.db.entity.nft.NFT;
+import com.jpmp.db.entity.nft.Nft;
 import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.nft.NFTRepository;
 import com.jpmp.db.repository.nft.RBoardRepository;
@@ -27,7 +27,7 @@ public class RBoardServiceImpl implements RBoardService {
     public void addRBorad(User user, NtfRequestReqDto ntfRequestReqDto) {
 
 
-        NFT nft = nftRepository.findByNftId(ntfRequestReqDto.getNftId()).get();
+        Nft nft = nftRepository.findByNftId(ntfRequestReqDto.getNftId()).get();
         User enterprise = nft.getEnterprise();
 
         RealizationBoard realizationBoard = RealizationBoard.builder()
