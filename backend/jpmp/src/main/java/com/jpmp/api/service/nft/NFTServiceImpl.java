@@ -48,6 +48,11 @@ public class NFTServiceImpl implements NFTService {
     }
 
     @Override
+    public List<Nft> getNftLikeList(User userDetails) {
+        return nftQueryRepository.findByCoustomUserLikes(userDetails);
+    }
+
+    @Override
     public List<Nft> getNftList(NFTSearchReqDto nftSearchReqDto, Pageable pageable) {
         return nftQueryRepository.findByNFTSearchDto(nftSearchReqDto , pageable);
     }

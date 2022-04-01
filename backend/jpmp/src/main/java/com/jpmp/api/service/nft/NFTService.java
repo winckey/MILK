@@ -18,6 +18,8 @@ public interface NFTService {
 
     List<Nft> getNftList(User userDetails);
 
+    List<Nft> getNftLikeList(User userDetails);
+
     List<Nft> getNftList(NFTSearchReqDto nftSearchReqDto , Pageable pageable );
 
     void getNftList(User userDetails, Boolean ownerIsEnterprise);
