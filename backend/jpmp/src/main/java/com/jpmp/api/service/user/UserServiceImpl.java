@@ -15,6 +15,8 @@ import com.jpmp.db.repository.nft.NFTLikeRepository;
 import com.jpmp.db.repository.nft.NFTRepository;
 import com.jpmp.db.repository.user.UserRepository;
 
+import com.jpmp.exception.CustomException;
+import com.jpmp.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public TokenDto login(UserLoginReqDto userLoginReqDto) {
 
-        User user = userRepository.findByEmail(userLoginReqDto.getEmail()).orElseThrow(() -> new NoSuchElementException("회원이 없습니다."));
+        User user = userRepository.findByEmail(userLoginReqDto.getEmail()).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         checkPassword(userLoginReqDto.getPassword(), user.getPassword());
 
         String username = user.getUsername();
@@ -70,7 +72,7 @@ public class UserServiceImpl implements UserService {
     }
     private void checkPassword(String rawPassword, String findMemberPassword) {
         if (!passwordEncoder.matches(rawPassword, findMemberPassword)) {
-            throw new IllegalArgumentException("비밀번호가 맞지 않습니다.");
+            throw new CustomException(ErrorCode.USER_PW_INVALID);
         }
     }
     private RefreshToken saveRefreshToken(String username) {
