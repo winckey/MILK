@@ -118,21 +118,21 @@ export default function Carousel() {
   const ItemContainerRef = useRef(null);
   // b => beginning | m => middle | e => end
   const [ScrollInd, setScrollInd] = useState("b");
-  const [list, setList] = useState([]);
+  // const [list, setList] = useState([]);
 
-  async function handler() {
-    const data = await (
-      await fetch(
-        `${process.env.BASE_URL}/nft/search?&ownerIsEnterprise=true&sort=likeCount,desc`
-      )
-    ).json();
-    setList(data.nftDtoList);
-  }
-  useEffect(() => {
-    handler();
-  }, []);
-  console.log(list);
-  // list map  돌리면서 브랜드명이랑 사진 가져오기
+  // async function handler() {
+  //   const data = await (
+  //     await fetch(
+  //       `${process.env.BASE_URL}/nft/search?&ownerIsEnterprise=true&sort=likeCount,desc`
+  //     )
+  //   ).json();
+  //   setList(data.nftDtoList);
+  // }
+  // useEffect(() => {
+  //   handler();
+  // }, []);
+  // console.log(list);
+  // // list map  돌리면서 브랜드명이랑 사진 가져오기
   return (
     <CarouselEl
       data-aos-easing="ease-in-sine"

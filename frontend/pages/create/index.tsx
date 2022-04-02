@@ -17,6 +17,7 @@ import Web3 from "web3";
 import useMutation from "@libs/client/useMutation";
 import { useForm } from "react-hook-form";
 import { truncate } from "fs";
+import { SellModal } from "@components/ui/sell";
 
 declare let window: any;
 
@@ -267,13 +268,17 @@ const Create: NextPage = () => {
   console.log(product);
   const inputClass =
     "bg-white rounded-[10px] border max-w-[600px] p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold";
-
+  const [selectedSell, setSelectedSell] = useState<null | object>(null);
   return (
     <div className="min-h-screen w-full bg-lightBg  ">
-      <button onClick={onClick}>리스트</button>
-      <button onClick={connectMeta}>지갑연결 가즈앙</button>
-      <div className="px-12 ml-12 mr-4">
-        <div>
+      {selectedSell && <SellModal />}
+      <div className="flex justify-evenly">
+        <button onClick={() => setSelectedSell(true)}>판매모달띄우기</button>
+        <button onClick={onClick}>리스트</button>
+        <button onClick={connectMeta}>지갑연결 가즈앙</button>
+      </div>
+      <div className="px-12 ml-12 mr-4 flex justify-center">
+        <div className="w-[50]% ">
           <div className="text-3xl font-bold mb-8 "> Create New Item</div>
           <div className="text-xs text-textGray mb-2">
             <span className="text-red-500 font-bold">*</span> 필수 입력항목
@@ -291,7 +296,7 @@ const Create: NextPage = () => {
                     File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3,
                     WAV, OGG, GLB, GLTF. Max size: 100 MB
                   </div>
-                  <label className="lg:w-[50%] lg:h-[300px] w-[300px] h-[200px] flex flex-col items-center justify-center px-4 py-6 bg-white text-gold rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-gold hover:text-white">
+                  <label className="lg:w-[100%] lg:h-[300px] w-[300px] h-[200px] flex flex-col items-center justify-center px-4 py-6 bg-white text-gold rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-gold hover:text-white">
                     <svg
                       className="w-12 h-12"
                       fill="currentColor"
@@ -300,7 +305,6 @@ const Create: NextPage = () => {
                     >
                       <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
                     </svg>
-
                     {ipfs && (
                       <>
                         <div>
@@ -345,24 +349,18 @@ const Create: NextPage = () => {
                   <div className={inputClass}>
                     <input
                       {...register("description", {
-                        required: "필수 입력정보입니다.",
                         onChange: (e) => setDescription(e.target.value),
                       })}
                       className="w-full outline-none placeholder:text-sm placeholder:text-textGray"
                       placeholder="제품 상세설명을 입력해주세요."
                     />{" "}
                   </div>
-                  <div className="pl-3">
-                    {errors?.description?.message ? (
-                      <p className="mt-[3px] text-xs text-[#ff5e57]">
-                        {errors?.description?.message}
-                      </p>
-                    ) : null}
-                  </div>
                 </div>
                 {/* 에디션 */}
                 <div>
-                  <div className="pt-6 pb-2 pl-2 font-bold">Edition</div>
+                  <div className="pt-6 pb-2 pl-2 font-bold">
+                    Edition<span className="pl-1  text-red-500">*</span>
+                  </div>
                   <div className={inputClass}>
                     <input
                       {...register("edition", {
@@ -388,7 +386,9 @@ const Create: NextPage = () => {
                 </div>
                 {/* 제품실물여부 */}
                 <div>
-                  <div className="pt-6 pb-2 pl-2 font-bold">실물화 여부</div>
+                  <div className="pt-6 pb-2 pl-2 font-bold">
+                    실물화 여부<span className="pl-1  text-red-500">*</span>
+                  </div>
                   <div className="flex gap-4 items-center">
                     <button
                       type="button"
@@ -408,7 +408,10 @@ const Create: NextPage = () => {
                     </button>
                   </div>
                 </div>
-                <button className="my-16 py-3 font-semibold px-8 rounded-[10px] bg-lightGold border border-lightGold text-white hover:bg-gold hover:shadow-md focus:bg-gold focus:outline-none">
+                <button
+                  onClick={createNFT}
+                  className="my-16 py-3 font-semibold px-8 rounded-[10px] bg-lightGold border border-lightGold text-white hover:bg-gold hover:shadow-md focus:bg-gold focus:outline-none"
+                >
                   Create
                 </button>
               </div>

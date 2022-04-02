@@ -9,7 +9,8 @@ import Lights from "../../components/show/Lights";
 
 function test() {
   return (
-    <div style={{ height: "100vh", width: "100vw" }}>
+    // <div style={{ height: "100vh", width: "100vw" }}>
+    <div className="w-auto h-auto max-w-full max-h-full object-contain">
       <Canvas
         gl={{
           powerPreference: "high-performance",
