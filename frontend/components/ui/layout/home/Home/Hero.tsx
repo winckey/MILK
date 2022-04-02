@@ -102,7 +102,7 @@ const Lines = styled.span`
   display: flex;
   gap: 0.5rem;
 `;
-const Line = styled.span`
+const Line = styled.span<{ active: boolean }>`
   display: inline-block;
   width: 2rem;
   height: 0.25rem;
@@ -170,6 +170,7 @@ export default function Hero() {
       </Title>
       <Slider>
         <InfoContainer>
+          {/* <Button round>{CurSlide.Badge}</Button> */}
           <Button round>{CurSlide.Badge}</Button>
           <MiddleSection>
             <BsChevronLeft
@@ -206,7 +207,7 @@ export default function Hero() {
               }}
             />
           </MiddleSection>
-          <Button>Live 참여</Button>
+          <Button round>Live 참여</Button>
         </InfoContainer>
         <Lines>
           {Slides.map((s) => {
