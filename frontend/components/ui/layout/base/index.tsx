@@ -1,6 +1,7 @@
 // 수정 금지
 
-import Header from "@components/main/Header";
+import Footer from "@components/ui/common/footer";
+import Header from "@components/ui/common/navbar";
 import Head from "next/head";
 
 interface LayoutProps {
@@ -15,7 +16,9 @@ export default function Layout({ children, seoTitle, canGoBack }: LayoutProps) {
       <Head>
         <title>MILC | {seoTitle}</title>
       </Head>
-      <div className="min-h-screen w-full bg-lightBg">{children}</div>
+      <Header />
+      <div className="min-h-screen w-full pt-[80px] bg-lightBg">{children}</div>
+      <Footer />
     </div>
   );
 }
