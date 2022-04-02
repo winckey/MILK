@@ -86,20 +86,6 @@ export default function Signup() {
               <h3>MILC에 오신 것을</h3>
               <h3>환영합니다</h3>
             </div>
-            <div className="grid grid-cols-2 mt-6 pt-4 gap-3 ">
-              <button
-                // onClick={onCompany}
-                className="flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold text-gray-500 hover:bg-gradient-to-r from-gold to-lightGold hover:text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-              >
-                명품유저
-              </button>
-              <button
-                // onClick={onUser}
-                className="flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold text-gray-500 hover:bg-gradient-to-r from-gold to-lightGold hover:text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-              >
-                개인유저
-              </button>
-            </div>
             <div className="py-4 ">
               <form onSubmit={handleSubmit(onValid)}>
                 <div>
@@ -307,10 +293,7 @@ export default function Signup() {
                   )}
                 </div>
                 <div className="my-8">
-                  <button
-                    // onClick={}
-                    className="w-full flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-                  >
+                  <button className="w-full flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white">
                     회원가입
                   </button>
                 </div>
