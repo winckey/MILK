@@ -1,37 +1,39 @@
-// import useSWR from "swr";
-// import SockJS from "sockjs-client";
-// import { over } from "stompjs";
-import React, { useEffect, useState } from "react";
+// // import useSWR from "swr";
+// // import SockJS from "sockjs-client";
+// // import { over } from "stompjs";
+// import React, { useEffect, useState } from "react";
+// import { NextPage } from "next";
+// import { useRouter } from "next/router";
+
 import { NextPage } from "next";
-import { useRouter } from "next/router";
 
-// interface userInfo {
-//   proImg?: string;
-//   userName: string;
-//   myAsset: number;
-//   userId: string;
-//   receivername: string;
-//   connected: false;
-//   message: string;
-//   money: number;
-// }
+// // interface userInfo {
+// //   proImg?: string;
+// //   userName: string;
+// //   myAsset: number;
+// //   userId: string;
+// //   receivername: string;
+// //   connected: false;
+// //   message: string;
+// //   money: number;
+// // }
 
-// interface Stream {
-//   roomId: number;
-//   user: userInfo;
-// }
+// // interface Stream {
+// //   roomId: number;
+// //   user: userInfo;
+// // }
 
-// interface StreamResponse {
-//   ok: true;
-//   stream: Stream;
-// }
+// // interface StreamResponse {
+// //   ok: true;
+// //   stream: Stream;
+// // }
 
-// let stompClient: any = null;
+// // let stompClient: any = null;
 
-const Stream: NextPage = () => {
-  return null;
-};
-export default Stream;
+// const Stream: NextPage = () => {
+//   return null;
+// };
+// export default Stream;
 // const Stream: NextPage = () => {
 //   const { user, isLoading } = userUser();
 //   const router = useRouter();
@@ -51,6 +53,9 @@ export default Stream;
 //     // 응찰가
 //     money: 0,
 //   });
+
+//   // 0분이 됐을 때, api에 요청해서 경매 종료로 바꾸면서(백방) 최고가에 대한 정보  ( 유저 아이디랑 가격 )를 가진 유저한테 낙찰 혹은 포기 모달 활성화
+//   // 결과를 내가 api에 요청해서 보내고 web3~
 
 //   // 최고 응찰가 => 방장이 방 만들 때 지정한 그 시작금액이 들어가야함
 //   const [highMoney, setHighMoney] = useState();
@@ -114,7 +119,8 @@ export default Stream;
 //   const sendValue = () => {
 //     if (stompClient) {
 //       const chatMessage = {
-//         senderName: userData.userName,
+//         // 닉네임만 중복 안됨
+//         senderName: userData.nickname,
 //         message: userData.message,
 //         status: "MESSAGE",
 //       };
@@ -173,5 +179,10 @@ export default Stream;
 //     </>
 //   );
 // };
-// 방에 들어갔는데 accesstoken이 없으면 필요한 정보들은 리코일에 저장하면 된다
-// 로그인,로그아웃할 때 지갑 연결했을 때, 지갑 금액 갱신
+// // 방에 들어갔는데 accesstoken이 없으면 필요한 정보들은 리코일에 저장하면 된다
+// // 로그인,로그아웃할 때 지갑 연결했을 때, 지갑 금액 갱신
+const Stream: NextPage = () => {
+  return null;
+};
+
+export default Stream;
