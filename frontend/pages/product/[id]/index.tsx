@@ -54,6 +54,8 @@ const Product: NextPage = () => {
     type: router.query.type?.toString(),
     balance: Number(router.query.balance),
     nftId: router.query.itemId2?.toString(),
+    marketplace: marketplace,
+    nft: nft,
     // name: "구찌 가방",
     // brand: "루이비똥",
     // image: "http~~~~",
@@ -84,7 +86,7 @@ const Product: NextPage = () => {
     const signer = provider.getSigner();
     const res1 = await marketContract(signer);
     const res2 = await nftContract(signer);
-    const items = await loadMarketItems(res1, res2);
+
     // setitems(items);
     setMarketplace(res1);
     setNFT(res2);

@@ -61,11 +61,19 @@ export const nftContract = async (signer) => {
   return contract;
 };
 
-export const loadMarketItems = async (marketplace, nft) => {
+export const loadMarketItems = async () => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const marketplace = await marketContract(signer);
+  const nft = await nftContract(signer);
   const itemCounts = await marketplace.itemCount();
+  // const item2 = await marketplace.items(0);
+  // console.log(item2);
+  console.log(itemCounts);
   let items = [];
   for (let i = 1; i <= itemCounts; i++) {
     const item = await marketplace.items(i);
+
     if (!item.sold) {
       // get uri url from nft contract
       const uri = await nft.tokenURI(item.tokenId);
@@ -83,21 +91,24 @@ export const loadMarketItems = async (marketplace, nft) => {
         description: metadata.description,
         image: metadata.image,
       });
-      console.log("이 NFT의 ID 값은", item.itemId);
-      console.log("이 NFT의 주인은", item.seller);
+      // console.log("이 NFT의 ID 값은", item.itemId);
+      // console.log("이 NFT의 주인은", item.seller);
+      // console.log("이 상품의 이미지 주소는", item.image);
+      console.log(item);
     }
   }
   console.log(items);
-  console.log(
-    items[itemCounts - 1].seller,
-    items[itemCounts - 1].itemId,
-    typeof items[itemCounts - 1].itemId
-  );
-  return {
-    items: items,
-    seller: items[itemCounts - 1].seller,
-    id: items[itemCounts - 1].itemId,
-  };
+  // console.log(
+  //   items[itemCounts - 1].seller,
+  //   items[itemCounts - 1].itemId,
+  //   typeof items[itemCounts - 1].itemId
+  // );
+  return items;
+  // {
+  //   items: items,
+  //   seller: items[itemCounts - 1].seller,
+  //   id: items[itemCounts - 1].itemId,
+  // };
 };
 
 export const purchaseMarketItem = async (item, marketplace) => {

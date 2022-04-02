@@ -89,22 +89,13 @@ export default function OrderModal({
   //     });
   //   }
   // }, [course]);
-  const [marketplace, setMarketplace] = useState({});
-  const [nft, setNFT] = useState({});
   const [enough, setEnough] = useState(true);
   const [items, setItems] = useState({});
   const balance = response.balance;
   const price = response.price;
   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  console.log(provider);
 
-  const marketplaceC = async () => {
-    const res = await marketContract(provider.getSigner());
-    setMarketplace(res);
-  };
-  const nftC = async () => {
-    const res = await nftContract(provider.getSigner());
-    setNFT(res);
-  };
   const nftId = response.nftId?.toString();
   const closeModal = () => {
     setIsOpen(false);
@@ -129,25 +120,20 @@ export default function OrderModal({
   };
 
   const loadItems = async () => {
-    const res = await loadMarketItems(marketplace, nft)
-      .then(() => setItems(res))
-      .then();
+    const res = await loadMarketItems();
+    setItems(res);
   };
 
   const onClick = async () => {
-    await purchaseMarketItem(items.itemId, marketplace);
+    await purchaseMarketItem();
   };
 
   useEffect(() => {
     isEnough();
-    nftC();
-    marketplaceC();
     loadItems();
   }, []);
-
   console.log(items);
-  console.log(marketplace);
-  console.log(nft);
+
   return (
     <Modal isOpen={isOpen}>
       <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">

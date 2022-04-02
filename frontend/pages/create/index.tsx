@@ -16,8 +16,35 @@ import files from "@pages/api/files";
 import Web3 from "web3";
 import useMutation from "@libs/client/useMutation";
 import { useForm } from "react-hook-form";
+import { truncate } from "fs";
 
 declare let window: any;
+
+interface Iitems {
+  totalPrice: any;
+  itemId: any;
+  seller: any;
+  name: any;
+  description: any;
+  image: any;
+}
+
+interface INftForm {
+  nftId: string;
+  nftName: string;
+  price: string;
+  imgUrl: string;
+  product: boolean;
+  description: string;
+  edition: number;
+  type: number;
+  loyalty: number;
+}
+
+interface INftResponse {
+  message: string;
+  statusCode: number;
+}
 
 const Create: NextPage = () => {
   const router = useRouter();
@@ -34,7 +61,7 @@ const Create: NextPage = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [edition, setEdition] = useState("");
+  const [edition, setEdition] = useState(0);
   const [type, setType] = useState(0);
   const [loyalty, setLoyalty] = useState(0);
   const [product, setProduct] = useState(false);
@@ -45,29 +72,8 @@ const Create: NextPage = () => {
   // setLoading(false);
   // };
 
-  interface Iitems {
-    totalPrice: any;
-    itemId: any;
-    seller: any;
-    name: any;
-    description: any;
-    image: any;
-  }
-
-  interface INftForm {
-    nftId: string;
-    nftName: string;
-    price: string;
-    imgUrl: string;
-  }
-
-  interface INftResponse {
-    message: string;
-    statusCode: number;
-  }
-
   const [uploadNFT, { loading, data, error }] =
-    useMutation<INftResponse>("/Mlik/nft");
+    useMutation<INftResponse>("/nft");
 
   const {
     register,
@@ -184,6 +190,7 @@ const Create: NextPage = () => {
       const result = await (ipfs as IPFSHTTPClient).add(
         JSON.stringify({ image, name, description })
       );
+      console.log(result);
       mintThenList(result);
     } catch (error) {
       console.log("ipfs uri upload error: ", error);
@@ -192,11 +199,6 @@ const Create: NextPage = () => {
 
   const mintThenList = async (result: any) => {
     const uri = `https://ipfs.infura.io/ipfs/${result.path}`;
-
-    let accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    let account = accounts[0];
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const jsonRpcProvider = new ethers.providers.JsonRpcProvider();
@@ -244,6 +246,11 @@ const Create: NextPage = () => {
     console.log(res1.itemCount());
   };
 
+  const onClick = async () => {
+    const res = await loadMarketItems();
+    console.log(res);
+  };
+
   // useEffect(() => {
   //   if (data && data.statusCode === 200) {
   //     alert("NFT 상품이 등록되었습니다!");
@@ -257,99 +264,153 @@ const Create: NextPage = () => {
   //   // web3Handler();
   //   loadContracts();
   // }, []);
+  console.log(product);
+  const inputClass =
+    "bg-white rounded-[10px] border max-w-[600px] p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold";
 
   return (
     <div className="min-h-screen w-full bg-lightBg  ">
-      <div className="px-24 pt-32  ml-12 mr-4">
+      <button onClick={onClick}>리스트</button>
+      <button onClick={connectMeta}>지갑연결 가즈앙</button>
+      <div className="px-12 ml-12 mr-4">
         <div>
-          <div className="text-5xl mb-12 "> Create item</div>
+          <div className="text-3xl font-bold mb-8 "> Create New Item</div>
+          <div className="text-xs text-textGray mb-2">
+            <span className="text-red-500 font-bold">*</span> 필수 입력항목
+          </div>
           {/* 제품 정보들 좌+우 */}
-          <button onClick={connectMeta}>지갑연결 가즈앙</button>
           <form onSubmit={createNFT}>
-            <div className="grid grid-cols-2">
-              <div className="grid grid-rows-6 gap-4">
-                {/* 제품명 */}
+            <div className="">
+              <div className="">
                 <div>
-                  <div>제품명</div>
+                  <div className="font-bold">
+                    Image, Video, Audio, or 3D Model
+                    <span className="pl-1 text-red-500">*</span>
+                  </div>
+                  <div className="text-xs text-textGray pb-2 font-medium">
+                    File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3,
+                    WAV, OGG, GLB, GLTF. Max size: 100 MB
+                  </div>
+                  <label className="lg:w-[50%] lg:h-[300px] w-[300px] h-[200px] flex flex-col items-center justify-center px-4 py-6 bg-white text-gold rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-gold hover:text-white">
+                    <svg
+                      className="w-12 h-12"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+                    </svg>
+
+                    {ipfs && (
+                      <>
+                        <div>
+                          <div className="">
+                            <input
+                              className="hidden"
+                              type="file"
+                              required
+                              name="file"
+                              onChange={uploadIPFS}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </label>
+                </div>
+                {/* 제품명 */}
+                <div className="pt-6 pb-2 pl-2 font-bold">
+                  제품명<span className="pl-1  text-red-500">*</span>
+                </div>
+                <div className={inputClass}>
                   <input
                     {...register("nftName", {
                       required: "필수 입력정보입니다.",
                     })}
+                    className="w-full outline-none placeholder:text-sm placeholder:text-textGray"
                     placeholder="제품명을 입력해주세요."
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
-                {/* 제품실물여부 */}
-                <div>
-                  <div>실물 여부</div>
-                  <input
-                    type="checkbox"
-                    required
-                    name="name"
-                    onChange={(e) => setProduct(e.target.checked)}
-                  />
+                <div className="pl-3">
+                  {errors?.nftName?.message ? (
+                    <p className="mt-[3px] text-xs text-[#ff5e57]">
+                      {errors?.nftName?.message}
+                    </p>
+                  ) : null}
                 </div>
                 {/* 제품 설명 */}
                 <div>
-                  <div>상세 설명</div>
-                  <input
-                    type="text"
-                    required
-                    name="name"
-                    placeholder="제품 상세설명을 입력해주세요."
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
+                  <div className="pt-6 pb-2 pl-2 font-bold">상세 설명</div>{" "}
+                  <div className={inputClass}>
+                    <input
+                      {...register("description", {
+                        required: "필수 입력정보입니다.",
+                        onChange: (e) => setDescription(e.target.value),
+                      })}
+                      className="w-full outline-none placeholder:text-sm placeholder:text-textGray"
+                      placeholder="제품 상세설명을 입력해주세요."
+                    />{" "}
+                  </div>
+                  <div className="pl-3">
+                    {errors?.description?.message ? (
+                      <p className="mt-[3px] text-xs text-[#ff5e57]">
+                        {errors?.description?.message}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
                 {/* 에디션 */}
                 <div>
-                  <div>Edition</div>
-                  <input
-                    type="number"
-                    required
-                    name="name"
-                    placeholder="에디션 넘버를 지정해주세요."
-                    onChange={(e) => setEdition(e.target.value)}
-                  />
+                  <div className="pt-6 pb-2 pl-2 font-bold">Edition</div>
+                  <div className={inputClass}>
+                    <input
+                      {...register("edition", {
+                        required: "필수 입력정보입니다.",
+                        pattern: {
+                          value: /^[1-9]+$/,
+                          message: "숫자만 입력하세요",
+                        },
+                        onChange: (e) => setEdition(Number(e.target.value)),
+                      })}
+                      className="w-full outline-none placeholder:text-sm placeholder:text-textGray"
+                      placeholder="에디션 넘버를 지정해주세요."
+                    />{" "}
+                  </div>
+
+                  <div className="pl-3">
+                    {errors?.edition?.message ? (
+                      <p className="mt-[3px] text-xs text-[#ff5e57]">
+                        {errors?.edition?.message}
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
-                {/* 판매유형 */}
+                {/* 제품실물여부 */}
                 <div>
-                  <div>판매 유형</div>
-                  <input type="text" />
+                  <div className="pt-6 pb-2 pl-2 font-bold">실물화 여부</div>
+                  <div className="flex gap-4 items-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        product ? null : setProduct(true);
+                      }}
+                      className="flex justify-center items-center w-[150px] h-[50px] rounded-lg border-2 border-gold font-bold hover:bg-gold hover:text-white hover:cursor-pointer active:bg-gold focus:text-white focus:bg-gold"
+                    >
+                      가능
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => (product ? setProduct(false) : null)}
+                      className="flex justify-center items-center w-[150px] h-[50px] rounded-lg border-2 border-gold font-bold hover:bg-gold hover:text-white hover:cursor-pointer focus:text-white focus:bg-gold"
+                    >
+                      불가능
+                    </button>
+                  </div>
                 </div>
-                {/* 로열티 */}
-                <div>
-                  <div>로열티 설정</div>
-                  <input type="number" />
-                </div>
-              </div>
-              <div className="grid gap-5 ">
-                {ipfs && (
-                  <>
-                    <div>
-                      <div>제품 파일 올리기</div>
-                      <div className="bg-lightGold h-[250px] w-[250px]">
-                        <input
-                          type="file"
-                          required
-                          name="file"
-                          onChange={uploadIPFS}
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
-                <div>
-                  <div>가격</div>
-                  <input
-                    {...register("price", {
-                      required: "필수 입력정보입니다.",
-                    })}
-                    name="price"
-                    placeholder="가격을 설정해주세요."
-                    onChange={(e) => setPrice(e.target.value)}
-                  />
-                </div>
-                <button>Create</button>
+                <button className="my-16 py-3 font-semibold px-8 rounded-[10px] bg-lightGold border border-lightGold text-white hover:bg-gold hover:shadow-md focus:bg-gold focus:outline-none">
+                  Create
+                </button>
               </div>
             </div>
           </form>
