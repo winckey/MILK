@@ -57,18 +57,15 @@ interface Iresponse {
     name: string | undefined;
     image: string | undefined;
     description: string | undefined;
-    price: number | undefined;
+    production: boolean;
     edition: number | undefined;
-    type: string | undefined;
-    balance: number | undefined;
-    nftId: string | undefined;
   };
   onClose: Function;
   ethUSD: number;
   exchange: number;
 }
 
-export default function SellModal() {
+export default function SellModal({ response, onClose }: Iresponse) {
   const [isOpen, setIsOpen] = useState(true);
   // console.log(response);
   // const [order, setOrder] = useState(defaultOrder);
@@ -84,14 +81,6 @@ export default function SellModal() {
   //     });
   //   }
   // }, [course]);
-  const [enough, setEnough] = useState(true);
-  const [items, setItems] = useState({});
-  const balance = response.balance;
-  const price = response.price;
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  console.log(provider);
-
-  const nftId = response.nftId?.toString();
   const closeModal = () => {
     setIsOpen(false);
     // setOrder(defaultOrder);
@@ -101,33 +90,6 @@ export default function SellModal() {
   };
 
   // const formState = createFormState(order, hasAgreedTOS, isNewPurchase);
-
-  const isEnough = () => {
-    if (!price || !balance) {
-      window.location.reload();
-      return null;
-    }
-    if (balance >= price) {
-      setEnough(true);
-    } else {
-      setEnough(false);
-    }
-  };
-
-  const loadItems = async () => {
-    const res = await loadMarketItems();
-    setItems(res);
-  };
-
-  const onClick = async () => {
-    await purchaseMarketItem();
-  };
-
-  useEffect(() => {
-    isEnough();
-    loadItems();
-  }, []);
-  console.log(items);
 
   return (
     <Modal isOpen={isOpen}>
@@ -160,7 +122,7 @@ export default function SellModal() {
                   <div className="mb-1">
                     <img
                       src={response.image}
-                      className="w-[200px] h-[200px]"
+                      className="w-[200px] h-[auto]"
                       alt=""
                     />
                   </div>
@@ -182,12 +144,13 @@ export default function SellModal() {
                         />
                       </div>
                       <div className="ml-1 w-full overflow-hidden text-ellipsis flex items-end">
-                        {response.price?.toFixed(2)}
+                        <input type="text" />
+                        {/* {response.price?.toFixed(2)}
                         <div className="text-[15px] ml-1 mb-1 font-normal">
                           <span className="text-textGray overflow-hidden text-ellipsis w-full">
                             Eth (₩ {(ethUSD * exchange).toFixed(0)}원)
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="text-[15px] mt-[15px]"></div>
@@ -203,59 +166,25 @@ export default function SellModal() {
                   alt="ETH"
                 />
                 <div className="text-lg font-bold">
-                  {response.balance?.toFixed(2)}
+                  {/* {response.balance?.toFixed(2)} */}
                 </div>
                 <span className="ml-1 text-sm text-textGray">Eth</span>
               </div>
-              <div className="text-xs text-red-500">
-                <span>
-                  {enough ? null : (
-                    <div className="flex mt-1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 mx-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                      {"잔고가 부족합니다. Ethereum을 구매해주세요."}
-                    </div>
-                  )}
-                </span>
-              </div>
+              <div className="text-xs text-red-500"></div>
             </div>
           </div>
         </div>
         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex">
-          {enough ? (
-            <button
-              // onClick={onClick}
-              className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-              // disabled={formState.isDisabled}
-              // onClick={() => {
-              //   onSubmit(order, course);
-              // }}
-            >
-              Buy
-            </button>
-          ) : (
-            <button
-              className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white cursor-not-allowed"
-              // disabled={formState.isDisabled}
-              // onClick={() => {
-              //   onSubmit(order, course);
-              // }}
-            >
-              Buy
-            </button>
-          )}
+          <button
+            // onClick={onClick}
+            className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
+            // disabled={formState.isDisabled}
+            // onClick={() => {
+            //   onSubmit(order, course);
+            // }}
+          >
+            Sell
+          </button>
         </div>
       </div>
     </Modal>

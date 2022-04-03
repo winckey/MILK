@@ -22,6 +22,7 @@ const Product: NextPage = () => {
   const [selectedRealization, setSelectedRealization] = useState<null | object>(
     null
   );
+  const [selectedSell, setSelectedSell] = useState<null | object>(null);
   const [marketplace, setMarketplace] = useState({});
   const [nft, setNFT] = useState({});
   const [itemId, setItemId] = useState(0);
@@ -32,6 +33,7 @@ const Product: NextPage = () => {
   const cleanupModal = () => {
     setSelectedRealization(null);
     setSelectedOrder(null);
+    setSelectedSell(null);
   };
 
   // 관이 part
@@ -54,8 +56,6 @@ const Product: NextPage = () => {
     type: router.query.type?.toString(),
     balance: Number(router.query.balance),
     nftId: router.query.itemId2?.toString(),
-    marketplace: marketplace,
-    nft: nft,
     // name: "구찌 가방",
     // brand: "루이비똥",
     // image: "http~~~~",
@@ -86,7 +86,6 @@ const Product: NextPage = () => {
     const signer = provider.getSigner();
     const res1 = await marketContract(signer);
     const res2 = await nftContract(signer);
-
     // setitems(items);
     setMarketplace(res1);
     setNFT(res2);

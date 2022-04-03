@@ -269,11 +269,24 @@ const Create: NextPage = () => {
   const inputClass =
     "bg-white rounded-[10px] border max-w-[600px] p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold";
   const [selectedSell, setSelectedSell] = useState<null | object>(null);
+  const response = {
+    image:
+      "https://img.koreatimes.co.kr/upload/newsV2/images/202110/ded3f223c33744129183ed11be80ea57.jpg/dims/resize/740/optimize",
+    name: "Chanel Classic flap bag",
+    description: "걍 개지림;",
+    edition: 11,
+    production: true,
+  };
+  const cleanupModal = () => {
+    setSelectedSell(null);
+  };
   return (
     <div className="min-h-screen w-full bg-lightBg  ">
-      {selectedSell && <SellModal />}
+      {selectedSell && <SellModal response={response} onClose={cleanupModal} />}
       <div className="flex justify-evenly">
-        <button onClick={() => setSelectedSell(true)}>판매모달띄우기</button>
+        <button onClick={() => setSelectedSell(response)}>
+          판매모달띄우기
+        </button>
         <button onClick={onClick}>리스트</button>
         <button onClick={connectMeta}>지갑연결 가즈앙</button>
       </div>
