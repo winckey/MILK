@@ -3,8 +3,8 @@ import { Physics } from "@react-three/cannon";
 
 import React from "react";
 
-import Goods from "../../components/show/Goods";
-import Lights from "../../components/show/Lights";
+import Goods from "@components/exhibition/Goods";
+import Lights from "@components/exhibition/Lights";
 // import Bulb from "../../components/show/Bulb";
 
 function test() {

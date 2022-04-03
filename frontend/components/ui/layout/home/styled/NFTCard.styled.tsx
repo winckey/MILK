@@ -106,7 +106,7 @@ const Bar2 = styled(Bar1)`
   z-index: 0;
 `;
 
-export default function NFTCard({ item }) {
+export default function NFTCard({ item }: any) {
   const {
     Id,
     Badge,

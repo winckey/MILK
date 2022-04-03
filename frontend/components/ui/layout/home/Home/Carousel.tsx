@@ -28,17 +28,13 @@ const CarouselEl = styled.article`
   }
 `;
 
-const Title = styled.h1`
-  font-size: 2.5rem;
-  font-weight: 500;
-`;
 const Controls = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
   gap: 1rem;
 `;
-const CtrlBtn = styled.span`
+const CtrlBtn = styled.span<{ active: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,7 +90,7 @@ const BottomSection = styled.div`
   align-items: center;
   gap: 0.5rem;
 `;
-const Badge = styled.span`
+const Badge = styled.span<{ number: any }>`
   position: relative;
   display: inline-block;
   border-radius: 50%;
@@ -115,9 +111,13 @@ const Badge = styled.span`
 const Amount = styled.span``;
 
 export default function Carousel() {
-  const ItemContainerRef = useRef(null);
+  const ItemContainerRef: any = useRef(null);
   // b => beginning | m => middle | e => end
+<<<<<<< HEAD:frontend/components/main/Home/Carousel.js
   const [ScrollInd, setScrollInd] = useState("b");
+=======
+  const [ScrollInd, setScrollInd]: any = useState("b");
+>>>>>>> dda2f919ec84d16477c3ab4578527c5276a22d80:frontend/components/ui/layout/home/Home/Carousel.tsx
   // const [list, setList] = useState([]);
 
   // async function handler() {
@@ -132,14 +132,21 @@ export default function Carousel() {
   //   handler();
   // }, []);
   // console.log(list);
+<<<<<<< HEAD:frontend/components/main/Home/Carousel.js
   // // list map  돌리면서 브랜드명이랑 사진 가져오기
+=======
+  // list map  돌리면서 브랜드명이랑 사진 가져오기
+>>>>>>> dda2f919ec84d16477c3ab4578527c5276a22d80:frontend/components/ui/layout/home/Home/Carousel.tsx
   return (
     <CarouselEl
-      data-aos-easing="ease-in-sine"
-      data-aos-duration="600"
+      data-aos="fade-up"
+      data-aos-delay="300"
+      data-aos-duration="1000"
       className="duration-500"
     >
-      <Title>Top Creators</Title>
+      <div className="text-4xl bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
+        Top Brands
+      </div>
       <Controls>
         <CtrlBtn
           active={ScrollInd === "e" || ScrollInd === "m"}
@@ -167,7 +174,7 @@ export default function Carousel() {
       <ItemContainer
         ref={ItemContainerRef}
         onScroll={(e) => {
-          const { scrollWidth, scrollLeft, offsetWidth } = e.target;
+          const { scrollWidth, scrollLeft, offsetWidth }: any = e.target;
           const SL = Math.ceil(scrollLeft + offsetWidth);
           if (scrollLeft <= 0) setScrollInd("b");
           if (scrollLeft > 0 && scrollLeft < scrollWidth) setScrollInd("m");

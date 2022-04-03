@@ -1,32 +1,21 @@
-import Head from "next/head";
-import styled from "styled-components";
-import { Colors, Devices } from "@components/main/Theme";
-import { BsGithub, BsGlobe } from "react-icons/bs";
-import Link from "next/link";
-import Hero from "@components/main/Home/Hero";
+import Hero from "@components/ui/layout/home/Home/Hero";
 import AOS from "aos";
-import Carousel from "@components/main/Home/Carousel";
-import TopCollectibles from "@components/main/Home/TopCollectibles";
+import Carousel from "@components/ui/layout/home/Home/Carousel";
+import TopCollectibles from "@components/ui/layout/home/Home/TopCollectibles";
 import { useEffect } from "react";
-// hi
-
-const HomeEl = styled.article`
-  color: ${Colors.White};
-`;
+import { Layout } from "@components/ui/layout";
 
 export default function Home() {
   useEffect(() => {
     AOS.init();
   });
   return (
-    <HomeEl>
-      <Head>
-        <meta content="Cleaned create-next-app including styled-components and configured theme" />
-        <link rel="icon" href="/favicon.png" />
-      </Head>
-      <Hero />
-      <Carousel />
-      <TopCollectibles />
-    </HomeEl>
+    <Layout seoTitle="메인">
+      <div className="bg-ourBlack">
+        <Hero />
+        <Carousel />
+        <TopCollectibles />
+      </div>
+    </Layout>
   );
 }

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
-import { Colors, Devices } from "../Theme";
+import { Colors, Devices } from "@components/ui/layout/home/Theme";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import Button from "../styled/Button.styled";
@@ -10,22 +10,6 @@ import "aos/dist/aos.css";
 
 // hi
 
-const HeroEl = styled.article`
-  margin: 6rem 1rem 5rem 1rem;
-  text-align: center;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media ${Devices.Laptop} {
-    margin: 3rem 4rem 5rem 4rem;
-  }
-
-  @media ${Devices.LaptopL} {
-    margin: 3rem 10rem 5rem 10rem;
-  }
-`;
 const Title = styled.h1`
   margin-bottom: 3rem;
   font-weight: 500;
@@ -50,7 +34,7 @@ const Slider = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 100%;
+  width: 80%;
   overflow: hidden;
   box-shadow: 0px 0px 3rem ${Colors.Primary};
   border-radius: 20px;
@@ -118,7 +102,7 @@ const Lines = styled.span`
   display: flex;
   gap: 0.5rem;
 `;
-const Line = styled.span`
+const Line = styled.span<{ active: boolean }>`
   display: inline-block;
   width: 2rem;
   height: 0.25rem;
@@ -169,7 +153,12 @@ export default function Hero() {
   });
 
   return (
-    <HeroEl data-aos="fade-up" data-aos-delay="150" data-aos-duration="1000">
+    <div
+      className="flex flex-col pt-5 items-center text-center"
+      data-aos="fade-up"
+      data-aos-delay="150"
+      data-aos-duration="1000"
+    >
       <Title>
         <Heading
           data-aos="zoom-y-out"
@@ -181,6 +170,7 @@ export default function Hero() {
       </Title>
       <Slider>
         <InfoContainer>
+          {/* <Button round>{CurSlide.Badge}</Button> */}
           <Button round>{CurSlide.Badge}</Button>
           <MiddleSection>
             <BsChevronLeft
@@ -217,7 +207,7 @@ export default function Hero() {
               }}
             />
           </MiddleSection>
-          <Button>Live 참여</Button>
+          <Button round>Live 참여</Button>
         </InfoContainer>
         <Lines>
           {Slides.map((s) => {
@@ -230,6 +220,6 @@ export default function Hero() {
           </Img>
         </ImgContainer>
       </Slider>
-    </HeroEl>
+    </div>
   );
 }

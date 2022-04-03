@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Colors } from "../Theme";
 // hi
-const Button = styled.button`
+const Button = styled.button<{ round: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;

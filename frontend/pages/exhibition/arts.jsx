@@ -15,16 +15,24 @@ import {
 } from "@react-three/drei";
 import { useRoute, useLocation, Link } from "wouter";
 import getUuid from "uuid-by-string";
-import Goods from "../../components/show/Goods";
+import Goods from "@components/exhibition/Goods";
 
 const pexel = (id) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`;
 const images = [
   // Front
-  { position: [0, 0, 1.5], rotation: [0, 0, 0], url: pexel(1103970) },
+  {
+    position: [0, 0, 1.5],
+    rotation: [0, 0, 0],
+    url: "https://contents.lotteon.com/itemimage/LO/15/66/84/51/83/_1/56/68/45/18/5/LO1566845183_1566845185_1.jpg/dims/resizef/554X554",
+  },
   // Back
-  { position: [-0.8, 0, -0.6], rotation: [0, 0, 0], url: pexel(416430) },
-  { position: [0.8, 0, -0.6], rotation: [0, 0, 0], url: pexel(310452) },
+  { position: [-0.8, 0, -0.6], rotation: [0, 0, 0], url: "/저장.jpg" },
+  {
+    position: [0.8, 0, -0.6],
+    rotation: [0, 0, 0],
+    url: "/구찌가방.PNG",
+  },
   // Left
   {
     position: [-1.75, 0, 0.25],
@@ -109,6 +117,79 @@ export default function arts() {
   );
 }
 
+function Frame({ url, ...props }) {
+  const [hovered, hover] = useState(false);
+
+  const image = useRef();
+  const frame = useRef();
+  const name = getUuid(url);
+
+  useCursor(hovered);
+  useFrame((state) => {
+    // image.current.material.zoom =
+    //   2 + Math.sin(rnd * 10000 + state.clock.elapsedTime / 3) / 2;
+    image.current.scale.x = THREE.MathUtils.lerp(
+      image.current.scale.x,
+      0.85 * (hovered ? 0.85 : 1),
+      0.1
+    );
+    image.current.scale.y = THREE.MathUtils.lerp(
+      image.current.scale.y,
+      0.9 * (hovered ? 0.905 : 1),
+      0.1
+    );
+  });
+
+  return (
+    <group {...props}>
+      <mesh
+        onPointerOver={(e) => (e.stopPropagation(), hover(true))}
+        onPointerOut={() => hover(false)}
+        name={name}
+        scale={[1, 1.2, 0.05]}
+        position={[0, GOLDENRATIO / 2, 0]}
+      >
+        <boxGeometry />
+        <meshStandardMaterial
+          color="#151515"
+          metalness={0.5}
+          roughness={0.5}
+          envMapIntensity={2}
+        />
+        <mesh
+          ref={frame}
+          raycast={() => null}
+          scale={[0.9, 0.93, 0.9]}
+          position={[0, 0, 0.2]}
+        >
+          <boxGeometry />
+          {/* <PresentationControls
+            global
+            config={{ mass: 2, tension: 500 }}
+            snap={{ mass: 4, tension: 1500 }}
+            rotation={[0, 0.6, 0]}
+            polar={[-Math.PI / 3, Math.PI / 3]}
+            azimuth={[-Math.PI / 1.4, Math.PI / 2]}
+          >
+            <Goods />
+          </PresentationControls> */}
+          <meshBasicMaterial toneMapped={false} fog={false} />
+        </mesh>
+
+        <ambientLight intensity={0.1} />
+        <directionalLight />
+
+        <Image
+          raycast={() => null}
+          ref={image}
+          position={[0, 0, 0.7]}
+          url={url}
+        />
+      </mesh>
+    </group>
+  );
+}
+
 function Frames({
   images,
   q = new THREE.Quaternion(),
@@ -178,75 +259,3 @@ function Frames({
 //     </group>
 //   );
 // }
-
-function Frame({ url, ...props }) {
-  const [hovered, hover] = useState(false);
-  const [rnd] = useState(() => Math.random());
-  const image = useRef();
-  const frame = useRef();
-  const name = getUuid(url);
-  // useCursor(hovered);
-  useFrame((state) => {
-    image.current.material.zoom =
-      2 + Math.sin(rnd * 10000 + state.clock.elapsedTime / 3) / 2;
-    image.current.scale.x = THREE.MathUtils.lerp(
-      image.current.scale.x,
-      0.85 * (hovered ? 0.85 : 1),
-      0.1
-    );
-    image.current.scale.y = THREE.MathUtils.lerp(
-      image.current.scale.y,
-      0.9 * (hovered ? 0.905 : 1),
-      0.1
-    );
-  });
-
-  return (
-    <group {...props}>
-      <mesh
-        name={name}
-        // onPointerOver={(e) => (e.stopPropagation(), hover(true))}
-        // onPointerOut={() => hover(false)}
-        scale={[1, GOLDENRATIO, 0.05]}
-        position={[0, GOLDENRATIO / 2, 0]}
-      >
-        <boxGeometry />
-        <meshStandardMaterial
-          color="#151515"
-          metalness={0.5}
-          roughness={0.5}
-          envMapIntensity={2}
-        />
-        <mesh
-          ref={frame}
-          raycast={() => null}
-          scale={[0.9, 0.93, 0.9]}
-          position={[0, 0, 0.2]}
-        >
-          <boxGeometry />
-          <PresentationControls
-            global
-            config={{ mass: 2, tension: 500 }}
-            snap={{ mass: 4, tension: 1500 }}
-            rotation={[0, 0.6, 0]}
-            polar={[-Math.PI / 3, Math.PI / 3]}
-            azimuth={[-Math.PI / 1.4, Math.PI / 2]}
-          >
-            <Goods />
-          </PresentationControls>
-          <meshBasicMaterial toneMapped={false} fog={false} />
-        </mesh>
-
-        <ambientLight intensity={0.1} />
-        <directionalLight />
-
-        <Image
-          raycast={() => null}
-          ref={image}
-          position={[0, 0, 0.7]}
-          url={url}
-        />
-      </mesh>
-    </group>
-  );
-}
