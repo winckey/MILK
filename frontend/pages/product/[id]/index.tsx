@@ -8,7 +8,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { loadMarketItems, marketContract, nftContract } from "utils/interact";
 import ThreeDimension from "@components/ui/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useMutation from "@libs/client/useMutation";
 
 declare let window: any;
@@ -17,19 +17,23 @@ const Product: NextPage = () => {
   const { user, isLoading } = useUser();
   // console.log(user);
 
-  const [isOwner, setIsOwner] = useState(true); // 본인 상품인지 여부
+  const [isOwner, setIsOwner] = useState(false); // 본인 상품인지 여부
   const [selectedOrder, setSelectedOrder] = useState<null | object>(null);
   const [selectedRealization, setSelectedRealization] = useState<null | object>(
     null
   );
+  const [selectedSell, setSelectedSell] = useState<null | object>(null);
   const [marketplace, setMarketplace] = useState({});
   const [nft, setNFT] = useState({});
   const [itemId, setItemId] = useState(0);
-  const [name, setname] = useState("");
+  const [name, setName] = useState("");
+  const [ethUSD, setEthUSD] = useState(0);
+  const [exchange, setExchange] = useState(0);
 
   const cleanupModal = () => {
     setSelectedRealization(null);
     setSelectedOrder(null);
+    setSelectedSell(null);
   };
 
   // 관이 part
@@ -42,7 +46,7 @@ const Product: NextPage = () => {
   // console.log(typeof image);
 
   // router에서 받아온 id로 요청 후 받은 데이터 (임시 참고용)
-  const nftId = "zxs123123123";
+  const nftId = router.query.nftId?.toString();
   const response = {
     name: router.query.name?.toString(),
     image: router.query.image?.toString(),
@@ -50,8 +54,8 @@ const Product: NextPage = () => {
     price: Number(router.query.price),
     edition: Number(router.query.edition),
     type: router.query.type?.toString(),
-    balance: router.query.balance,
-    nftId: router.query.nftId,
+    balance: Number(router.query.balance),
+    nftId: router.query.itemId2?.toString(),
     // name: "구찌 가방",
     // brand: "루이비똥",
     // image: "http~~~~",
@@ -61,15 +65,30 @@ const Product: NextPage = () => {
     // type: "boolean",
   };
 
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(
+        "https://api.coinpaprika.com/v1/tickers/eth-ethereum"
+      );
+      const json = await res.json();
+      // console.log(json);
+      setEthUSD(json.quotes.USD.price);
+      const res2 = await fetch(
+        "https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD"
+      );
+      const json2 = await res2.json();
+      setExchange(json2[0].basePrice);
+    })();
+  }, []);
+
   const loadContracts = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const res1 = await marketContract(signer);
     const res2 = await nftContract(signer);
-    const items = await loadMarketItems(res1, res2);
     // setitems(items);
-    // setMarketplace(res1);
-    // setNFT(res2);
+    setMarketplace(res1);
+    setNFT(res2);
     // setLoading(false);
     // setId(items.id);
     // console.log(id);
@@ -243,12 +262,12 @@ const Product: NextPage = () => {
                             </a>
                           </div>
                           <div className="ml-1 w-full overflow-hidden text-ellipsis">
-                            {router.query.price}
+                            {response.price?.toFixed(2)}
                           </div>
                         </div>
                         <div className="text-[15px] mt-[15px]">
                           <span className="text-textGray overflow-hidden text-ellipsis w-full">
-                            ($2,345.59)
+                            Eth (₩ {(ethUSD * exchange).toFixed(0)}원)
                           </span>
                         </div>
                       </div>
@@ -364,7 +383,14 @@ const Product: NextPage = () => {
         </div>
 
         {/* Modal */}
-        {selectedOrder && <OrderModal onClose={cleanupModal} />}
+        {selectedOrder && (
+          <OrderModal
+            ethUSD={ethUSD}
+            response={response}
+            onClose={cleanupModal}
+            exchange={exchange}
+          />
+        )}
         {selectedRealization && (
           <RealizationModal
             nft={selectedRealization}
