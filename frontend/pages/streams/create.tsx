@@ -66,9 +66,17 @@ const Create: NextPage = () => {
   };
   // 방 만들기 버튼 누를 때, 스트리밍 생성 함수 실행
   const makeRoom = async () => {
-    await getStreamId();
-    // console.log(streamData);
-    await makeStream(streamData);
+    if (streamData.roomName === "") {
+      alert("방제목을 입력해주세요");
+    } else if (streamData.runtime === 0) {
+      alert("진행 시간을 입력해주세요");
+    } else if (streamData.startprice === 0) {
+      alert("시작 가격을 지정해주세요");
+    } else {
+      await getStreamId();
+      // console.log(streamData);
+      await makeStream(streamData);
+    }
   };
 
   useEffect(() => {
