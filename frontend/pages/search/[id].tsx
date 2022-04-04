@@ -46,6 +46,7 @@ const Search: NextPage = () => {
     setList(data.nftDtoList);
   }
 
+  console.log(list);
   useEffect(() => {
     handler();
   }, [id, sortSelected, roomSelected, selectedPrice]);
