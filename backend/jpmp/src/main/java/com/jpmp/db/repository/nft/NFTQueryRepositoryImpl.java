@@ -52,7 +52,6 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
                         eqSeleOwner(reqDto.getOwnerIsEnterprise()),
                         qnft.price.between(reqDto.getMin(), reqDto.getMax()),
                         qnft.seleStatus.eq(true)
-
                 );
 
 
@@ -94,6 +93,7 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
 
 
     private BooleanExpression eqNntName(String name) {
+        System.out.println("nftquery  name : " +name);
         if ((name).equals("")) {
             return null;
         }
@@ -101,6 +101,7 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     private BooleanExpression eqEnterprise(User enterprise) {
+        System.out.println("nftquery  enterprise: " +enterprise);
         if ((enterprise == null)) {
             return null;
         }
@@ -108,6 +109,7 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     private BooleanExpression eqSeleOwner(Boolean seleOwner) {
+        System.out.println("nftquery  seleOwner: " +seleOwner);
         if ((seleOwner == null)) {
             return null;
         }
