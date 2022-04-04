@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { role } from "@components/atoms/Auth";
 
 interface User {
   address1: string;
@@ -82,7 +84,7 @@ const ActiveLinkBrand = ({ children, href }: LinkProps) => {
     <Link href={href} scroll={false}>
       <a
         className={`${
-          slug === href ? "text-white border-b-4 border-gold" : "text-[#E5E5E5]"
+          slug === href ? "text-white border-b-4 border-gold" : "text-gray-400"
         } px-[30px] py-5 w-full flex cursor-pointer hover:text-white`}
       >
         {children}
@@ -94,14 +96,16 @@ const ActiveLinkBrand = ({ children, href }: LinkProps) => {
 export default function ProfileLayout({ children }: LayoutProps) {
   const router = useRouter();
 
-  // 해당 nickname을 가진 유저 정보 가져오기
+  const getRole = useRecoilValue(role);
+
+  // 해당 nickname을 가진 유저의 판매/보유 nft 리스트 가져오기
   const { data } = useSWR<UserProfileResponse>(
     router.query.nickname
       ? `${process.env.BASE_URL}/user/info/${router.query.nickname}`
       : null
   );
 
-  // 존재하지 않는 회원 url 직접 입력 방지
+  // 해당 nickname을 가진 유저의 판매/보유 nft 리스트 가져오기
   useEffect(() => {
     if (data && data?.status === 404) {
       alert("존재하지 않는 회원입니다.");
@@ -226,6 +230,29 @@ export default function ProfileLayout({ children }: LayoutProps) {
                     <span className="ml-4 mr-3 font-semibold">판매 목록</span>
                   </ActiveLinkBrand>
                 </li>
+                {getRole === "ROLE_ENTERPRISE" ? (
+                  <li>
+                    <ActiveLinkBrand
+                      href={`/profile/${data?.user?.nickname}/collection`}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                        />
+                      </svg>
+                      <span className="ml-4 mr-3 font-semibold">보유 목록</span>
+                    </ActiveLinkBrand>
+                  </li>
+                ) : null}
                 <li>
                   <ActiveLinkBrand
                     href={`/profile/${data?.user?.nickname}/activity`}

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
-import { accessToken } from "@components/atoms/Auth";
+import { accessToken, role } from "@components/atoms/Auth";
 
 interface ILoginForm {
   email: string;
@@ -22,21 +22,31 @@ interface IUser {
   phone: string;
   proImg: string;
   userName: string;
+  userRole: string;
   zipCode: string;
 }
 
 interface ILoginResponse {
-  accessToken: string;
-  refreshToken: string;
   message: string;
-  statusCode: number;
-  user: IUser;
+
+  // success
+  accessToken?: string;
+  refreshToken?: string;
+  statusCode?: number;
+  user?: IUser;
+
+  // error
+  code?: string;
+  error?: string;
+  requestUrl?: string;
+  status?: number;
 }
 
 export default function Login() {
   const router = useRouter();
 
   const setTOKEN = useSetRecoilState(accessToken);
+  const setRole = useSetRecoilState(role);
 
   // input 값 받아옴
   const {
@@ -61,7 +71,12 @@ export default function Login() {
   useEffect(() => {
     if (data && data.statusCode === 200) {
       setTOKEN(data.accessToken); // recoil에 토큰 저장
+      setRole(data.user?.userRole); // recoil에 계정 구분 저장
       router.push("/"); // 메인 페이지로 이동
+    } else if (data && data.status === 401) {
+      alert("비밀번호가 잘못 입력 되었습니다.");
+    } else if (data && data.status === 404) {
+      alert("아이디가 잘못 입력 되었습니다.");
     }
   }, [data, router]);
 

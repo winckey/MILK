@@ -1,14 +1,14 @@
 import { IoClose, IoMenu } from "react-icons/io5";
 import SearchBar from "./SearchBar";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { accessToken } from "@components/atoms/Auth";
+import { accessToken, role } from "@components/atoms/Auth";
 import { useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 // hi
 
-function MyDropdown({ logout }: any) {
+function MyDropdown({ logout, role }: any) {
   const [open, setOpen] = useState(false);
   function toggleOpen() {
     setOpen(!open);
@@ -26,17 +26,29 @@ function MyDropdown({ logout }: any) {
       <Menu.Items className="absolute mt-10 mr-2    flex flex-col right-0 bg-white rounded-md shadow-lg border">
         <Menu.Item>
           <Link href="/account/edit">
-            <a className="px-4 py-2 hover:bg-gray-300 text-gray-500">프로필</a>
+            <a className="px-4 py-2 hover:bg-gray-300 text-gray-500">
+              프로필 수정
+            </a>
           </Link>
         </Menu.Item>
-        <Menu.Item>
-          <a
-            className="px-4 py-2 hover:bg-gray-300 text-gray-500"
-            href="/show/arts"
-          >
-            나의 전시관
-          </a>
-        </Menu.Item>
+        {role === "ROLE_ADMIN" ? (
+          <Menu.Item>
+            <Link href="/signup/partner">
+              <a className="px-4 py-2 hover:bg-gray-300 text-gray-500">
+                계정 관리
+              </a>
+            </Link>
+          </Menu.Item>
+        ) : (
+          <Menu.Item>
+            <a
+              className="px-4 py-2 hover:bg-gray-300 text-gray-500"
+              href="/show/arts"
+            >
+              나의 전시관
+            </a>
+          </Menu.Item>
+        )}
         <Menu.Item>
           <a
             onClick={logout}
@@ -52,6 +64,7 @@ function MyDropdown({ logout }: any) {
 
 export default function Header() {
   const [TOKEN, setTOKEN] = useRecoilState(accessToken);
+  const getRole = useRecoilValue(role);
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const logout = () => {
@@ -116,7 +129,7 @@ export default function Header() {
               ))}
           <div className="flex md:border-l-2 md:border-gray-400 text-xl md:pl-3 justify-start gap-3 ">
             {TOKEN ? (
-              <MyDropdown logout={logout} />
+              <MyDropdown logout={logout} role={getRole} />
             ) : (
               <>
                 <Link href="/login">

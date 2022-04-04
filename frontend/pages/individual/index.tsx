@@ -1,9 +1,23 @@
 import { Layout } from "@components/ui/layout";
 import type { NextPage } from "next";
-import Image from "next/image";
 import useSWR from "swr";
+import Image from "next/image";
+import { Item } from "@components/ui/common";
+import { Nft } from "@components/ui/common/item";
+
+interface IndividualResponse {
+  message: string;
+  statusCode: number;
+  nftDtoList: Nft[];
+}
 
 const Individual: NextPage = () => {
+  // 개인이 판매중인 nft 조회
+  const { data } = useSWR<IndividualResponse>(
+    `${process.env.BASE_URL}/nft/search?ownerIsEnterprise=false`
+  );
+  // console.log(data);
+
   return (
     <Layout seoTitle="개인관">
       <div className="pb-20">
@@ -49,14 +63,17 @@ const Individual: NextPage = () => {
           </p>
           <div className="px-[52px]">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
-              <div className="bg-blue-500 h-[300px]"></div>
-              <div className="bg-blue-500 h-[300px]"></div>
-              <div className="bg-blue-500 h-[300px]"></div>
-              <div className="bg-blue-500 h-[300px]"></div>
-              <div className="bg-blue-500 h-[300px]"></div>
-              <div className="bg-blue-500 h-[300px]"></div>
-              <div className="bg-blue-500 h-[300px]"></div>
-              <div className="bg-blue-500 h-[300px]"></div>
+              {data?.nftDtoList.map((nft) => (
+                <Item
+                  key={nft.nftId}
+                  enterprise={nft.enterprise}
+                  imgUrl={nft.imgUrl}
+                  likeCount={nft.likeCount}
+                  nftId={nft.nftId}
+                  nftName={nft.nftName}
+                  price={nft.price}
+                />
+              ))}
             </div>
           </div>
         </div>
