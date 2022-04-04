@@ -4,6 +4,7 @@ import { over } from "stompjs";
 import React, { useEffect, useState } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
+import useUser from "@libs/client/useUser";
 
 // interface userInfo {
 //   proImg?: string;
@@ -29,22 +30,20 @@ import { useRouter } from "next/router";
 let stompClient = null;
 
 const Stream = () => {
-  // const { user, isLoading } = userUser();
+  const { user, isLoading } = useUser();
   const router = useRouter();
   const [chats, setChats] = useState([]);
   const [hostId, setHostId] = useState("");
   const [isHost, setIsHost] = useState(false);
   const [userList, setUserList] = useState([]);
-
-  // 최고 응찰가 => 방장이 방 만들 때 지정한 그 시작금액이 들어가야함
   const [highMoney, setHighMoney] = useState([]);
+  const [highest, setHighest] = useState(0);
   const [userData, setUserData] = useState({
-    userId: "",
-    userName: "",
+    nickName: "",
     receivername: "",
     connected: false,
     message: "",
-    // 내 자산
+    // 내 지갑에서 받아와야함
     myAsset: 0,
     // 응찰가
     money: 0,
@@ -85,31 +84,41 @@ const Stream = () => {
   const onError = () => {
     console.log("error가 무엇이냐");
   };
-  // 방장일 경우에는 어떻게 해야할지 고민해야함
+
   const onConnected = () => {
     setUserData({
       ...userData,
-      userName: data?.stream?.user?.userName,
-      money: data?.stream.user?.money,
+
+      nickName: user.nickname,
+
       connected: true,
+
+      // roomId: roomId,
     });
 
     // 그 방에 대한 정보 subscribe 할 수 있도록
-    stompClient.subscribe(`/room/${router.query.id}`, onMessageRecived);
+    // stompClient.subscribe(`/subscribe/chat/room/${router.query.id:룸아이디}`, onMessageRecived);
+    stompClient.subscribe(`/subscribe/chat/room/1`, onMessageRecived);
     userJoin();
   };
 
   const userJoin = () => {
     const chatMessage = {
-      senderName: userData.userName,
+      senderName: user?.nickName,
       status: "JOIN",
     };
-    stompClient.send(`/chat/join`, {}, JSON.stringify(chatMessage));
+    stompClient.send(`/publish/chat/join`, {}, JSON.stringify(chatMessage));
   };
 
   // 받은 상태값(입장, 경매, 채팅)에 따라 state 변경
   const onMessageRecived = (response) => {
     const res = JSON.parse(response.body);
+    console.log("응답은", res);
+    if (res) {
+      console.log(res);
+    } else {
+      console.log("error");
+    }
     switch (res.status) {
       case "JOIN":
         // userData가 축적된 객체형 데이터를 userList에 담는다
@@ -126,8 +135,12 @@ const Stream = () => {
         setChats([...chats]);
         break;
       case "AUCTION":
+        let don = res.cost;
+        setHighest(don);
+        console.log(don, "이다!");
         highMoney.push(res);
         setHighMoney([...highMoney]);
+        console.log("최고가 갱신!", highMoney);
         break;
     }
   };
@@ -137,41 +150,46 @@ const Stream = () => {
   const handleMoney = (e) => {
     const { value } = e.target;
     setUserData({ ...userData, money: value });
-    // 최고가랑 비교하기
   };
   const handleMessage = (event) => {
     const { value } = event.target;
     setUserData({ ...userData, message: value });
   };
-  const handleUsername = (event) => {
-    const { value } = event.target;
-    setUserData({ ...userData, username: value });
-  };
+
   const sendValue = () => {
     if (stompClient) {
       const chatMessage = {
-        // 닉네임만 중복 안됨
-        senderName: userData.nickname,
+        senderName: userData.nickName,
         message: userData.message,
         status: "MESSAGE",
+        roomId: 1,
       };
-      stompClient.send("/chat/message", {}, JSON.stringify(chatMessage));
+      stompClient.send(
+        "/publish/chat/message",
+        {},
+        JSON.stringify(chatMessage)
+      );
       setUserData({ ...userData, message: "" });
     }
   };
+  // && userData.money > highMoney[-1]
   const sendPrice = () => {
-    if (stompClient && userData.money > highMoney) {
-      let priceList = {
-        senderName: userData.username,
-        money: userData.money,
+    if (stompClient && userData.money <= highest) {
+      console.log("돈 더 업");
+    } else if (stompClient) {
+      const priceList = {
+        senderName: userData.nickName,
+        cost: userData.money,
+        roomId: 1,
         status: "AUCTION",
       };
-      console.log(priceList);
-      stompClient.send("/chat/auction", {}, JSON.stringify(priceList));
+      console.log("돈보낸디", priceList);
+      stompClient.send("/publish/chat/auction", {}, JSON.stringify(priceList));
       // 응찰가격 0으로 리셋
       setUserData({ ...userData, money: 0 });
-    } else if (stompClient && userData.money <= highMoney) {
-      console.log("더 높은 금액을 입력하세요");
+      // } else if (stompClient && userData.money <= highMoney) {
+      //   console.log("더 높은 금액을 입력하세요");
+      // }
     }
   };
 
@@ -181,84 +199,67 @@ const Stream = () => {
 
   return (
     <div className="bg-white min-h-screen">
-      {userData.connected ? (
-        <>
-          <>
-            <ul className="chat-messages">
-              {chats.map((chat, index) => (
-                <li
-                  className={`message ${
-                    chat.senderName === userData.username && "self"
-                  }`}
-                  key={index}
-                >
-                  <div className="avatar">{chat.senderName}</div>
+      {/* {userData.connected ? (
+        <> */}
+      <>
+        <div>최고가는 {highest}</div>
+        <ul>
+          {highMoney.map((val, i) => (
+            <li key={i}>
+              {" "}
+              {val.senderName} 님께서 최고가{val.cost} 응찰!
+            </li>
+          ))}
+        </ul>
 
-                  <div className="message-data">{chat.message}</div>
-                </li>
-              ))}
-            </ul>
-
-            <div className="send-message">
-              <input
-                type="number"
-                className="input-message"
-                placeholder="돈을 입력하세요"
-                value={userData.money}
-                onChange={handleMoney}
-              />
-              <button type="button" className="send-button" onClick={sendPrice}>
-                send
-              </button>
-            </div>
-          </>
-          <ul className="chat-messages">
-            {chats.map((chat, index) => (
-              <li
-                className={`message ${
-                  chat.senderName === userData.username && "self"
-                }`}
-                key={index}
-              >
-                {chat.senderName !== userData.username && (
-                  <div className="avatar">{chat.senderName}</div>
-                )}
-                <div className="message-data">{chat.message}</div>
-                {chat.senderName === userData.username && (
-                  <div className="avatar self">{chat.senderName}</div>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          <div className="send-message">
-            <input
-              type="text"
-              className="input-message"
-              placeholder="enter the message"
-              value={userData.message}
-              onChange={handleMessage}
-            />
-            <button type="button" className="send-button" onClick={sendValue}>
-              send
-            </button>
-          </div>
-        </>
-      ) : (
-        <div className="register">
+        <div className="send-message">
           <input
-            id="user-name"
-            placeholder="Enter your name"
-            name="userName"
-            value={userData.username}
-            onChange={handleUsername}
-            margin="normal"
+            type="number"
+            className="input-message"
+            placeholder="응찰가를 입력하세요"
+            value={userData.money}
+            onChange={handleMoney}
           />
-          <button type="button" onClick={registerUser}>
-            connect
+          <button type="button" className="send-button" onClick={sendPrice}>
+            send
           </button>
         </div>
-      )}
+      </>
+      <ul className="chat-messages">
+        {chats.map((chat, index) => (
+          <li
+            className={`message ${
+              chat.senderName === userData.nickName && "self"
+            }`}
+            key={index}
+          >
+            {chat.senderName !== userData.nickName && (
+              <div className="avatar">{chat.senderName}</div>
+            )}
+            <div className="message-data">{chat.message}</div>
+            {chat.senderName === userData.nickName && (
+              <div className="avatar self">{chat.senderName}</div>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      <div className="send-message">
+        <input
+          type="text"
+          className="input-message"
+          placeholder="enter the message"
+          value={userData.message}
+          onChange={handleMessage}
+        />
+        <button type="button" className="send-button" onClick={sendValue}>
+          send
+        </button>
+      </div>
+
+      <button type="button" onClick={registerUser}>
+        connect
+      </button>
     </div>
   );
 };
