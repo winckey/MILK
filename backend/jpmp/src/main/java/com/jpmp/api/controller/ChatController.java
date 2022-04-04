@@ -37,7 +37,7 @@ public class ChatController {
     }
 
     @MessageMapping("/chat/auction")
-    public ChatResDto auction(Message message) {
+    public void auction(Message message) {
         ChatResDto tmpDto = new ChatResDto();
         tmpDto.setRoomId(message.getRoomId());
         tmpDto.setSenderName(message.getSenderName());
@@ -46,7 +46,7 @@ public class ChatController {
         chatService.addCost(tmpDto);
         ChatResDto resDto = chatService.maxCost(tmpDto.getRoomId());
 
-        return resDto;
+        template.convertAndSend("/subscribe/chat/room/" + message.getRoomId(), tmpDto.getCost());
     }
 
 
