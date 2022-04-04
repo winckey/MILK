@@ -166,6 +166,7 @@ const Stream: NextPage = () => {
       registerUser();
     } else "오잉";
   }, [user]);
+  //
   return (
     // navbar 뒤로가기만 생성
     <Layout seoTitle="라이브 경매">
