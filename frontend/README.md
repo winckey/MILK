@@ -90,6 +90,7 @@ npm i recoil-persist
 
 ```bash
 npm i sockjs-client stompjs
+npm i --save-dev @types/stompjs @types/sockjs-client
 
 # net 오류 부분 방지
 npm i net -S

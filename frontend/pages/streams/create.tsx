@@ -69,16 +69,15 @@ const Create: NextPage = () => {
     await getStreamId();
     // console.log(streamData);
     await makeStream(streamData);
+  };
+
+  useEffect(() => {
     if (data && data.statusCode === 200) {
-      // console.log(data);
+      console.log(data);
       // console.log(data.roomId);
       router.push(`/streams/${data.roomId}`);
     }
-
-    // console.log("성공", data);
-    // console.log(roomId);
-    // router.push(`/streams/${streamData.roomName}`);
-  };
+  }, [data, router]);
   // 최초 들어온 유저 데이터 갱신
   useEffect(() => {
     setStreamData({
