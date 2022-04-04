@@ -1,3 +1,4 @@
+import { ProfileImg, Timer } from "@components/cloudflare";
 import { Layout } from "@components/ui/layout";
 import Message from "@components/ui/message";
 import useUser from "@libs/client/useUser";
@@ -6,13 +7,19 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import SockJS from "sockjs-client";
 import { over } from "stompjs";
+import useSWR from "swr";
 
 let stompClient: any = null;
+// 백에서 해당 룸 상세조회 api 만들면 추가해줘야함
+// interface StreamResponse
 
 const Stream: NextPage = () => {
   const { user, isLoading } = useUser();
   const [chats, setChats]: any = useState([]);
   const [highMoney, setHighMoney]: any = useState([]);
+  const router = useRouter();
+  let time = 20;
+  // const [time, setTime]:number = useState(20);
   const [highest, setHighest] = useState(0);
   const [userData, setUserData] = useState({
     nickName: "",
@@ -24,9 +31,19 @@ const Stream: NextPage = () => {
     // 응찰가
     money: 0,
   });
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
+  // 해당 방 정보 가져오기
+  // const { data,mutate } = useSWR<StreamResponse>(
+  //   router.query.id
+  //     ? `${process.env.BASE_URL}/user/info/${router.query.id}`
+  //     : null
+  // );
+
+  // useEffect(() => {
+
+  //   setUserData({
+  //     ...userData,
+  //   });
+  // }, []);
 
   const connect = () => {
     let Sock = new SockJS(`https://j6e206.p.ssafy.io:8080/ws`);
@@ -231,7 +248,7 @@ const Stream: NextPage = () => {
           </div>
         </div>
       </div>
-
+      <Timer time={time} />
       <button type="button" onClick={registerUser}>
         connect
       </button>
