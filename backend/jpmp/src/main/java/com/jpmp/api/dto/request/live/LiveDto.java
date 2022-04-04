@@ -11,32 +11,27 @@ import javax.validation.constraints.NotBlank;
 @ToString
 public class LiveDto {
 
-    @ApiModelProperty(example = "값 전달 하지마세요!!!!!")
+    @ApiModelProperty(name = "경매방 Id", hidden = true)
     private int roomId;
 
-    @NotBlank
     @ApiModelProperty(name = "유저 Id", example = "4")
     private int userId;
 
-    @ApiModelProperty(name = "유저 name", example = "test")
-    private String userName;
+    @ApiModelProperty(name = "유저 nickname", example = "test")
+    private String nickname;
 
-    @NotBlank
     @ApiModelProperty(name = "cloudflareKey", example = "키값")
     private String cfKey;
 
-    @NotBlank
-    @ApiModelProperty(name = "cloudflareId", example = "아이디 값")
+    @ApiModelProperty(name = "cloudflareId", example = "아이디값")
     private String cfId;
 
-    @NotBlank
-    @ApiModelProperty(name = "cloudflareUrl", example = "url 값")
+    @ApiModelProperty(name = "cloudflareUrl", example = "url값")
     private String cfUrl;
 
     @ApiModelProperty(name = "경매방 이름", example = "구찌가방")
     private String roomName;
 
-    @NotBlank
     @ApiModelProperty(name = "시작가격", example = "123456")
     private int startprice;
 
