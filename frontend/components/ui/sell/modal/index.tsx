@@ -61,8 +61,6 @@ interface Iresponse {
     edition: number | undefined;
   };
   onClose: Function;
-  ethUSD: number;
-  exchange: number;
 }
 
 export default function SellModal({ response, onClose }: Iresponse) {

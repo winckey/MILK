@@ -113,11 +113,7 @@ const Amount = styled.span``;
 export default function Carousel() {
   const ItemContainerRef: any = useRef(null);
   // b => beginning | m => middle | e => end
-<<<<<<< HEAD:frontend/components/main/Home/Carousel.js
-  const [ScrollInd, setScrollInd] = useState("b");
-=======
   const [ScrollInd, setScrollInd]: any = useState("b");
->>>>>>> dda2f919ec84d16477c3ab4578527c5276a22d80:frontend/components/ui/layout/home/Home/Carousel.tsx
   // const [list, setList] = useState([]);
 
   // async function handler() {
@@ -132,11 +128,7 @@ export default function Carousel() {
   //   handler();
   // }, []);
   // console.log(list);
-<<<<<<< HEAD:frontend/components/main/Home/Carousel.js
-  // // list map  돌리면서 브랜드명이랑 사진 가져오기
-=======
   // list map  돌리면서 브랜드명이랑 사진 가져오기
->>>>>>> dda2f919ec84d16477c3ab4578527c5276a22d80:frontend/components/ui/layout/home/Home/Carousel.tsx
   return (
     <CarouselEl
       data-aos="fade-up"

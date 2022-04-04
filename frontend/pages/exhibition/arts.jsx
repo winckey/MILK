@@ -37,33 +37,33 @@ const images = [
   {
     position: [-1.75, 0, 0.25],
     rotation: [0, Math.PI / 2.5, 0],
-    url: pexel(327482),
+    url: "/에르메스.jpg",
   },
   {
     position: [-2.15, 0, 1.5],
     rotation: [0, Math.PI / 2.5, 0],
-    url: pexel(325185),
+    url: "/구찌.jpg",
   },
   {
     position: [-2, 0, 2.75],
     rotation: [0, Math.PI / 2.5, 0],
-    url: pexel(358574),
+    url: "/루이비통.jpg",
   },
   // Right
   {
     position: [1.75, 0, 0.25],
     rotation: [0, -Math.PI / 2.5, 0],
-    url: pexel(227675),
+    url: "/톰브라운.jpg",
   },
   {
     position: [2.15, 0, 1.5],
     rotation: [0, -Math.PI / 2.5, 0],
-    url: pexel(911738),
+    url: "/파텍필립.jpg",
   },
   {
     position: [2, 0, 2.75],
     rotation: [0, -Math.PI / 2.5, 0],
-    url: pexel(1738986),
+    url: "/고야드.jpg",
   },
 ];
 
