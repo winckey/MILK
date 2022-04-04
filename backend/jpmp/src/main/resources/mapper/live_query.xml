@@ -3,8 +3,8 @@
 <mapper namespace="com.jpmp.api.dao.LiveDao">
 
     <insert  id="register" parameterType="com.jpmp.api.dto.request.live.LiveDto">
-        insert into user ( user_id, user_name, cf_key, cf_id, cf_url, room_name, startprice, runtime )
-        values (  #{userId}, #{userName}, #{cfKey}, #{cfId} , #{cfUrl} , #{roomName} , #{startprice} ,#{runtime} )
+        insert into live ( user_id, nickname, cf_key, cf_id, cf_url, room_name, startprice, runtime )
+        values (  #{userId}, #{nickname}, #{cfKey}, #{cfId} , #{cfUrl} , #{roomName} , #{startprice} ,#{runtime} )
         <selectKey keyProperty="roomId" resultType="int" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
