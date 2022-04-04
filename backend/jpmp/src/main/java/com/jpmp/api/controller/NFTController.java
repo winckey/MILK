@@ -29,6 +29,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -98,7 +99,7 @@ public class NFTController {
 
     }
 
-    @GetMapping()
+    @GetMapping("/user")
     @ApiOperation(value = "나의 nft 조회", notes = "자신이 소유한 nft 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -114,6 +115,23 @@ public class NFTController {
         return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
     }
 
+    @GetMapping("/user/{nickname}")
+    @ApiOperation(value = "나의 nft 조회", notes = "자신이 소유한 nft 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<NFTListResDto> getNftMyListByNickname(@NotNull @PathVariable String nickname) {
+        User userDetails = userRepository.findByNickname(nickname).get();
+
+        List<Nft> nftList = nftService.getNftList(userDetails);
+
+        return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+    }
+
+
     @GetMapping("/like")
     @ApiOperation(value = "나의 좋아요 nft 조회", notes = "자신이 좋아요한 nft 조회")
     @ApiResponses({
@@ -124,6 +142,22 @@ public class NFTController {
     })
     public ResponseEntity<NFTListResDto> getNftMyLikeList(@ApiIgnore Authentication authentication) {
         User userDetails = userRepository.findByUsername(getUsername());
+
+        List<Nft> nftList = nftService.getNftLikeList(userDetails);
+
+        return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+    }
+
+    @GetMapping("/like/{nickname}")
+    @ApiOperation(value = "나의 좋아요 nft 조회", notes = "자신이 좋아요한 nft 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<NFTListResDto> getNftMyLikeListByNickname(@NotNull @PathVariable String nickname) {
+        User userDetails = userRepository.findByNickname(nickname).get();
 
         List<Nft> nftList = nftService.getNftLikeList(userDetails);
 
