@@ -38,6 +38,6 @@ public class LiveDto {
     @ApiModelProperty(name = "진행시간", example = "30")
     private int runtime;
 
-    @ApiModelProperty(example = "값 전달 하지 마세요!!!!!")
+    @ApiModelProperty(example = "값 전달 하지 마세요!!!!!",  hidden = true)
     private boolean finish;
 }
