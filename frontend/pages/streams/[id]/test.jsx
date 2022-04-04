@@ -84,7 +84,7 @@ const Stream = () => {
   const onError = () => {
     console.log("error가 무엇이냐");
   };
-
+  // 유저 갱신
   const onConnected = () => {
     setUserData({
       ...userData,
@@ -99,7 +99,7 @@ const Stream = () => {
     // 그 방에 대한 정보 subscribe 할 수 있도록
     // stompClient.subscribe(`/subscribe/chat/room/${router.query.id:룸아이디}`, onMessageRecived);
     stompClient.subscribe(`/subscribe/chat/room/1`, onMessageRecived);
-    userJoin();
+    // userJoin();
   };
 
   // const userJoin = () => {
@@ -120,19 +120,22 @@ const Stream = () => {
       console.log("error");
     }
     switch (res.status) {
-      case "JOIN":
-        // userData가 축적된 객체형 데이터를 userList에 담는다
-        userList.push(res);
-        setUserList([...userList]);
-        // 유저리스트에 1명이 나니까 내가 방장
-        if (userList.length === 1) {
-          setIsHost(true);
-          setHostId(userList.userId);
-        }
-        break;
+      // case "JOIN":
+      // userData가 축적된 객체형 데이터를 userList에 담는다
+
+      // setUserData(...userData,
+      // )
+      // 유저리스트에 1명이 나니까 내가 방장
+      // if (userList.length === 1) {
+      //   setIsHost(true);
+      //   setHostId(userList.userId);
+      // }
+      // break;
       case "MESSAGE":
         chats.push(res);
         setChats([...chats]);
+        console.log("나는 유저리스트", userList);
+        console.log(res);
         break;
       case "AUCTION":
         let don = res.cost;
