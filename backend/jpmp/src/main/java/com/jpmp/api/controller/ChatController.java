@@ -1,6 +1,7 @@
 package com.jpmp.api.controller;
 
 import com.jpmp.api.dto.request.chat.Message;
+import com.jpmp.api.dto.request.chat.Status;
 import com.jpmp.api.dto.response.chat.ChatResDto;
 import com.jpmp.api.service.chat.ChatService;
 import io.swagger.annotations.Api;
@@ -42,11 +43,12 @@ public class ChatController {
         tmpDto.setRoomId(message.getRoomId());
         tmpDto.setSenderName(message.getSenderName());
         tmpDto.setCost(message.getCost());
+        tmpDto.setStatus(Status.AUCTION);
 
         chatService.addCost(tmpDto);
         ChatResDto resDto = chatService.maxCost(tmpDto.getRoomId());
 
-        template.convertAndSend("/subscribe/chat/room/" + message.getRoomId(), tmpDto.getCost());
+        template.convertAndSend("/subscribe/chat/room/" + message.getRoomId(), tmpDto);
     }
 
 
