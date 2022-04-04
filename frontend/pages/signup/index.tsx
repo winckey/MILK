@@ -22,7 +22,7 @@ export default function Signup() {
 
   // request
   const [signup, { loading, data, error }] =
-    useMutation<ISignupResponse>("/api/user");
+    useMutation<ISignupResponse>("/user");
 
   // input 값 받아옴
   const {
@@ -85,20 +85,6 @@ export default function Signup() {
             <div className="text-3xl font-bold ">
               <h3>MILC에 오신 것을</h3>
               <h3>환영합니다</h3>
-            </div>
-            <div className="grid grid-cols-2 mt-6 pt-4 gap-3 ">
-              <button
-                // onClick={onCompany}
-                className="flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold text-gray-500 hover:bg-gradient-to-r from-gold to-lightGold hover:text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-              >
-                명품유저
-              </button>
-              <button
-                // onClick={onUser}
-                className="flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold text-gray-500 hover:bg-gradient-to-r from-gold to-lightGold hover:text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-              >
-                개인유저
-              </button>
             </div>
             <div className="py-4 ">
               <form onSubmit={handleSubmit(onValid)}>
@@ -281,7 +267,7 @@ export default function Signup() {
                         validate: {
                           checkNickname: async (value) =>
                             (await fetch(
-                              `https://j6e206.p.ssafy.io:8080/api/user/nickname/${value}`
+                              `${process.env.BASE_URL}/user/nickname/${value}`
                             )
                               .then((res) => res.json())
                               .then((result) => result))
@@ -307,10 +293,7 @@ export default function Signup() {
                   )}
                 </div>
                 <div className="my-8">
-                  <button
-                    // onClick={}
-                    className="w-full flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-                  >
+                  <button className="w-full flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white">
                     회원가입
                   </button>
                 </div>

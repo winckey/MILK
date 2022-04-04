@@ -300,12 +300,8 @@
   "ast": {
     "absolutePath": "@openzeppelin/contracts/token/ERC721/IERC721.sol",
     "exportedSymbols": {
-      "IERC165": [
-        1750
-      ],
-      "IERC721": [
-        1021
-      ]
+      "IERC165": [1750],
+      "IERC721": [1021]
     },
     "id": 1022,
     "license": "MIT",
@@ -313,12 +309,7 @@
     "nodes": [
       {
         "id": 907,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "93:23:2"
       },
@@ -361,10 +352,7 @@
         },
         "fullyImplemented": false,
         "id": 1021,
-        "linearizedBaseContracts": [
-          1021,
-          1750
-        ],
+        "linearizedBaseContracts": [1021, 1750],
         "name": "IERC721",
         "nameLocation": "245:7:2",
         "nodeType": "ContractDefinition",
@@ -1648,12 +1636,8 @@
   "legacyAST": {
     "absolutePath": "@openzeppelin/contracts/token/ERC721/IERC721.sol",
     "exportedSymbols": {
-      "IERC165": [
-        1750
-      ],
-      "IERC721": [
-        1021
-      ]
+      "IERC165": [1750],
+      "IERC721": [1021]
     },
     "id": 1022,
     "license": "MIT",
@@ -1661,12 +1645,7 @@
     "nodes": [
       {
         "id": 907,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "93:23:2"
       },
@@ -1709,10 +1688,7 @@
         },
         "fullyImplemented": false,
         "id": 1021,
-        "linearizedBaseContracts": [
-          1021,
-          1750
-        ],
+        "linearizedBaseContracts": [1021, 1750],
         "name": "IERC721",
         "nameLocation": "245:7:2",
         "nodeType": "ContractDefinition",
@@ -2998,8 +2974,8 @@
     "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.5",
-  "updatedAt": "2022-03-31T06:38:01.776Z",
+  "schemaVersion": "3.4.6",
+  "updatedAt": "2022-04-01T09:21:24.745Z",
   "devdoc": {
     "details": "Required interface of an ERC721 compliant contract.",
     "events": {

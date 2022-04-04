@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 import { Modal } from "../../common";
+import {
+  purchaseMarketItem,
+  marketContract,
+  nftContract,
+  loadMarketItems,
+} from "../../../../utils/interact";
+import { ethers } from "ethers";
 
 // const defaultOrder = {
 //   price: "",
@@ -39,27 +46,36 @@ import { Modal } from "../../common";
 //   return _createFormState();
 // };
 
+declare let window: any;
+
 interface RealizationModalProps {
   onClose: Function;
 }
 
 interface Iresponse {
-  // response: {
-  //   name: string | undefined;
-  //   image: string | undefined;
-  //   description: string | undefined;
-  //   price: number;
-  //   edition: number;
-  //   type: string | undefined;
-  //   balance: number;
-  //   nftId: string;
-  // };
+  response: {
+    name: string | undefined;
+    image: string | undefined;
+    description: string | undefined;
+    price: number | undefined;
+    edition: number | undefined;
+    type: string | undefined;
+    balance: number | undefined;
+    nftId: string | undefined;
+  };
   onClose: Function;
+  ethUSD: number;
+  exchange: number;
 }
 
-export default function OrderModal({ onClose }: Iresponse) {
+export default function OrderModal({
+  response,
+  onClose,
+  ethUSD,
+  exchange,
+}: Iresponse) {
   const [isOpen, setIsOpen] = useState(true);
-
+  // console.log(response);
   // const [order, setOrder] = useState(defaultOrder);
   // const [enablePrice, setEnablePrice] = useState(false);
   // const [hasAgreedTOS, setHasAgreedTOS] = useState(false);
@@ -73,7 +89,14 @@ export default function OrderModal({ onClose }: Iresponse) {
   //     });
   //   }
   // }, [course]);
+  const [enough, setEnough] = useState(true);
+  const [items, setItems] = useState({});
+  const balance = response.balance;
+  const price = response.price;
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  console.log(provider);
 
+  const nftId = response.nftId?.toString();
   const closeModal = () => {
     setIsOpen(false);
     // setOrder(defaultOrder);
@@ -83,6 +106,33 @@ export default function OrderModal({ onClose }: Iresponse) {
   };
 
   // const formState = createFormState(order, hasAgreedTOS, isNewPurchase);
+
+  const isEnough = () => {
+    if (!price || !balance) {
+      window.location.reload();
+      return null;
+    }
+    if (balance >= price) {
+      setEnough(true);
+    } else {
+      setEnough(false);
+    }
+  };
+
+  const loadItems = async () => {
+    const res = await loadMarketItems();
+    setItems(res);
+  };
+
+  const onClick = async () => {
+    await purchaseMarketItem();
+  };
+
+  useEffect(() => {
+    isEnough();
+    loadItems();
+  }, []);
+  console.log(items);
 
   return (
     <Modal isOpen={isOpen}>
@@ -127,37 +177,90 @@ export default function OrderModal({ onClose }: Iresponse) {
                   <div className="text-xs text-textGray pt-4">Product Name</div>
                   {/* <div className="text-xl">{response.name}</div> */}
                   <div className="text-xs text-textGray pt-4">Price</div>
-                  <div className="flex">
-                    {" "}
-                    <div className="cursor-pointer">
-                      <a>
+                  <div className="mb-2 flex flex-wrap">
+                    <div className="text-[20px] font-semibold flex items-center">
+                      <div>
                         <img
-                          className="w-6 h-6 object-contain"
+                          className="w-5 h-5 object-contain"
                           src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
                           alt="ETH"
                         />
-                      </a>
+                      </div>
+                      <div className="ml-1 w-full overflow-hidden text-ellipsis flex items-end">
+                        {response.price?.toFixed(2)}
+                        <div className="text-[15px] ml-1 mb-1 font-normal">
+                          <span className="text-textGray overflow-hidden text-ellipsis w-full">
+                            Eth (₩ {(ethUSD * exchange).toFixed(0)}원)
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    {/* <div>{response.price.toFixed(1)} (₩ 이더가격)</div> */}
+                    <div className="text-[15px] mt-[15px]"></div>
                   </div>
                 </div>
               </div>
-              {/* {isNewPurchase && (
-                <> */}
-              {/* <div>{response.balance}</div> */}
+              <hr className="mt-4 bg-slate-300" />
+              <div className="my-2 font-bold">your current balance</div>
+              <div className="flex items-center">
+                <img
+                  className="w-5 h-5 mr-1 object-contain"
+                  src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
+                  alt="ETH"
+                />
+                <div className="text-lg font-bold">
+                  {response.balance?.toFixed(2)}
+                </div>
+                <span className="ml-1 text-sm text-textGray">Eth</span>
+              </div>
+              <div className="text-xs text-red-500">
+                <span>
+                  {enough ? null : (
+                    <div className="flex mt-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 mx-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      {"잔고가 부족합니다. Ethereum을 구매해주세요."}
+                    </div>
+                  )}
+                </span>
+              </div>
             </div>
           </div>
         </div>
         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex">
-          <button
-            className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-            // disabled={formState.isDisabled}
-            // onClick={() => {
-            //   onSubmit(order, course);
-            // }}
-          >
-            Buy
-          </button>
+          {enough ? (
+            <button
+              // onClick={onClick}
+              className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
+              // disabled={formState.isDisabled}
+              // onClick={() => {
+              //   onSubmit(order, course);
+              // }}
+            >
+              Buy
+            </button>
+          ) : (
+            <button
+              className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white cursor-not-allowed"
+              // disabled={formState.isDisabled}
+              // onClick={() => {
+              //   onSubmit(order, course);
+              // }}
+            >
+              Buy
+            </button>
+          )}
         </div>
       </div>
     </Modal>

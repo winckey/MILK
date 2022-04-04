@@ -345,36 +345,16 @@
   "ast": {
     "absolutePath": "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
     "exportedSymbols": {
-      "Address": [
-        1489
-      ],
-      "Context": [
-        1511
-      ],
-      "ERC165": [
-        1738
-      ],
-      "ERC721": [
-        905
-      ],
-      "ERC721URIStorage": [
-        1167
-      ],
-      "IERC165": [
-        1750
-      ],
-      "IERC721": [
-        1021
-      ],
-      "IERC721Metadata": [
-        1194
-      ],
-      "IERC721Receiver": [
-        1039
-      ],
-      "Strings": [
-        1714
-      ]
+      "Address": [1489],
+      "Context": [1511],
+      "ERC165": [1738],
+      "ERC721": [905],
+      "ERC721URIStorage": [1167],
+      "IERC165": [1750],
+      "IERC721": [1021],
+      "IERC721Metadata": [1194],
+      "IERC721Receiver": [1039],
+      "Strings": [1714]
     },
     "id": 1168,
     "license": "MIT",
@@ -382,12 +362,7 @@
     "nodes": [
       {
         "id": 1041,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "113:23:4"
       },
@@ -430,15 +405,7 @@
         },
         "fullyImplemented": false,
         "id": 1167,
-        "linearizedBaseContracts": [
-          1167,
-          905,
-          1194,
-          1021,
-          1738,
-          1750,
-          1511
-        ],
+        "linearizedBaseContracts": [1167, 905, 1194, 1021, 1738, 1750, 1511],
         "name": "ERC721URIStorage",
         "nameLocation": "251:16:4",
         "nodeType": "ContractDefinition",
@@ -513,9 +480,7 @@
             "visibility": "private"
           },
           {
-            "baseFunctions": [
-              247
-            ],
+            "baseFunctions": [247],
             "body": {
               "id": 1113,
               "nodeType": "Block",
@@ -603,10 +568,7 @@
                       "id": 1061,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        4294967278,
-                        4294967278
-                      ],
+                      "overloadedDeclarations": [4294967278, 4294967278],
                       "referencedDeclaration": 4294967278,
                       "src": "565:7:4",
                       "typeDescriptions": {
@@ -634,9 +596,7 @@
                   "src": "565:78:4"
                 },
                 {
-                  "assignments": [
-                    1069
-                  ],
+                  "assignments": [1069],
                   "declarations": [
                     {
                       "constant": false,
@@ -708,9 +668,7 @@
                   "src": "654:45:4"
                 },
                 {
-                  "assignments": [
-                    1075
-                  ],
+                  "assignments": [1075],
                   "declarations": [
                     {
                       "constant": false,
@@ -1405,10 +1363,7 @@
                       "id": 1122,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        4294967278,
-                        4294967278
-                      ],
+                      "overloadedDeclarations": [4294967278, 4294967278],
                       "referencedDeclaration": 4294967278,
                       "src": "1368:7:4",
                       "typeDescriptions": {
@@ -1592,9 +1547,7 @@
             "visibility": "internal"
           },
           {
-            "baseFunctions": [
-              689
-            ],
+            "baseFunctions": [689],
             "body": {
               "id": 1165,
               "nodeType": "Block",
@@ -1944,36 +1897,16 @@
   "legacyAST": {
     "absolutePath": "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
     "exportedSymbols": {
-      "Address": [
-        1489
-      ],
-      "Context": [
-        1511
-      ],
-      "ERC165": [
-        1738
-      ],
-      "ERC721": [
-        905
-      ],
-      "ERC721URIStorage": [
-        1167
-      ],
-      "IERC165": [
-        1750
-      ],
-      "IERC721": [
-        1021
-      ],
-      "IERC721Metadata": [
-        1194
-      ],
-      "IERC721Receiver": [
-        1039
-      ],
-      "Strings": [
-        1714
-      ]
+      "Address": [1489],
+      "Context": [1511],
+      "ERC165": [1738],
+      "ERC721": [905],
+      "ERC721URIStorage": [1167],
+      "IERC165": [1750],
+      "IERC721": [1021],
+      "IERC721Metadata": [1194],
+      "IERC721Receiver": [1039],
+      "Strings": [1714]
     },
     "id": 1168,
     "license": "MIT",
@@ -1981,12 +1914,7 @@
     "nodes": [
       {
         "id": 1041,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "113:23:4"
       },
@@ -2029,15 +1957,7 @@
         },
         "fullyImplemented": false,
         "id": 1167,
-        "linearizedBaseContracts": [
-          1167,
-          905,
-          1194,
-          1021,
-          1738,
-          1750,
-          1511
-        ],
+        "linearizedBaseContracts": [1167, 905, 1194, 1021, 1738, 1750, 1511],
         "name": "ERC721URIStorage",
         "nameLocation": "251:16:4",
         "nodeType": "ContractDefinition",
@@ -2112,9 +2032,7 @@
             "visibility": "private"
           },
           {
-            "baseFunctions": [
-              247
-            ],
+            "baseFunctions": [247],
             "body": {
               "id": 1113,
               "nodeType": "Block",
@@ -2202,10 +2120,7 @@
                       "id": 1061,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        4294967278,
-                        4294967278
-                      ],
+                      "overloadedDeclarations": [4294967278, 4294967278],
                       "referencedDeclaration": 4294967278,
                       "src": "565:7:4",
                       "typeDescriptions": {
@@ -2233,9 +2148,7 @@
                   "src": "565:78:4"
                 },
                 {
-                  "assignments": [
-                    1069
-                  ],
+                  "assignments": [1069],
                   "declarations": [
                     {
                       "constant": false,
@@ -2307,9 +2220,7 @@
                   "src": "654:45:4"
                 },
                 {
-                  "assignments": [
-                    1075
-                  ],
+                  "assignments": [1075],
                   "declarations": [
                     {
                       "constant": false,
@@ -3004,10 +2915,7 @@
                       "id": 1122,
                       "name": "require",
                       "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        4294967278,
-                        4294967278
-                      ],
+                      "overloadedDeclarations": [4294967278, 4294967278],
                       "referencedDeclaration": 4294967278,
                       "src": "1368:7:4",
                       "typeDescriptions": {
@@ -3191,9 +3099,7 @@
             "visibility": "internal"
           },
           {
-            "baseFunctions": [
-              689
-            ],
+            "baseFunctions": [689],
             "body": {
               "id": 1165,
               "nodeType": "Block",
@@ -3545,8 +3451,8 @@
     "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.5",
-  "updatedAt": "2022-03-31T06:38:01.779Z",
+  "schemaVersion": "3.4.6",
+  "updatedAt": "2022-04-01T09:21:24.751Z",
   "devdoc": {
     "details": "ERC721 token with storage based token URI management.",
     "kind": "dev",

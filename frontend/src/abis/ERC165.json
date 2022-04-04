@@ -34,12 +34,8 @@
   "ast": {
     "absolutePath": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
     "exportedSymbols": {
-      "ERC165": [
-        1738
-      ],
-      "IERC165": [
-        1750
-      ]
+      "ERC165": [1738],
+      "IERC165": [1750]
     },
     "id": 1739,
     "license": "MIT",
@@ -47,12 +43,7 @@
     "nodes": [
       {
         "id": 1716,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "99:23:9"
       },
@@ -95,18 +86,13 @@
         },
         "fullyImplemented": true,
         "id": 1738,
-        "linearizedBaseContracts": [
-          1738,
-          1750
-        ],
+        "linearizedBaseContracts": [1738, 1750],
         "name": "ERC165",
         "nameLocation": "744:6:9",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "baseFunctions": [
-              1749
-            ],
+            "baseFunctions": [1749],
             "body": {
               "id": 1736,
               "nodeType": "Block",
@@ -317,12 +303,8 @@
   "legacyAST": {
     "absolutePath": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
     "exportedSymbols": {
-      "ERC165": [
-        1738
-      ],
-      "IERC165": [
-        1750
-      ]
+      "ERC165": [1738],
+      "IERC165": [1750]
     },
     "id": 1739,
     "license": "MIT",
@@ -330,12 +312,7 @@
     "nodes": [
       {
         "id": 1716,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "99:23:9"
       },
@@ -378,18 +355,13 @@
         },
         "fullyImplemented": true,
         "id": 1738,
-        "linearizedBaseContracts": [
-          1738,
-          1750
-        ],
+        "linearizedBaseContracts": [1738, 1750],
         "name": "ERC165",
         "nameLocation": "744:6:9",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "baseFunctions": [
-              1749
-            ],
+            "baseFunctions": [1749],
             "body": {
               "id": 1736,
               "nodeType": "Block",
@@ -602,8 +574,8 @@
     "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.5",
-  "updatedAt": "2022-03-31T06:38:01.787Z",
+  "schemaVersion": "3.4.6",
+  "updatedAt": "2022-04-01T09:21:24.767Z",
   "devdoc": {
     "details": "Implementation of the {IERC165} interface. Contracts that want to implement ERC165 should inherit from this contract and override {supportsInterface} to check for the additional interface id that will be supported. For example: ```solidity function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {     return interfaceId == type(MyInterface).interfaceId || super.supportsInterface(interfaceId); } ``` Alternatively, {ERC165Storage} provides an easier to use but more expensive implementation.",
     "kind": "dev",

@@ -49,9 +49,7 @@
   "ast": {
     "absolutePath": "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol",
     "exportedSymbols": {
-      "IERC721Receiver": [
-        1039
-      ]
+      "IERC721Receiver": [1039]
     },
     "id": 1040,
     "license": "MIT",
@@ -59,12 +57,7 @@
     "nodes": [
       {
         "id": 1023,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "101:23:3"
       },
@@ -82,9 +75,7 @@
         },
         "fullyImplemented": false,
         "id": 1039,
-        "linearizedBaseContracts": [
-          1039
-        ],
+        "linearizedBaseContracts": [1039],
         "name": "IERC721Receiver",
         "nameLocation": "289:15:3",
         "nodeType": "ContractDefinition",
@@ -272,9 +263,7 @@
   "legacyAST": {
     "absolutePath": "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol",
     "exportedSymbols": {
-      "IERC721Receiver": [
-        1039
-      ]
+      "IERC721Receiver": [1039]
     },
     "id": 1040,
     "license": "MIT",
@@ -282,12 +271,7 @@
     "nodes": [
       {
         "id": 1023,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "101:23:3"
       },
@@ -305,9 +289,7 @@
         },
         "fullyImplemented": false,
         "id": 1039,
-        "linearizedBaseContracts": [
-          1039
-        ],
+        "linearizedBaseContracts": [1039],
         "name": "IERC721Receiver",
         "nameLocation": "289:15:3",
         "nodeType": "ContractDefinition",
@@ -497,8 +479,8 @@
     "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.5",
-  "updatedAt": "2022-03-31T06:38:01.778Z",
+  "schemaVersion": "3.4.6",
+  "updatedAt": "2022-04-01T09:21:24.748Z",
   "devdoc": {
     "details": "Interface for any contract that wants to support safeTransfers from ERC721 asset contracts.",
     "kind": "dev",

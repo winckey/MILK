@@ -1,4 +1,4 @@
-import { Colors } from "@components/main/Theme";
+import { Colors } from "@components/ui/layout/home/Theme";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`

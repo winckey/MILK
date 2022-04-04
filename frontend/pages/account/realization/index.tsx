@@ -25,11 +25,11 @@ const Realization: NextPage = () => {
   const TOKEN = useRecoilValue(accessToken);
 
   const { data } = useSWR<RealizationListResponse>(
-    [`https://j6e206.p.ssafy.io:8080/api/realization_board/user`, TOKEN],
+    [`${process.env.BASE_URL}/realization_board/user`, TOKEN],
     tokenFetcher
   );
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <Layout seoTitle="실물화 내역">
@@ -83,18 +83,6 @@ const Realization: NextPage = () => {
                   </div>
                 </div>
               </div>
-              {/* <span className="font-normal text-textGray">dd</span>
-              <div className="border-b mt-10 max-w-[560px]">
-                <div className="border-t">
-                  <div className="flex justify-between">
-                    <div className="flex">
-                      <div className="font-semibold">승인대기</div>
-                      <div>d</div>
-                    </div>
-                    <div>d</div>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>

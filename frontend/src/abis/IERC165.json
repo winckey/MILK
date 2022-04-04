@@ -34,9 +34,7 @@
   "ast": {
     "absolutePath": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
     "exportedSymbols": {
-      "IERC165": [
-        1750
-      ]
+      "IERC165": [1750]
     },
     "id": 1751,
     "license": "MIT",
@@ -44,12 +42,7 @@
     "nodes": [
       {
         "id": 1740,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "100:23:10"
       },
@@ -67,9 +60,7 @@
         },
         "fullyImplemented": false,
         "id": 1750,
-        "linearizedBaseContracts": [
-          1750
-        ],
+        "linearizedBaseContracts": [1750],
         "name": "IERC165",
         "nameLocation": "415:7:10",
         "nodeType": "ContractDefinition",
@@ -174,9 +165,7 @@
   "legacyAST": {
     "absolutePath": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
     "exportedSymbols": {
-      "IERC165": [
-        1750
-      ]
+      "IERC165": [1750]
     },
     "id": 1751,
     "license": "MIT",
@@ -184,12 +173,7 @@
     "nodes": [
       {
         "id": 1740,
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.8", ".0"],
         "nodeType": "PragmaDirective",
         "src": "100:23:10"
       },
@@ -207,9 +191,7 @@
         },
         "fullyImplemented": false,
         "id": 1750,
-        "linearizedBaseContracts": [
-          1750
-        ],
+        "linearizedBaseContracts": [1750],
         "name": "IERC165",
         "nameLocation": "415:7:10",
         "nodeType": "ContractDefinition",
@@ -316,8 +298,8 @@
     "version": "0.8.13+commit.abaa5c0e.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.4.5",
-  "updatedAt": "2022-03-31T06:38:01.788Z",
+  "schemaVersion": "3.4.6",
+  "updatedAt": "2022-04-01T09:21:24.768Z",
   "devdoc": {
     "details": "Interface of the ERC165 standard, as defined in the https://eips.ethereum.org/EIPS/eip-165[EIP]. Implementers can declare support of contract interfaces, which can then be queried by others ({ERC165Checker}). For an implementation, see {ERC165}.",
     "kind": "dev",
