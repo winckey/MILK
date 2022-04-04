@@ -45,8 +45,8 @@ public class ChatController {
         tmpDto.setCost(message.getCost());
         tmpDto.setStatus(Status.AUCTION);
 
-        //chatService.addCost(tmpDto);
-        //ChatResDto resDto = chatService.maxCost(tmpDto.getRoomId());
+        chatService.addCost(tmpDto);
+        ChatResDto resDto = chatService.maxCost(tmpDto.getRoomId());
         System.out.println("구독 옥션 메세지 입니다");
         template.convertAndSend("/subscribe/chat/room/" + message.getRoomId(), tmpDto);
     }
