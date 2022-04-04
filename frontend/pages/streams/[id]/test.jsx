@@ -102,13 +102,13 @@ const Stream = () => {
     userJoin();
   };
 
-  const userJoin = () => {
-    const chatMessage = {
-      senderName: user?.nickName,
-      status: "JOIN",
-    };
-    stompClient.send(`/publish/chat/join`, {}, JSON.stringify(chatMessage));
-  };
+  // const userJoin = () => {
+  //   const chatMessage = {
+  //     senderName: user?.nickName,
+  //     status: "JOIN",
+  //   };
+  //   stompClient.send(`/publish/chat/join`, {}, JSON.stringify(chatMessage));
+  // };
 
   // 받은 상태값(입장, 경매, 채팅)에 따라 state 변경
   const onMessageRecived = (response) => {
