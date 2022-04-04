@@ -31,6 +31,14 @@ const Stream: NextPage = () => {
     // 응찰가
     money: 0,
   });
+
+  // useEffect(() => {
+  //   setUserData({
+  //     ...userData,
+
+  //     nickName: user.nickname,
+  //   });
+  // }, [user]);
   // 해당 방 정보 가져오기
   // const { data,mutate } = useSWR<StreamResponse>(
   //   router.query.id
@@ -44,7 +52,8 @@ const Stream: NextPage = () => {
   //     ...userData,
   //   });
   // }, []);
-
+  // 최초 들어올 때 연결
+  //
   const connect = () => {
     let Sock = new SockJS(`https://j6e206.p.ssafy.io:8080/ws`);
     stompClient = over(Sock);
@@ -58,12 +67,8 @@ const Stream: NextPage = () => {
   const onConnected = () => {
     setUserData({
       ...userData,
-
       nickName: user.nickname,
-
       connected: true,
-
-      // roomId: roomId,
     });
 
     // 그 방에 대한 정보 subscribe 할 수 있도록
@@ -141,10 +146,26 @@ const Stream: NextPage = () => {
       // }
     }
   };
-
-  const registerUser = () => {
-    connect();
+  const onKeyPress = (e: any) => {
+    if (e.key === "Enter") {
+      sendValue();
+    }
   };
+  const registerUser = async () => {
+    await connect();
+  };
+  // user 데이터 다 받아오면 소켓 연결합니다
+  useEffect(() => {
+    if (user) {
+      console.log("성공", user);
+      console.log(user.nickname, "이다");
+      // setUserData({
+      //   ...userData,
+      //   nickName: user.nickname,
+      // });
+      registerUser();
+    } else "오잉";
+  }, [user]);
   return (
     // navbar 뒤로가기만 생성
     <Layout seoTitle="라이브 경매">
@@ -217,14 +238,12 @@ const Stream: NextPage = () => {
             </h2>
             <div className="py-10 pb-16 h-[72vh]   bg-white px-4 space-y-4">
               {chats.map((chat: any, index: number) => (
-                <>
-                  <Message
-                    key={index}
-                    message={chat.message}
-                    reversed={chat.senderName === userData.nickName}
-                    nickName={chat.senderName}
-                  />
-                </>
+                <Message
+                  key={index}
+                  message={chat.message}
+                  reversed={chat.senderName === userData.nickName}
+                  nickName={chat.senderName}
+                />
               ))}
             </div>
           </div>
@@ -232,6 +251,7 @@ const Stream: NextPage = () => {
             <div className="flex relative  w-full items-center  mx-auto">
               <input
                 type="text"
+                onKeyPress={onKeyPress}
                 value={userData.message}
                 onChange={handleMessage}
                 className="shadow-sm  rounded-md w-full border-gray-300 focus:ring-gold focus:outline-none pr-12 focus:border-lightGold"
