@@ -2,6 +2,7 @@ import NFT from "../src/abis/NFT.json";
 import Marketplace from "../src/abis/Marketplace.json";
 import { ethers } from "ethers";
 import Web3 from "web3";
+import useUser from "@libs/client/useUser";
 
 export const connectWallet = async () => {
   if (window.ethereum) {
@@ -9,9 +10,11 @@ export const connectWallet = async () => {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
+      const account = Web3.utils.toChecksumAddress(accounts[0].toLowerCase());
       const wallet = {
         status: "",
-        address: accounts[0],
+        address: account,
+        accounts: accounts,
       };
       return wallet;
     } catch (err) {
@@ -71,6 +74,7 @@ export const loadMarketItems = async () => {
   // console.log(item2);
   console.log(itemCounts);
   let items = [];
+  let sellers = [];
   for (let i = 1; i <= itemCounts; i++) {
     const item = await marketplace.items(i);
 
@@ -95,20 +99,83 @@ export const loadMarketItems = async () => {
       // console.log("이 NFT의 주인은", item.seller);
       // console.log("이 상품의 이미지 주소는", item.image);
       console.log(item);
+      sellers.push(item.seller);
     }
   }
   console.log(items);
+  console.log(sellers);
   // console.log(
   //   items[itemCounts - 1].seller,
   //   items[itemCounts - 1].itemId,
   //   typeof items[itemCounts - 1].itemId
   // );
+  return {
+    items: items,
+    seller: sellers,
+  };
+};
+
+export const loadNFTItems = async () => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const marketplace = await marketContract(signer);
+  const nft = await nftContract(signer);
+  const itemCounts = await nft.tokenCount(); // 7
+  console.log(itemCounts);
+  const response = await connectWallet();
+  const address = response?.address;
+  console.log(response.address);
+
+  let items = [];
+  for (let i = 1; i <= itemCounts; i++) {
+    const uri = await nft.tokenURI(i);
+    const res = await fetch(uri);
+    const metadata = await res.json();
+    const data = await nft.ownerOf(i);
+    console.log(metadata);
+    console.error("★★★★★★★★★★★★★★");
+    console.log(address);
+    console.log(data);
+    console.error("★★★★★★★★★★★★★★");
+    // console.log(metadata);
+    // console.log(nft.ownerOf(i));
+    items.push({
+      nftId: i.toString(),
+      address: data,
+      image: metadata.image,
+      name: metadata.name,
+      description: metadata.description,
+      edition: metadata.edition,
+      product: metadata.product,
+      nickname: metadata.nickname,
+    });
+    // console.log(item);
+  }
+
+  // console.log(nft.address);
+  console.log(items);
+  // return items;
   return items;
-  // {
-  //   items: items,
-  //   seller: items[itemCounts - 1].seller,
-  //   id: items[itemCounts - 1].itemId,
-  // };
+};
+
+export const findNFT = async (nftId) => {
+  const items = await loadNFTItems();
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].nftId === nftId) {
+      const item = {
+        nftId: items[i].nftId,
+        address: items[i].address.toString(),
+        image: items[i].image.toString(),
+        name: items[i].name.toString(),
+        description: items[i].description.toString(),
+        edition: items[i].edition,
+        product: items[i].product,
+        nickname: items[i].nickname.toString(),
+      };
+      console.log(item);
+      return item;
+    }
+  }
 };
 
 export const purchaseMarketItem = async (item, marketplace) => {
