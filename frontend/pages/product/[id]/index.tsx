@@ -6,17 +6,37 @@ import useUser from "@libs/client/useUser";
 import type { NextPage } from "next";
 // import Image from "next/image";
 import { useRouter } from "next/router";
-import { loadMarketItems, marketContract, nftContract } from "utils/interact";
+import {
+  findNFT,
+  loadMarketItems,
+  marketContract,
+  nftContract,
+} from "utils/interact";
 import ThreeDimension from "@components/ui/image";
 import { useEffect, useState } from "react";
 import useMutation from "@libs/client/useMutation";
+import { useLocation } from "wouter";
+import { SellModal } from "@components/ui/sell";
 
 declare let window: any;
 
+interface IResponse {
+  nftId: string;
+  address: any;
+  image: any;
+  name: any;
+  description: any;
+  edition: any;
+  product: any;
+  nickname: any;
+}
+
 const Product: NextPage = () => {
+  const router = useRouter();
   const { user, isLoading } = useUser();
   // console.log(user);
 
+  const nftId = router.query?.id?.toString();
   const [isOwner, setIsOwner] = useState(false); // 본인 상품인지 여부
   const [selectedOrder, setSelectedOrder] = useState<null | object>(null);
   const [selectedRealization, setSelectedRealization] = useState<null | object>(
@@ -37,33 +57,56 @@ const Product: NextPage = () => {
   };
 
   // 관이 part
-  const router = useRouter();
   // const brand = "Celine";
   console.log(router);
+  console.log(nftId);
+  console.log(typeof nftId);
   // console.log(router);
-  const image: string | undefined = router.query.image?.toString();
   // console.log(image);
   // console.log(typeof image);
 
   // router에서 받아온 id로 요청 후 받은 데이터 (임시 참고용)
-  const nftId = router.query.nftId?.toString();
-  const response = {
-    name: router.query.name?.toString(),
-    image: router.query.image?.toString(),
-    description: router.query.description?.toString(),
-    price: Number(router.query.price),
-    edition: Number(router.query.edition),
-    type: router.query.type?.toString(),
-    balance: Number(router.query.balance),
-    nftId: router.query.itemId2?.toString(),
-    // name: "구찌 가방",
-    // brand: "루이비똥",
-    // image: "http~~~~",
-    // description: "string",
-    // price: "GUCCI",
-    // edition: "string",
-    // type: "boolean",
+  // const nftId = router.query.nftId?.toString();
+  const [response, setResponse] = useState<IResponse | undefined>();
+
+  const getNFT = async () => {
+    const res = await findNFT(nftId);
+    console.log(res);
+    setResponse(Object(res));
+    // return res;
   };
+
+  const resp = async () => {
+    await getNFT();
+  };
+
+  // const response = getNFT();
+  // const res3 = async () => {
+  //   const res = await findNFT(nftId);
+  //   let resp = [];
+  //   resp?.push({
+  //     nftId: nftId,
+  //     address: res?.address.toString(),
+  //     image: res?.image.toString(),
+  //     name: res?.name.toString(),
+  //     description: res?.description.toString(),
+  //     edition: res?.edition,
+  //     product: res?.product,
+  //     nickname: res?.nickname.toString(),
+  //   });
+  //   setResponse(resp);
+  // };
+
+  console.log(response);
+
+  // console.log(response);
+  // const nftres = async () => {
+  //   const res = await getNFT(nftId).then((res) => setResponse(res));
+  // };
+  // const res3 = await getNFT(nftId);
+  // console.log(res3);
+  // setResponse(res3);
+  // console.log(response);
 
   useEffect(() => {
     (async () => {
@@ -78,8 +121,9 @@ const Product: NextPage = () => {
       );
       const json2 = await res2.json();
       setExchange(json2[0].basePrice);
+      resp();
     })();
-  }, []);
+  }, [nftId]);
 
   const loadContracts = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -100,8 +144,6 @@ const Product: NextPage = () => {
   //     await marketplace.purchaseItem(item.itemid, { value: item.totalPrice })
   //   ).wait();
   // };
-
-  console.log(response);
 
   return (
     <Layout seoTitle="제품명">
@@ -172,11 +214,11 @@ const Product: NextPage = () => {
                       <div className="h-full w-full">
                         <div className="h-full w-[600px] flex items-center justify-center max-w-full max-h-full overflow-hidden">
                           <img
-                            src={response.image}
+                            src={response?.image}
                             alt="#"
                             className="w-auto h-auto max-w-full max-h-full object-contain"
                           />
-                          {/* <ThreeDimension name={response.image} /> */}
+                          {/* <ThreeDimension name={response?.image} /> */}
                         </div>
                       </div>
                     </div>
@@ -208,13 +250,13 @@ const Product: NextPage = () => {
                           <div className="w-full inline-flex items-center h-8">
                             Created by
                             <span className="ml-1 text-gold font-semibold overflow-hidden text-ellipsis">
-                              {router.query.name}
+                              {response?.name}
                             </span>
                           </div>
                         </div>
                         <div>
                           <span className="text-sm text-ellipsis">
-                            {router?.query.description}
+                            {response?.description}
                           </span>
                         </div>
                       </div>
@@ -227,11 +269,11 @@ const Product: NextPage = () => {
                 <div className="mt-5 mx-5 mb-[15px]">
                   <div className="h-[46px] flex items-center">
                     <span className="text-gold font-semibold overflow-hidden text-ellipsis cursor-pointer">
-                      {router.query.name}
+                      {response?.name}
                     </span>
                   </div>
                   <span className="text-3xl font-semibold max-w-full text-textBlack">
-                    {router.query.name}
+                    {response?.name}
                   </span>
                 </div>
                 <div className="m-5">
@@ -239,7 +281,7 @@ const Product: NextPage = () => {
                     <div className="text-[#8A939B] inline-flex items-center h-6 w-full text-[14.5px]">
                       Owned by
                       <span className="ml-1 overflow-hidden text-ellipsis text-[#2081e2] cursor-pointer">
-                        won
+                        {response?.nickname}
                       </span>
                     </div>
                   </div>
@@ -249,6 +291,7 @@ const Product: NextPage = () => {
                   <div className="rounded-[10px] overflow-hidden shadow-lg">
                     <div className="p-5 bg-white"></div>
                     <div className="p-5 bg-[#fbfdff]">
+                      {/* 여기부터 이게 마켓플레이스에 올라가있는지 여부에 따른 차별화된 표시 */}
                       <div className="text-[#8A939B] text-[14.5px]">현재가</div>
                       <div className="mb-2 flex flex-wrap">
                         <div className="text-[30px] font-semibold flex items-center">
@@ -261,15 +304,15 @@ const Product: NextPage = () => {
                               />
                             </a>
                           </div>
-                          <div className="ml-1 w-full overflow-hidden text-ellipsis">
-                            {response.price?.toFixed(2)}
-                          </div>
+                          {/* <div className="ml-1 w-full overflow-hidden text-ellipsis">
+                            {response?.price?.toFixed(2)}
+                          </div> */}
                         </div>
-                        <div className="text-[15px] mt-[15px]">
+                        {/* <div className="text-[15px] mt-[15px]">
                           <span className="text-textGray overflow-hidden text-ellipsis w-full">
                             Eth (₩ {(ethUSD * exchange).toFixed(0)}원)
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                       {/* 본인 상품이냐에 따라 다른 UI */}
                       {isOwner ? (
@@ -277,7 +320,9 @@ const Product: NextPage = () => {
                           <div className="w-full contents">
                             <div className="inline-flex w-full">
                               <button
-                                onClick={() => setSelectedRealization(response)}
+                                onClick={() =>
+                                  setSelectedRealization(response!)
+                                }
                                 className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full"
                               >
                                 <div className="mr-3 flex">
@@ -299,7 +344,10 @@ const Product: NextPage = () => {
                               </button>
                             </div>
                             <div className="inline-flex w-full lg:w-[50%] ml-2">
-                              <button className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-white hover:bg-lightBg px-5 py-3 border-[1px] border-lightGold text-lightGold w-full">
+                              <button
+                                className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-white hover:bg-lightBg px-5 py-3 border-[1px] border-lightGold text-lightGold w-full"
+                                onClick={() => setSelectedSell(response!)}
+                              >
                                 <div className="flex mr-3">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -325,7 +373,7 @@ const Product: NextPage = () => {
                             <div className="inline-flex w-full">
                               {/* -------- 구매 버튼 ---------- */}
                               <button
-                                onClick={() => setSelectedOrder(response)}
+                                onClick={() => setSelectedOrder(response!)}
                                 className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full"
                               >
                                 <div className="mr-3 flex">
@@ -398,6 +446,9 @@ const Product: NextPage = () => {
             user={user}
             nftId={nftId}
           />
+        )}
+        {selectedSell && (
+          <SellModal response={response} onClose={cleanupModal} />
         )}
       </div>
     </Layout>
