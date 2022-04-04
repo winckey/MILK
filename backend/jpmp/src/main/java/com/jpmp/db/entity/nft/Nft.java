@@ -60,7 +60,7 @@ public class Nft {
                 .nftName(nftDto.getNftName())
                 .price(nftDto.getPrice())
                 .imgUrl(nftDto.getImgUrl())
-                .seleStatus(true)//생성과동시에 판매등록
+                .seleStatus(false)//생성 판매는 따로
                 .realizationStatus(false)//생성즉시기떄문에 아직 실물화 아님
                 .ownerIsEnterprise(true)// 생성시 기업소유
                 .owner(owner)

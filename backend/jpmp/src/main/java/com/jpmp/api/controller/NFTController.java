@@ -191,6 +191,7 @@ public class NFTController {
                 .ownerIsEnterprise(ownerIsEnterprise)
                 .build();
 
+
         List<Nft> nftList = nftService.getNftList(nftSearchReqDto, pageable);
 
 
