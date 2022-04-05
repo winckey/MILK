@@ -115,6 +115,30 @@ export const loadMarketItems = async () => {
   };
 };
 
+export const isRealizedItem = async (nftId) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const res = await nftContract(signer);
+  const tokenId = Number(nftId);
+  const re = await res.isRealization(tokenId);
+  return re;
+};
+
+export const isMarketItem = async (nftId) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const res1 = await nftContract(signer);
+  const res2 = await marketContract(signer);
+  const itemAccount = await res1.ownerOf(Number(nftId));
+  console.log(itemAccount);
+  console.log(res2.address);
+
+  if (itemAccount === res2.address) {
+    const item = await res2.items(Number(nftId));
+    return item.seller;
+  }
+};
+
 export const loadNFTItems = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
