@@ -12,4 +12,6 @@ public interface LiveDao {
     public List<LiveDto> getLiveList();
 
     void finishLive(int roomId);
+
+    public LiveDto getLive(int roomId);
 }

@@ -26,4 +26,9 @@ public class LiveServiceImpl implements LiveService{
     public void finishLive(int roomId) {
         liveDao.finishLive(roomId);
     }
+
+    @Override
+    public LiveDto getLive(int roomId) {
+        return liveDao.getLive(roomId);
+    }
 }

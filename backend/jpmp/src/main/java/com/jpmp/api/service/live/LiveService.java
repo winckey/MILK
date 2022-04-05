@@ -10,4 +10,6 @@ public interface LiveService {
     public List<LiveDto> getLiveList();
 
     void finishLive(int roomId);
+
+    public LiveDto getLive(int roomId);
 }
