@@ -72,7 +72,7 @@ export const loadMarketItems = async () => {
   const itemCounts = await marketplace.itemCount();
   // const item2 = await marketplace.items(0);
   // console.log(item2);
-  console.log(itemCounts);
+  // console.log(itemCounts);
   let items = [];
   let sellers = [];
   for (let i = 1; i <= itemCounts; i++) {
@@ -98,12 +98,12 @@ export const loadMarketItems = async () => {
       // console.log("이 NFT의 ID 값은", item.itemId);
       // console.log("이 NFT의 주인은", item.seller);
       // console.log("이 상품의 이미지 주소는", item.image);
-      console.log(item);
+      // console.log(item);
       sellers.push(item.seller);
     }
   }
-  console.log(items);
-  console.log(sellers);
+  // console.log(items);
+  // console.log(sellers);
   // console.log(
   //   items[itemCounts - 1].seller,
   //   items[itemCounts - 1].itemId,
@@ -121,10 +121,10 @@ export const loadNFTItems = async () => {
   const marketplace = await marketContract(signer);
   const nft = await nftContract(signer);
   const itemCounts = await nft.tokenCount(); // 7
-  console.log(itemCounts);
+  // console.log(itemCounts);
   const response = await connectWallet();
   const address = response?.address;
-  console.log(response.address);
+  // console.log(response.address);
 
   let items = [];
   for (let i = 1; i <= itemCounts; i++) {
@@ -132,11 +132,11 @@ export const loadNFTItems = async () => {
     const res = await fetch(uri);
     const metadata = await res.json();
     const data = await nft.ownerOf(i);
-    console.log(metadata);
-    console.error("★★★★★★★★★★★★★★");
-    console.log(address);
-    console.log(data);
-    console.error("★★★★★★★★★★★★★★");
+    // console.log(metadata);
+    // console.error("★★★★★★★★★★★★★★");
+    // console.log(address);
+    // console.log(data);
+    // console.error("★★★★★★★★★★★★★★");
     // console.log(metadata);
     // console.log(nft.ownerOf(i));
     items.push({
@@ -153,7 +153,7 @@ export const loadNFTItems = async () => {
   }
 
   // console.log(nft.address);
-  console.log(items);
+  // console.log(items);
   // return items;
   return items;
 };
@@ -172,7 +172,7 @@ export const findNFT = async (nftId) => {
         product: items[i].product,
         nickname: items[i].nickname.toString(),
       };
-      console.log(item);
+      // console.log(item);
       return item;
     }
   }

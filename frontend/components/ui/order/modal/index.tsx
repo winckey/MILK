@@ -94,12 +94,17 @@ export default function OrderModal({
   // }, [course]);
   const [enough, setEnough] = useState(true);
   const [items, setItems] = useState({});
-  const balance = getUserBalance();
+  const [balance, setBalance] = useState<string | undefined>("");
+  const getBalance = async () => {
+    const res = await getUserBalance();
+    setBalance(res);
+  };
+  console.log(balance);
   // const price = response?.price;
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   console.log(provider);
-
-  const nftId = response?.nftId?.toString();
+  const signer = provider.getSigner();
+  const nftId = response?.nftId;
   const closeModal = () => {
     setIsOpen(false);
     // setOrder(defaultOrder);
@@ -127,13 +132,15 @@ export default function OrderModal({
     setItems(res);
   };
 
-  const onClick = async () => {
-    await purchaseMarketItem();
-  };
+  // const onPurchase = async () => {
+
+  //   await purchaseMarketItem();
+  // };
 
   useEffect(() => {
     // isEnough();
     loadItems();
+    getBalance();
   }, []);
   console.log(items);
 
@@ -178,7 +185,7 @@ export default function OrderModal({
                     Edition {response?.edition} of Total Edition
                   </div>
                   <div className="text-xs text-textGray pt-4">Product Name</div>
-                  {/* <div className="text-xl">{response?.name}</div> */}
+                  <div className="text-xl">{response?.name}</div>
                   <div className="text-xs text-textGray pt-4">Price</div>
                   <div className="mb-2 flex flex-wrap">
                     <div className="text-[20px] font-semibold flex items-center">
@@ -193,7 +200,7 @@ export default function OrderModal({
                         {/* {response?.price?.toFixed(2)} */}
                         <div className="text-[15px] ml-1 mb-1 font-normal">
                           <span className="text-textGray overflow-hidden text-ellipsis w-full">
-                            Eth (₩ {(ethUSD * exchange).toFixed(0)}원)
+                            Eth (₩ {Math.round(ethUSD * exchange)}원)
                           </span>
                         </div>
                       </div>
@@ -212,6 +219,13 @@ export default function OrderModal({
                 />
                 <div className="text-lg font-bold">
                   {Number(balance)?.toFixed(2)}
+                </div>
+                <div className="text-[15px] ml-1 mb-1 font-normal">
+                  <span className="text-textGray overflow-hidden text-ellipsis w-full">
+                    Eth (₩{" "}
+                    {Math.ceil(Number(balance) * Math.ceil(ethUSD * exchange))}
+                    원)
+                  </span>
                 </div>
                 <span className="ml-1 text-sm text-textGray">Eth</span>
               </div>
