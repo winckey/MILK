@@ -34,9 +34,9 @@ const ProfileCollection: NextPage = () => {
       <ProfileLayout>
         <div className="border-t">
           <div className="px-[52px] mt-8">
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
-              {collectionList && collectionList?.length > 0 ? (
-                <>
+            {collectionList && collectionList?.length > 0 ? (
+              <>
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
                   {collectionList?.map((nft) => (
                     <Item
                       key={nft.nftId}
@@ -48,11 +48,13 @@ const ProfileCollection: NextPage = () => {
                       price={nft.price}
                     />
                   ))}
-                </>
-              ) : (
-                <div>없어</div>
-              )}
-            </div>
+                </div>
+              </>
+            ) : (
+              <div className="mx-9 my-6 h-[248px] text-center border flex flex-col justify-center items-center text-[28px] text-textGray">
+                아직 보유하는 상품이 없습니다.
+              </div>
+            )}
           </div>
         </div>
       </ProfileLayout>
