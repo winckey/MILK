@@ -175,17 +175,21 @@ public class NFTController {
     })
     public ResponseEntity<NFTListResDto> getNftList(@RequestParam(value = "keyword",  defaultValue = "") String keyword,
                                                        @RequestParam(value = "enterprise",  defaultValue = "") String enterprise,
-                                                       @RequestParam(value = "max",  defaultValue = "99999") int max,
+                                                       @RequestParam(value = "max",  defaultValue = "9999999") int max,
                                                        @RequestParam(value = "min",  defaultValue = "0") int min,
                                                        @RequestParam(value = "ownerIsEnterprise", defaultValue = "") Boolean ownerIsEnterprise,
                                                        @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {//https://brunch.co.kr/@kd4/158
         ///members?page=0&size=3&sort=id,desc&sort=username,desc
         System.out.println("enterprise : " +enterprise);
 
+
+        User enterpriseEntity =
+                (enterprise.equals("")) ? null : userRepository.findByNickname(enterprise).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
         NFTSearchReqDto nftSearchReqDto
                 = NFTSearchReqDto.builder()
                 .keyword(keyword)
-                .enterprise(userRepository.findByNickname(enterprise).orElse(null))// 이거 왜 realname은 안댐
+                .enterprise(enterpriseEntity)// 이거 왜 realname은 안댐
                 .max(max)
                 .min(min)
                 .ownerIsEnterprise(ownerIsEnterprise)
