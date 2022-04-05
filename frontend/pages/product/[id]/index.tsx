@@ -83,21 +83,38 @@ const Product: NextPage = () => {
   const validation = async () => {
     if (nftUser === currentUser) {
       setIsOwner(true);
-      console.log(true);
+      console.log("이 사람이 주인입니다.");
     } else {
       setIsOwner(false);
-      console.log(false);
+      console.log("이 사람이 주인이 아닙니다.");
     }
   };
 
   const [isProduct, setIsProduct] = useState(false);
-  const onProduct = () => {
+  const [isRealize, setIsRealize] = useState(false);
+
+  const isRealized = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const res = await nftContract(signer);
+    const tokenId = Number(nftId);
+    const re = await res.isRealization(tokenId);
+    console.error(re);
+    console.log(tokenId);
+    setIsRealize(re);
+  };
+
+  const onProduct = async () => {
     if (response?.product) {
       setIsProduct(true);
+      // console.log(res.isRealization(tokenId));
     } else {
       setIsProduct(false);
     }
   };
+
+  console.log(isRealize);
+
   const getAlert = () => {
     if (!isProduct) {
       alert("실물화가 불가능한 상품입니다.");
@@ -125,9 +142,15 @@ const Product: NextPage = () => {
       setExchange(json2[0].basePrice);
       await resp();
       await getAccount();
-      onProduct();
+      await onProduct();
     })();
   }, [nftId, isOwner]);
+
+  useEffect(() => {
+    (async () => {
+      await isRealized();
+    })();
+  }, []);
 
   console.log(response);
 

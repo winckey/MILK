@@ -61,11 +61,11 @@ interface RealizationModalProps {
   nft: any;
   onClose: Function;
   user: any;
-  nftId: string | undefined;
+  nftId: string | string[] | undefined;
 }
 
 interface IRealizationForm {
-  nftId: string | undefined;
+  nftId: string | string[] | undefined;
   check1: boolean;
   check2: boolean;
   check3: boolean;
