@@ -2,6 +2,7 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "./NFT.sol";
 
 // 재진입 공격 방지
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -49,18 +50,19 @@ contract Marketplace is ReentrancyGuard {
     address indexed buyer
   );
 
-  mapping(uint => Item) public items;
+mapping(uint => Item) public items;
 
-  constructor(uint _feePercent) {
-    // 이 계약서의 배포자가(msg.sender) 계약서의 주인이 되어야 하기 때문에 생성자로 값을 설정
-    // -> 배포자는 자신의 nft를 나열하고, 구매할 수 있는 기능들을 할 수 있다.(밑에서 함수로 정의)
-    feeAccount = payable(msg.sender);
-    feePercent = _feePercent;
-  }
+constructor(uint _feePercent) {
+  // 이 계약서의 배포자가(msg.sender) 계약서의 주인이 되어야 하기 때문에 생성자로 값을 설정
+  // -> 배포자는 자신의 nft를 나열하고, 구매할 수 있는 기능들을 할 수 있다.(밑에서 함수로 정의)
+  feeAccount = payable(msg.sender);
+  feePercent = _feePercent;
+}
 
 // ERC721의 인스턴스를 인자로 전달해줌 -> 프론트엔드에서 사용자가 nft contract 주소를 전달하면 솔리디티가 자동으로 nft컨트랙트를 생성한다.
 // nonReentrant(재진입 방지 modifier) : 누가 makeItem함수를 호출하고 끝나기 전에 다시 makeItem함수를 호출하는 것을 방지하기 위한 것
-function makeItem(IERC721 _nft, uint _tokenId, uint _price) external nonReentrant {
+function makeItem(NFT _nft, uint _tokenId, uint _price) external nonReentrant {
+  if (_nft.isRealization(_tokenId) == true) revert ("This token is already realized");
   // 구매 가격이 0보다 높아야 함
   require(_price > 0, "Price must be greater than zero" );
 
@@ -82,9 +84,12 @@ function makeItem(IERC721 _nft, uint _tokenId, uint _price) external nonReentran
 
   // payable으로 구매자는 판매자에게 구매 비용을 보내야하고, 일부는 수수료 계정으로 보내진다.    
   function purchaseItem(uint _itemId) external payable nonReentrant {
+    // NFT nft;
     uint _totalPrice = getTotalPrice(_itemId);
     // storage를 선언함으로써 items에 있는 값 중 복사값을 사용하는 것이 아닌 그대로를 사용하는 것
     Item storage item = items[_itemId];
+    // if (nft.isRealization(item.tokenId) == true) revert ("This token is already realized");
+
     // item이 존재하는지 확인 0보다 크고 총 갯수보다는 같거나 작아야 함
     require(_itemId > 0 && _itemId <= itemCount, "item doesn't exist");
     // msg.value를 통해 전송된 이더가 _totalPrice보다 같거나 큰지 확인
@@ -115,4 +120,75 @@ function makeItem(IERC721 _nft, uint _tokenId, uint _price) external nonReentran
   function getTotalPrice(uint _itemId) public view returns(uint) {
     return items[_itemId].price * (100 + feePercent) / 100;
   }
-}
+
+  function likeViewBatch(uint256[] memory ids) public view returns(Item[] memory) {
+    uint LikeItemsCount = ids.length;
+    uint currentIndex = 0;
+    Item[] memory likeItems = new Item[](LikeItemsCount);
+
+
+    for(uint i = 0; i < LikeItemsCount; i++) {
+      uint currentId = items[ids[i]].itemId;
+      Item storage currentItem = items[currentId];
+      likeItems[currentIndex] = currentItem;
+      currentIndex += 1;
+    }
+    return likeItems;
+  }
+  // nftId => onwerOf(tokenId) == marketplace.adress => true(지금 마켓에 판매로 올라가있는 상태)
+  // 인자값으로 프론트에서 불러온 nft컨트랙트 주소(const nft = await nft.addresss)와 _tokenId를 넣으세요 
+  function nftInMarket(NFT _nft, uint _tokenId) public view returns(bool) {
+    if (0 < _tokenId && _tokenId <= _nft.tokenCount()) revert("nft is not exist");
+    if (address(_nft.ownerOf(_tokenId)) != address(this)) revert("nft is not in the marketplace");
+    // require(_nft.realization(tokenId), "this nft can't in the marketplace");
+    return true;
+  }
+
+  // 이건 그냥 테스트용
+  function test(NFT _nft, uint _tokenId) public view returns(address) {
+    return _nft.ownerOf(_tokenId);
+  }
+
+
+  // 마켓에 올린 아이템 취소 함수 사용법
+  // * 인자값 (마켓에 올라가있기 때문에 _itemId, nft토큰 아이디 아님)
+  // * 반려조건
+  //    1. 메세지 보낸 사람과 item판매자가 같지 않은 경우 == 이 nft를 올린 사람이 아님
+  //    2. item이 전체 범위를 벗어남 == 없는 아아디
+  //    3. item은 마켓에 올릴 때 sold의 상태가 false로 올라가기 때문에 !item.sold == true라면 item이 이미 팔린 상태이거나 마켓에서 내려간 상태
+  
+  //    프론트 코드 참고
+  //   const cancleMarketItem = async (item) => {
+  //   await (await marketplace.cancelItem(item.itemId)).wait()
+  //   loadMarketplaceItems()
+  //    }
+
+  //   <Button onClick={() => cancleMarketItem(item)} variant="primary" size="lg">
+  //   마켓에서 내리기
+  //    </Button>
+  // 해보니까 마켓에서 원 소유주로 잘 내려감
+  function cancelItem(uint _itemId) external nonReentrant {
+    Item storage item = items[_itemId];
+    if (msg.sender != item.seller) revert ("This Item is not yours");
+    require(_itemId > 0 && _itemId <= itemCount, "item doesn't exist");
+    require(!item.sold, "item already sold");
+
+    item.sold = true;
+
+    item.nft.transferFrom(address(this), msg.sender, item.tokenId);
+
+    emit Bought(
+      _itemId,
+      address(item.nft),
+      item.tokenId,
+      item.price,
+      item.seller,
+      msg.sender
+    );
+
+  }
+  
+}// 구찌가 상품을 냈다 => 민팅했으면 셀 버튼 활성화 => 셀 버튼이 뜨려면 민팅된 아이템이 구찌 아이템인걸 알아야 함
+// 처음 민팅했을 때는 오너(ownerOf(tokenId)) == 민팅한 사람
+// 1. nftId => ownerOf(tokenId) == window.ether~.request(현 지갑 주소) => true(민팅한 주소 == 현재 로그인된 지갑 주소)
+// 2. nftId => onwerOf(tokenId) == marketplace.adress => true(지금 마켓에 판매로 올라가있는 상태)

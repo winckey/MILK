@@ -2,6 +2,7 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "./Marketplace.sol";
 
 
 // nft 마켓 = 오픈씨 흐름
@@ -16,6 +17,14 @@ contract NFT is ERC721URIStorage {
   // 컨트랙트 내부에 선언하지만 함수 밖에 선언하고, 함수를 이용해서 해당 변수를 수정하여 블록체인에 있는 상태변수도 수정한다.
   uint public tokenCount;
 
+  struct TokenData {
+
+    // address ownerAddr;
+
+    bool realization;
+  }
+
+  mapping(uint256 => TokenData) internal _tokenData;
   // 실제로 구현할 땐 SafeMath를 사용해야함
 
   // - 컨스트럭터(생성자)
@@ -35,8 +44,31 @@ contract NFT is ERC721URIStorage {
     // erc721의 민트함수 상속해서 사용(토큰 주인, 토큰 id)
     _safeMint(msg.sender, tokenCount);
     // erc721uristorage의 토큰 메타데이터를 저장하는 함수를 사용해 해당 함수의 메타데이터 저장
+    _tokenData[tokenCount].realization = false;
     _setTokenURI(tokenCount, _tokenURI);
 
     return(tokenCount);
+  }
+
+
+  // 실물화 확인 함수 => 토큰 아이디로 조회 => 참, 거짓 반환
+  function isRealization(uint _tokenId) public view returns (bool) {
+    return _tokenData[_tokenId].realization;
+  }
+
+
+  // 실물화 사용법
+  // * 인자값 (프론트에서 연결한 marketplace컨트랙트의 주소 ex) const marketAddr = await marketpalce.address, tokenId)
+  // * 반려 조건 
+  //    1. 토큰 오너와 트랜잭션 보낸 사람이 같지 않으면 == 토큰 주인이 아님
+  //    2. 마켓주소와 오너가 같으면 == 토큰이 마켓에 올라가있는 상태 주의주의
+  //    3. 실물화 확인 함수 isRealization이 참이라면 == 이미 실물화된 토큰
+  function Realization(address marketplaceAddr, uint _tokenId) public {
+    if (ownerOf(_tokenId) != msg.sender) revert("This token is not yours");
+    if (marketplaceAddr == ownerOf(_tokenId)) revert("Please fall back this token at marketplace");
+    if (isRealization(_tokenId) == true ) revert("This token is already realized");
+    unchecked{
+      _tokenData[_tokenId].realization = true;
+    }
   }
 }
