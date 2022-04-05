@@ -53,13 +53,18 @@ interface RealizationModalProps {
 }
 
 interface Iresponse {
-  response: {
-    name: string | undefined;
-    image: string | undefined;
-    description: string | undefined;
-    production: boolean;
-    edition: number | undefined;
-  };
+  response:
+    | {
+        nftId: string;
+        address: any;
+        image: any;
+        name: any;
+        description: any;
+        edition: any;
+        product: any;
+        nickname: any;
+      }
+    | undefined;
   onClose: Function;
 }
 
@@ -79,6 +84,7 @@ export default function SellModal({ response, onClose }: Iresponse) {
   //     });
   //   }
   // }, [course]);
+
   const closeModal = () => {
     setIsOpen(false);
     // setOrder(defaultOrder);
@@ -119,7 +125,7 @@ export default function SellModal({ response, onClose }: Iresponse) {
                 <div className="">
                   <div className="mb-1">
                     <img
-                      src={response.image}
+                      src={response?.image}
                       className="w-[200px] h-[auto]"
                       alt=""
                     />
@@ -127,10 +133,10 @@ export default function SellModal({ response, onClose }: Iresponse) {
                 </div>
                 <div className="block pl-4">
                   <div className="text-sm font-bold">
-                    Edition {response.edition} of Total Edition
+                    Edition {response?.edition} of Total Edition
                   </div>
                   <div className="text-xs text-textGray pt-4">Product Name</div>
-                  {/* <div className="text-xl">{response.name}</div> */}
+                  {/* <div className="text-xl">{response?.name}</div> */}
                   <div className="text-xs text-textGray pt-4">Price</div>
                   <div className="mb-2 flex flex-wrap">
                     <div className="text-[20px] font-semibold flex items-center">
@@ -143,7 +149,7 @@ export default function SellModal({ response, onClose }: Iresponse) {
                       </div>
                       <div className="ml-1 w-full overflow-hidden text-ellipsis flex items-end">
                         <input type="text" />
-                        {/* {response.price?.toFixed(2)}
+                        {/* {response?.price?.toFixed(2)}
                         <div className="text-[15px] ml-1 mb-1 font-normal">
                           <span className="text-textGray overflow-hidden text-ellipsis w-full">
                             Eth (₩ {(ethUSD * exchange).toFixed(0)}원)
@@ -164,7 +170,7 @@ export default function SellModal({ response, onClose }: Iresponse) {
                   alt="ETH"
                 />
                 <div className="text-lg font-bold">
-                  {/* {response.balance?.toFixed(2)} */}
+                  {/* {response?.balance?.toFixed(2)} */}
                 </div>
                 <span className="ml-1 text-sm text-textGray">Eth</span>
               </div>

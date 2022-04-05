@@ -5,6 +5,7 @@ import {
   marketContract,
   nftContract,
   loadMarketItems,
+  getUserBalance,
 } from "../../../../utils/interact";
 import { ethers } from "ethers";
 
@@ -53,16 +54,18 @@ interface RealizationModalProps {
 }
 
 interface Iresponse {
-  response: {
-    name: string | undefined;
-    image: string | undefined;
-    description: string | undefined;
-    price: number | undefined;
-    edition: number | undefined;
-    type: string | undefined;
-    balance: number | undefined;
-    nftId: string | undefined;
-  };
+  response:
+    | {
+        nftId: string;
+        address: any;
+        image: any;
+        name: any;
+        description: any;
+        edition: any;
+        product: any;
+        nickname: any;
+      }
+    | undefined;
   onClose: Function;
   ethUSD: number;
   exchange: number;
@@ -91,12 +94,12 @@ export default function OrderModal({
   // }, [course]);
   const [enough, setEnough] = useState(true);
   const [items, setItems] = useState({});
-  const balance = response.balance;
-  const price = response.price;
+  const balance = getUserBalance();
+  // const price = response?.price;
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   console.log(provider);
 
-  const nftId = response.nftId?.toString();
+  const nftId = response?.nftId?.toString();
   const closeModal = () => {
     setIsOpen(false);
     // setOrder(defaultOrder);
@@ -107,17 +110,17 @@ export default function OrderModal({
 
   // const formState = createFormState(order, hasAgreedTOS, isNewPurchase);
 
-  const isEnough = () => {
-    if (!price || !balance) {
-      window.location.reload();
-      return null;
-    }
-    if (balance >= price) {
-      setEnough(true);
-    } else {
-      setEnough(false);
-    }
-  };
+  // const isEnough = () => {
+  //   if (!price || !balance) {
+  //     window.location.reload();
+  //     return null;
+  //   }
+  //   if (balance >= price) {
+  //     setEnough(true);
+  //   } else {
+  //     setEnough(false);
+  //   }
+  // };
 
   const loadItems = async () => {
     const res = await loadMarketItems();
@@ -129,7 +132,7 @@ export default function OrderModal({
   };
 
   useEffect(() => {
-    isEnough();
+    // isEnough();
     loadItems();
   }, []);
   console.log(items);
@@ -163,19 +166,19 @@ export default function OrderModal({
               <div className="mt-1 relative rounded-md flex items-center">
                 <div className="">
                   <div className="mb-1">
-                    {/* <img
-                      src={response.image}
+                    <img
+                      src={response?.image}
                       className="w-[200px] h-[200px]"
                       alt=""
-                    /> */}
+                    />
                   </div>
                 </div>
                 <div className="block pl-4">
-                  {/* <div className="text-sm font-bold">
-                    Edition {response.edition} of Total Edition
-                  </div> */}
+                  <div className="text-sm font-bold">
+                    Edition {response?.edition} of Total Edition
+                  </div>
                   <div className="text-xs text-textGray pt-4">Product Name</div>
-                  {/* <div className="text-xl">{response.name}</div> */}
+                  {/* <div className="text-xl">{response?.name}</div> */}
                   <div className="text-xs text-textGray pt-4">Price</div>
                   <div className="mb-2 flex flex-wrap">
                     <div className="text-[20px] font-semibold flex items-center">
@@ -187,7 +190,7 @@ export default function OrderModal({
                         />
                       </div>
                       <div className="ml-1 w-full overflow-hidden text-ellipsis flex items-end">
-                        {response.price?.toFixed(2)}
+                        {/* {response?.price?.toFixed(2)} */}
                         <div className="text-[15px] ml-1 mb-1 font-normal">
                           <span className="text-textGray overflow-hidden text-ellipsis w-full">
                             Eth (₩ {(ethUSD * exchange).toFixed(0)}원)
@@ -208,7 +211,7 @@ export default function OrderModal({
                   alt="ETH"
                 />
                 <div className="text-lg font-bold">
-                  {response.balance?.toFixed(2)}
+                  {Number(balance)?.toFixed(2)}
                 </div>
                 <span className="ml-1 text-sm text-textGray">Eth</span>
               </div>

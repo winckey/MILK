@@ -2,36 +2,20 @@
 
 import type { NextPage } from "next";
 import { ProfileLayout, Layout } from "@components/ui/layout";
+import useSWR from "swr";
 import { Item } from "@components/ui/common";
+import { useRouter } from "next/router";
+import { OwnNftResponse } from ".";
 
 const ProfileFavorite: NextPage = () => {
-  // data list
-  const nftList = [
-    {
-      nftId: 1,
-      brand: "LouisVuitton",
-      nftName: "가방",
-      price: "100",
-      imgUrl:
-        "https://kr.louisvuitton.com/images/is/image/lv/1/PP_VP_L/%EB%A3%A8%EC%9D%B4-%EB%B9%84%ED%86%B5-%ED%8A%B8%EC%9C%84%EC%8A%A4%ED%8A%B8-pm-%EC%97%90%ED%94%BC-%ED%95%B8%EB%93%9C%EB%B0%B1--M58566_PM2_Front%20view.png?imwidth=656&imheight=656",
-    },
-    {
-      nftId: 2,
-      brand: "LouisVuitton",
-      nftName: "가방",
-      price: "100",
-      imgUrl:
-        "https://kr.louisvuitton.com/images/is/image/lv/1/PP_VP_L/%EB%A3%A8%EC%9D%B4-%EB%B9%84%ED%86%B5-%ED%8A%B8%EC%9C%84%EC%8A%A4%ED%8A%B8-pm-%EC%97%90%ED%94%BC-%ED%95%B8%EB%93%9C%EB%B0%B1--M58566_PM2_Front%20view.png?imwidth=656&imheight=656",
-    },
-    {
-      nftId: 3,
-      brand: "LouisVuitton",
-      nftName: "가방",
-      price: "100",
-      imgUrl:
-        "https://kr.louisvuitton.com/images/is/image/lv/1/PP_VP_L/%EB%A3%A8%EC%9D%B4-%EB%B9%84%ED%86%B5-%ED%8A%B8%EC%9C%84%EC%8A%A4%ED%8A%B8-pm-%EC%97%90%ED%94%BC-%ED%95%B8%EB%93%9C%EB%B0%B1--M58566_PM2_Front%20view.png?imwidth=656&imheight=656",
-    },
-  ];
+  const router = useRouter();
+
+  // 해당 nickname을 가진 유저의 관심 nft 리스트 가져오기
+  const { data } = useSWR<OwnNftResponse>(
+    router.query.nickname
+      ? `${process.env.BASE_URL}/nft/like/${router.query.nickname}`
+      : null
+  );
 
   return (
     <Layout seoTitle="프로필">
@@ -39,9 +23,23 @@ const ProfileFavorite: NextPage = () => {
         <div className="border-t">
           <div className="px-[52px] mt-8">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
-              {nftList.map((nft) => (
-                <Item nft={nft} key={nft.nftId} />
-              ))}
+              {data && data?.nftDtoList?.length > 0 ? (
+                <>
+                  {data.nftDtoList.map((nft) => (
+                    <Item
+                      key={nft.nftId}
+                      enterprise={nft.enterprise}
+                      imgUrl={nft.imgUrl}
+                      likeCount={nft.likeCount}
+                      nftId={nft.nftId}
+                      nftName={nft.nftName}
+                      price={nft.price}
+                    />
+                  ))}
+                </>
+              ) : (
+                <div>없어</div>
+              )}
             </div>
           </div>
         </div>
