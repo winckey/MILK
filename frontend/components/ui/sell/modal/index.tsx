@@ -84,6 +84,16 @@ export default function SellModal({ response, onClose }: Iresponse) {
   //     });
   //   }
   // }, [course]);
+  const [price, setPrice] = useState("");
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const nftId = response?.nftId;
+
+  const onSell = async () => {
+    const res1 = await marketContract(signer);
+    const res2 = await nftContract(signer);
+    await (await res1.makeItem(res2.address, nftId, price)).wait();
+  };
 
   const closeModal = () => {
     setIsOpen(false);
@@ -148,7 +158,10 @@ export default function SellModal({ response, onClose }: Iresponse) {
                         />
                       </div>
                       <div className="ml-1 w-full overflow-hidden text-ellipsis flex items-end">
-                        <input type="text" />
+                        <input
+                          type="text"
+                          onChange={(e) => setPrice(e.target.value)}
+                        />
                         {/* {response?.price?.toFixed(2)}
                         <div className="text-[15px] ml-1 mb-1 font-normal">
                           <span className="text-textGray overflow-hidden text-ellipsis w-full">
@@ -180,7 +193,7 @@ export default function SellModal({ response, onClose }: Iresponse) {
         </div>
         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex">
           <button
-            // onClick={onClick}
+            onClick={() => onSell()}
             className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
             // disabled={formState.isDisabled}
             // onClick={() => {

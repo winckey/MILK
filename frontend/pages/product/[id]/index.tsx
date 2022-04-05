@@ -7,6 +7,7 @@ import type { NextPage } from "next";
 // import Image from "next/image";
 import { useRouter } from "next/router";
 import {
+  connectWallet,
   findNFT,
   loadMarketItems,
   marketContract,
@@ -56,23 +57,13 @@ const Product: NextPage = () => {
     setSelectedSell(null);
   };
 
-  // 관이 part
-  // const brand = "Celine";
-  console.log(router);
-  console.log(nftId);
-  console.log(typeof nftId);
-  // console.log(router);
-  // console.log(image);
-  // console.log(typeof image);
-
-  // router에서 받아온 id로 요청 후 받은 데이터 (임시 참고용)
-  // const nftId = router.query.nftId?.toString();
   const [response, setResponse] = useState<IResponse | undefined>();
 
   const getNFT = async () => {
     const res = await findNFT(nftId);
     console.log(res);
     setResponse(Object(res));
+    setNftUser(res?.address);
     // return res;
   };
 
@@ -80,33 +71,44 @@ const Product: NextPage = () => {
     await getNFT();
   };
 
-  // const response = getNFT();
-  // const res3 = async () => {
-  //   const res = await findNFT(nftId);
-  //   let resp = [];
-  //   resp?.push({
-  //     nftId: nftId,
-  //     address: res?.address.toString(),
-  //     image: res?.image.toString(),
-  //     name: res?.name.toString(),
-  //     description: res?.description.toString(),
-  //     edition: res?.edition,
-  //     product: res?.product,
-  //     nickname: res?.nickname.toString(),
-  //   });
-  //   setResponse(resp);
-  // };
+  const [nftUser, setNftUser] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
 
-  console.log(response);
+  const getAccount = async () => {
+    const currentAccounts = await connectWallet();
+    setCurrentUser(currentAccounts.address);
+    await validation();
+  };
 
-  // console.log(response);
-  // const nftres = async () => {
-  //   const res = await getNFT(nftId).then((res) => setResponse(res));
+  const validation = async () => {
+    if (nftUser === currentUser) {
+      setIsOwner(true);
+      console.log(true);
+    } else {
+      setIsOwner(false);
+      console.log(false);
+    }
+  };
+
+  const [isProduct, setIsProduct] = useState(false);
+  const onProduct = () => {
+    if (response?.product) {
+      setIsProduct(true);
+    } else {
+      setIsProduct(false);
+    }
+  };
+  const getAlert = () => {
+    if (!isProduct) {
+      alert("실물화가 불가능한 상품입니다.");
+    }
+  };
+
+  // const buyMarketItem = async (item) => {
+  //   await (
+  //     await marketplace.purchaseItem(item.itemid, { value: item.totalPrice })
+  //   ).wait();
   // };
-  // const res3 = await getNFT(nftId);
-  // console.log(res3);
-  // setResponse(res3);
-  // console.log(response);
 
   useEffect(() => {
     (async () => {
@@ -121,29 +123,13 @@ const Product: NextPage = () => {
       );
       const json2 = await res2.json();
       setExchange(json2[0].basePrice);
-      resp();
+      await resp();
+      await getAccount();
+      onProduct();
     })();
-  }, [nftId]);
+  }, [nftId, isOwner]);
 
-  const loadContracts = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const res1 = await marketContract(signer);
-    const res2 = await nftContract(signer);
-    // setitems(items);
-    setMarketplace(res1);
-    setNFT(res2);
-    // setLoading(false);
-    // setId(items.id);
-    // console.log(id);
-    // console.log(marketplace);
-  };
-
-  // const buyMarketItem = async (item) => {
-  //   await (
-  //     await marketplace.purchaseItem(item.itemid, { value: item.totalPrice })
-  //   ).wait();
-  // };
+  console.log(response);
 
   return (
     <Layout seoTitle="제품명">
@@ -320,9 +306,10 @@ const Product: NextPage = () => {
                           <div className="w-full contents">
                             <div className="inline-flex w-full">
                               <button
-                                onClick={() =>
-                                  setSelectedRealization(response!)
-                                }
+                                onClick={() => {
+                                  setSelectedRealization(response?.product);
+                                  getAlert();
+                                }}
                                 className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full"
                               >
                                 <div className="mr-3 flex">

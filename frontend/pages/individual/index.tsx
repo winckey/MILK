@@ -16,7 +16,7 @@ const Individual: NextPage = () => {
   const { data } = useSWR<IndividualResponse>(
     `${process.env.BASE_URL}/nft/search?ownerIsEnterprise=false`
   );
-  // console.log(data);
+  console.log(data);
 
   return (
     <Layout seoTitle="개인관">

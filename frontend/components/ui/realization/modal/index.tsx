@@ -1,7 +1,9 @@
 import useMutation from "@libs/client/useMutation";
+import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { marketContract, nftContract } from "utils/interact";
 
 import { Modal } from "../../common";
 
@@ -52,6 +54,8 @@ import { Modal } from "../../common";
 //   price: string;
 //   type: boolean;
 // }
+
+declare let window: any;
 
 interface RealizationModalProps {
   nft: any;
@@ -120,14 +124,30 @@ export default function RealizationModal({
     }
   };
 
+  const [realize, setRealize] = useState<string>();
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const marketplace = async () => {
+    const res = await marketContract(signer);
+    setRealize(res.address);
+  };
+
+  const onRealization = async () => {
+    const res = await nftContract(signer);
+    res.Realization(realize, nftId);
+  };
+
   // server 응답 받았을 때 실행
   useEffect(() => {
     if (data && data.statusCode === 200) {
       alert(`신청이 완료되었습니다!`);
       router.push(`/account/realization`); // 실물화 내역 페이지로 이동
     }
+    marketplace();
   }, [data, router]);
 
+  console.log(realize);
   // 취소 버튼
   const closeModal = () => {
     setIsOpen(false);
@@ -250,6 +270,7 @@ export default function RealizationModal({
 
               <div className="flex">
                 <button
+                  onClick={() => onRealization()}
                   className="rounded-[10px] font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full mr-2"
                   // onClick={() => {
                   //   onSubmit(order, course);
