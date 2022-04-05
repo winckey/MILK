@@ -16,16 +16,17 @@ const ProfileFavorite: NextPage = () => {
       ? `${process.env.BASE_URL}/nft/like/${router.query.nickname}`
       : null
   );
+  console.log(data);
 
   return (
     <Layout seoTitle="프로필">
       <ProfileLayout>
         <div className="border-t">
           <div className="px-[52px] mt-8">
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
-              {data && data?.nftDtoList?.length > 0 ? (
-                <>
-                  {data.nftDtoList.map((nft) => (
+            {data && data?.nftDtoList?.length > 0 ? (
+              <>
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
+                  {data.nftDtoList?.map((nft) => (
                     <Item
                       key={nft.nftId}
                       enterprise={nft.enterprise}
@@ -36,11 +37,13 @@ const ProfileFavorite: NextPage = () => {
                       price={nft.price}
                     />
                   ))}
-                </>
-              ) : (
-                <div>없어</div>
-              )}
-            </div>
+                </div>
+              </>
+            ) : (
+              <div className="mx-9 my-6 h-[248px] text-center border flex flex-col justify-center items-center text-[28px] text-textGray">
+                아직 선호하는 상품이 없습니다.
+              </div>
+            )}
           </div>
         </div>
       </ProfileLayout>
