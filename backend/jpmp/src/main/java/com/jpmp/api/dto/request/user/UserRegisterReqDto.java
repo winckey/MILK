@@ -28,7 +28,7 @@ public class UserRegisterReqDto {
 
     @NotBlank
     @ApiModelProperty(name="유저 이름", example="장현진")
-    private String userName;
+    private String realName;
 
     @NotBlank
     @ApiModelProperty(name="닉네임", example="냠냠")
@@ -36,6 +36,7 @@ public class UserRegisterReqDto {
 
     @ApiModelProperty(name="전화번호", example="010-1234-5678")
     private String phone;
+    
 
     @ApiModelProperty(name="자기소개", example="안녕하세요")
     private String description;
@@ -52,17 +53,5 @@ public class UserRegisterReqDto {
 //    @Column(name = "user_role")
 //    private UserRole userRole;
 
-    public User toEntity() {
-        return User.builder()
-                .email(email)
-                .password(password)
-                .nickname(nickname)
-                .userName(userName)
-                .phone(phone)
-                .description(description)
-                .address1(address1)
-                .address2(address2)
-                .zipCode(zipCode)
-                .build();
-    }
+
 }

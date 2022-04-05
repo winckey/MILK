@@ -1,14 +1,14 @@
-import Layout from "@components/ui/layout";
+import { Layout } from "@components/ui/layout";
 import useMutation from "libs/client/useMutation";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface ISignupForm {
   email: string;
   password: string;
   checkPw: string; // 비밀번호 확인
-  userName: string;
+  realName: string;
   nickname: string;
 }
 
@@ -22,7 +22,7 @@ export default function Signup() {
 
   // request
   const [signup, { loading, data, error }] =
-    useMutation<ISignupResponse>("/api/user");
+    useMutation<ISignupResponse>("/user");
 
   // input 값 받아옴
   const {
@@ -32,6 +32,13 @@ export default function Signup() {
     getValues,
     watch,
   } = useForm<ISignupForm>({ mode: "onBlur" });
+
+  // 중복검사 시작했는지 확인 (중복검사를 시작했을때부터 SuccessMessage 보이기 위함)
+  const [startCheckNick, setStartCheckNick] = useState(false);
+  const changeStartCheckNick = () => {
+    setStartCheckNick(true);
+    return true;
+  };
 
   // form 제출 시 실행
   const onValid = (formData: ISignupForm) => {
@@ -54,7 +61,7 @@ export default function Signup() {
   return (
     <Layout seoTitle="회원가입">
       <div>
-        <div className="flex items-center pt-20">
+        <div className="flex items-center ">
           <div className="hidden lg:flex flex-row justify-center items-center  w-[50%] min-h-screen bg-gradient-to-r from-gold to-lightGold">
             <div className="flex flex-col justify-center text-left">
               <div className="text-4xl lg:text-5xl text-white font-bold pb-10">
@@ -78,20 +85,6 @@ export default function Signup() {
             <div className="text-3xl font-bold ">
               <h3>MILC에 오신 것을</h3>
               <h3>환영합니다</h3>
-            </div>
-            <div className="grid grid-cols-2 mt-6 pt-4 gap-3 ">
-              <button
-                // onClick={onCompany}
-                className="flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold text-gray-500 hover:bg-gradient-to-r from-gold to-lightGold hover:text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-              >
-                명품유저
-              </button>
-              <button
-                // onClick={onUser}
-                className="flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold text-gray-500 hover:bg-gradient-to-r from-gold to-lightGold hover:text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-              >
-                개인유저
-              </button>
             </div>
             <div className="py-4 ">
               <form onSubmit={handleSubmit(onValid)}>
@@ -230,7 +223,7 @@ export default function Signup() {
                       </span>
                     </div>
                     <input
-                      {...register("userName", {
+                      {...register("realName", {
                         required: "필수 정보입니다.",
                         pattern: {
                           value: /^[가-힣]*$/,
@@ -242,7 +235,7 @@ export default function Signup() {
                     />
                   </div>
                   <span className="text-xs text-[#ff5e57]">
-                    {errors?.userName?.message}
+                    {errors?.realName?.message}
                   </span>
                   <div className="flex flex-wrap items-stretch w-full mb-2 relative h-15 bg-white  rounded  pr-10">
                     <div className="flex -mr-px justify-center w-15 p-4">
@@ -271,22 +264,36 @@ export default function Signup() {
                           message:
                             "2~10자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
                         },
-                        validate: {},
+                        validate: {
+                          checkNickname: async (value) =>
+                            (await fetch(
+                              `${process.env.BASE_URL}/user/nickname/${value}`
+                            )
+                              .then((res) => res.json())
+                              .then((result) => result))
+                              ? startCheckNick
+                                ? true
+                                : changeStartCheckNick()
+                              : "이미 사용중인 닉네임 입니다.",
+                        },
                       })}
                       maxLength={10}
                       className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow  leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="닉네임"
                     />
                   </div>
-                  <span className="text-xs text-[#ff5e57]">
-                    {errors?.nickname?.message}
-                  </span>
+                  {startCheckNick && !errors?.nickname?.message ? (
+                    <span className="text-xs text-[#05c46b]">
+                      사용 가능한 닉네임 입니다.
+                    </span>
+                  ) : (
+                    <span className="text-xs text-[#ff5e57]">
+                      {errors?.nickname?.message}
+                    </span>
+                  )}
                 </div>
                 <div className="my-8">
-                  <button
-                    // onClick={}
-                    className="w-full flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
-                  >
+                  <button className="w-full flex justify-center items-center py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white">
                     회원가입
                   </button>
                 </div>

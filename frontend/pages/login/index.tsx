@@ -1,43 +1,52 @@
-import Layout from "@components/ui/layout";
+import { Layout } from "@components/ui/layout";
 import useMutation from "libs/client/useMutation";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
-import { accessToken } from "@components/atoms/Auth";
+import { accessToken, role } from "@components/atoms/Auth";
 
 interface ILoginForm {
   email: string;
   password: string;
 }
 
-// interface IUser {
-//   age: number;
-//   birthDate: string;
-//   description: string;
-//   email: string;
-//   gender: string;
-//   id: number;
-//   img: boolean;
-//   imgUrl: string;
-//   nickname: string;
-//   phone: string;
-//   provider: string;
-//   regDate: string;
-//   userId: string;
-// }
+interface IUser {
+  address1: string;
+  address2: string;
+  backgroundImg: string;
+  description: string;
+  email: string;
+  id: number;
+  nickname: string;
+  phone: string;
+  proImg: string;
+  userName: string;
+  userRole: string;
+  zipCode: string;
+}
 
 interface ILoginResponse {
-  accessToken: string;
   message: string;
-  statusCode: number;
-  user: any;
+
+  // success
+  accessToken?: string;
+  refreshToken?: string;
+  statusCode?: number;
+  user?: IUser;
+
+  // error
+  code?: string;
+  error?: string;
+  requestUrl?: string;
+  status?: number;
 }
 
 export default function Login() {
   const router = useRouter();
 
   const setTOKEN = useSetRecoilState(accessToken);
+  const setRole = useSetRecoilState(role);
 
   // input 값 받아옴
   const {
@@ -49,7 +58,7 @@ export default function Login() {
 
   // onValid form data DB에 요청
   const [login, { loading, data, error }] =
-    useMutation<ILoginResponse>("/api/user/login");
+    useMutation<ILoginResponse>("/user/login");
 
   // form 제출 시 실행
   const onValid = (formData: ILoginForm) => {
@@ -57,20 +66,24 @@ export default function Login() {
     if (loading) return;
     login(formData);
   };
-  console.log(data);
 
   // server 응답 받았을 때 실행
   useEffect(() => {
     if (data && data.statusCode === 200) {
       setTOKEN(data.accessToken); // recoil에 토큰 저장
+      setRole(data.user?.userRole); // recoil에 계정 구분 저장
       router.push("/"); // 메인 페이지로 이동
+    } else if (data && data.status === 401) {
+      alert("비밀번호가 잘못 입력 되었습니다.");
+    } else if (data && data.status === 404) {
+      alert("아이디가 잘못 입력 되었습니다.");
     }
   }, [data, router]);
 
   return (
     <Layout seoTitle="로그인">
       <div>
-        <div className="flex items-center pt-20">
+        <div className="flex items-center">
           <div className="flex flex-row justify-center items-center w-[50%] min-h-screen bg-gradient-to-r from-gold to-lightGold">
             <div className="flex flex-col justify-center text-left">
               <div className="text-4xl lg:text-5xl text-white font-bold pb-10">

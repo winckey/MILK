@@ -1,50 +1,93 @@
-import { accessToken } from "@components/atoms/Auth";
+import { IoClose, IoMenu } from "react-icons/io5";
+import SearchBar from "./SearchBar";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { accessToken, role } from "@components/atoms/Auth";
+import { useState } from "react";
+import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { IoMenu } from "react-icons/io5";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { useLocation } from "wouter";
+// hi
 
-export const Button = (props: any) => {
-  return (
-    <div
-      className=" btn bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
-    duration-500"
-    >
-      {props.children}
-    </div>
-  );
-};
-
-export default function Navbar() {
-  const router = useRouter();
-  // const [TOKEN, setTOKEN] = useRecoilState(accessToken);
+function MyDropdown({ logout, role }: any) {
   const [open, setOpen] = useState(false);
-  // const logout = () => {
-  //   localStorage.clear();
-  //   setTOKEN("");
-  // };
+  function toggleOpen() {
+    setOpen(!open);
+  }
+  return (
+    <Menu as="div" className="flex py-3 hover:bg-gold px-3 border rounded-full">
+      <Menu.Button
+        onClick={() => {
+          toggleOpen();
+        }}
+      >
+        유저
+      </Menu.Button>
 
+      <Menu.Items className="absolute mt-10 mr-2    flex flex-col right-0 bg-white rounded-md shadow-lg border">
+        <Menu.Item>
+          <Link href="/account/edit">
+            <a className="px-4 py-2 hover:bg-gray-300 text-gray-500">
+              프로필 수정
+            </a>
+          </Link>
+        </Menu.Item>
+        {role === "ROLE_ADMIN" ? (
+          <Menu.Item>
+            <Link href="/signup/partner">
+              <a className="px-4 py-2 hover:bg-gray-300 text-gray-500">
+                계정 관리
+              </a>
+            </Link>
+          </Menu.Item>
+        ) : (
+          <Menu.Item>
+            <a
+              className="px-4 py-2 hover:bg-gray-300 text-gray-500"
+              href="/show/arts"
+            >
+              나의 전시관
+            </a>
+          </Menu.Item>
+        )}
+        <Menu.Item>
+          <a
+            onClick={logout}
+            className="px-4 py-2 cursor-pointer hover:bg-gray-300 text-gray-500"
+          >
+            로그아웃
+          </a>
+        </Menu.Item>
+      </Menu.Items>
+    </Menu>
+  );
+}
+
+export default function Header() {
+  const [TOKEN, setTOKEN] = useRecoilState(accessToken);
+  const getRole = useRecoilValue(role);
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const logout = () => {
+    router.push("/");
+    localStorage.clear();
+    setTOKEN("");
+  };
   const AllLinks = [
-    { name: "개인관", link: "/user" },
+    { name: "개인관", link: "/individual" },
     { name: "명품관", link: "/brand" },
+    { name: "라이브 경매", link: "/streams" },
   ];
   const UserLinks = [
-    { name: "개인관", link: "/user" },
+    { name: "개인관", link: "/individual" },
     { name: "명품관", link: "/brand" },
-    { name: "전시관", link: "/show/arts" },
-    { name: "나의 정보", link: "/account" },
+    { name: "CREATE", link: "/create" },
   ];
 
   return (
-    <div className="shadow-md w-full fixed top-0 left-0  ">
-      <div className="md:flex items-center justify-between h-[80px] bg-ourBlack py-4 md:px-10 px-7">
-        <div
-          className="font-bold text-2xl cursor-pointer flex items-center  
-      text-gray-800"
-        >
-          <span className="text-4xl bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
+    <div className="shadow-md w-full bg-ourBlack z-10 h-[80px] fixed top-0 left-0 text-white">
+      <div className="flex items-center justify-between md:pt-4  bg-ourBlack   px-2">
+        <div className="font-bold text-2xl cursor-pointer flex pl-4  ">
+          <span className="text-4xl pt-4 md:pt-0 bg-clip-text  text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
             <Link href={"/"}>
               <a>MILC</a>
             </Link>
@@ -53,70 +96,58 @@ export default function Navbar() {
 
         <div
           onClick={() => setOpen(!open)}
-          className="text-3xl absolute right-8 top-6 cursor-pointer text-gold
+          className="text-3xl absolute right-8 top-6 flex cursor-pointer text-gold
           md:hidden"
         >
           <IoMenu />
         </div>
 
         <ul
-          className={`md:flex md:items-center  md:pb-0 pb-8 absolute md:static bg-ourBlack md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-500 ease-in ${
-            open ? "top-14 " : "top-[-490px]"
+          className={`md:flex md:items-center md:flex-row flex flex-col md:pb-0 pb-8 absolute md:static bg-ourBlack z-auto  left-0 w-full md:w-auto md:pl-0 px-9 transition-all duration-500 ease-in md:gap-x-2 ${
+            open ? "top-16 gap-y-5 pt-2 md:pt-0" : " top-[-490px]"
           }`}
         >
-          <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href={"/user/index"}>
-              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
-                개인관
-              </a>
-            </Link>
-          </li>
-          <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href={"/brand/index"}>
-              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
-                명품관
-              </a>
-            </Link>
-          </li>
-          <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href={"/show/arts"}>
-              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
-                전시관
-              </a>
-            </Link>
-          </li>
-          <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link href="/account/index">
-              <a className=" bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold hover:text-slate-600 duration-500">
-                나의 정보
-              </a>
-            </Link>
-          </li>
-
-          <div className="flex justify-start gap-3 md:gap-0">
-            {/* {TOKEN ? (
-              <button
-                className=" bg-gradient-to-r font-bold text-xl from-gold to-lightGold text-white  shadow-md focus:outline-none  py-2 px-4 rounded md:ml-8 
-    duration-500"
-                onClick={logout}
-              >
-                로그아웃
-              </button>
-            ) : ( */}
-            <>
-              <Link href="/login">
-                <a>
-                  <Button>로그인</Button>
-                </a>
-              </Link>
-
-              <Link href="/signup">
-                <a>
-                  <Button>회원가입</Button>
-                </a>
-              </Link>
-            </>
-            {/* )} */}
+          <SearchBar />
+          {!TOKEN
+            ? AllLinks.map((link) => (
+                <li key={link.name} className=" text-xl  ">
+                  <Link href={`${link.link}`}>
+                    <a className="cursor-pointer btn p-2 px-3 rounded-md d hover:bg-gold hover:duration-200">
+                      {link.name}
+                    </a>
+                  </Link>
+                </li>
+              ))
+            : UserLinks.map((link) => (
+                <li key={link.name} className=" text-xl ">
+                  <Link href={`${link.link}`}>
+                    <a className="cursor-pointer btn  p-2 px-3 rounded-md  hover:bg-gold hover:duration-200">
+                      {link.name}
+                    </a>
+                  </Link>
+                </li>
+              ))}
+          <div className="flex md:border-l-2 md:border-gray-400 text-xl md:pl-3 justify-start gap-3 ">
+            {TOKEN ? (
+              <MyDropdown logout={logout} role={getRole} />
+            ) : (
+              <>
+                <Link href="/login">
+                  <a>
+                    <div className="cursor-pointer btn  p-2 px-3 rounded-md  hover:bg-gold hover:duration-200">
+                      로그인
+                    </div>
+                  </a>
+                </Link>
+                <Link href="/signup">
+                  <a>
+                    <div className="cursor-pointer btn  p-2 px-3 rounded-md  hover:bg-gold hover:duration-200">
+                      회원가입
+                    </div>
+                  </a>
+                </Link>
+              </>
+            )}
           </div>
         </ul>
       </div>

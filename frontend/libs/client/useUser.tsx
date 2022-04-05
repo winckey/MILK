@@ -1,4 +1,8 @@
+// 수정 금지
+
 import useSWR from "swr";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { accessToken } from "@components/atoms/Auth";
 
@@ -8,8 +12,8 @@ interface IEditProfileResponse {
   user: any;
 }
 
-// Only useUser fetcher
-const fetcher = (url: string, token: string) =>
+// accessToken 필요한 fetcher
+export const tokenFetcher = (url: string, token: string) =>
   fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -18,13 +22,20 @@ const fetcher = (url: string, token: string) =>
 
 export default function useUser() {
   const TOKEN = useRecoilValue(accessToken);
-  // console.log(TOKEN);
 
   const { data, error } = useSWR<IEditProfileResponse>(
-    ["http://j6e206.p.ssafy.io:8080/api/user/info", TOKEN],
-    fetcher
+    [`${process.env.BASE_URL}/user/info`, TOKEN],
+    tokenFetcher
   );
-  // console.log(data);
+
+  // 로그인 하지 않은 사용자 처리
+  const router = useRouter();
+  useEffect(() => {
+    if (data && data.statusCode !== 200) {
+      alert("회원 전용 페이지입니다. 로그인해 주십시오.");
+      router.replace("/login"); // 로그인 페이지로 이동 (replace가 브라우저 history 남기지 않음)
+    }
+  }, [data, router]);
 
   return { user: data?.user, isLoading: !data && !error };
 }

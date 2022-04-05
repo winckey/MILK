@@ -3,19 +3,17 @@
 version: '3.2'
 
 services: 
-  frontend:
-    image: frontend-vue
-    build:
-      context: frontend/
-      dockerfile: dockerfile
-    ports:
-      - "80:80"
-      - "443:443"
+  # frontend:
+  #   image: frontend-next
+  #   build: 
+  #     context: frontend/
+  #     dockerfile: dockerfile
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - /home/ubuntu/docker-volume/ssl2:/var/www/html
+  #   container_name: "frontend"
 
-    volumes:
-      - /home/ubuntu/docker-volume/ssl2:/var/www/html
-    container_name: "frontend"
-  
   backend:
     image: backend-spring
     build:
@@ -23,7 +21,7 @@ services:
       dockerfile: dockerfile
     ports:
       - "8080:8080"  
-
     volumes:
       - /home/ubuntu/docker-volume/ssl2:/root
     container_name: "backend"
+  

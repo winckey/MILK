@@ -9,3 +9,10 @@ export const accessToken = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+// 계정 구분
+export const role = atom({
+  key: "role",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});

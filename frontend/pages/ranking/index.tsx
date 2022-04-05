@@ -1,10 +1,9 @@
-import { Navbar } from "@components/ui/common";
+// import { Navbar } from "@components/ui/common";
 import type { NextPage } from "next";
 
 const Ranking: NextPage = () => {
   return (
     <>
-      <Navbar />
       <div className="px-28 pt-32  ml-4 mr-4 min-h-screen w-full">
         {/* 랭킹 및 필터링 */}
         <div className="flex items-center px-12 pb-4 justify-between">

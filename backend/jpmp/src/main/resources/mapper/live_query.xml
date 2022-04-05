@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jpmp.api.dao.LiveDao">
+
+    <insert  id="register" parameterType="com.jpmp.api.dto.request.live.LiveDto">
+        insert into live ( user_id, nickname, cf_key, cf_id, cf_url, room_name, startprice, runtime, nft_id )
+        values (  #{userId}, #{nickname}, #{cfKey}, #{cfId} , #{cfUrl} , #{roomName} , #{startprice} ,#{runtime}, #{nftId} )
+        <selectKey keyProperty="roomId" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getLiveList" resultType="com.jpmp.api.dto.request.live.LiveDto">
+        select * from live
+    </select>
+
+    <update id="finishLive" parameterType="int">
+        update live
+        set finish = 1
+        where room_id = #{roomId}
+    </update>
+
+    <select id="getLive" parameterType="int" resultType="com.jpmp.api.dto.request.live.LiveDto">
+        select *
+          from live
+         where room_id = #{roomId}
+    </select>
+
+</mapper>

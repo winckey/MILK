@@ -10,8 +10,6 @@ npm run dev
 yarn dev
 ```
 
-
-
 ## 설치
 
 ### UI
@@ -73,9 +71,9 @@ npm i react-icons
 - three.js
 
 ```bash
-# 리액트용 three js 라이브러리 
-npm i @react-three/drei @react-three/fiber three 
-# 캔버스, 카메라 구도 및 추가 훅 사용을 위한 라이브러리 설치 
+# 리액트용 three js 라이브러리
+npm i @react-three/drei @react-three/fiber three @react-three/cannon
+# 캔버스, 카메라 구도 및 추가 훅 사용을 위한 라이브러리 설치
 npm i use-cannon uuid-by-string wouter
 ```
 
@@ -88,7 +86,27 @@ npm i recoil@0.5.1
 npm i recoil-persist
 ```
 
+- 채팅
 
+```bash
+npm i sockjs-client stompjs
+npm i --save-dev @types/stompjs @types/sockjs-client
+
+# net 오류 부분 방지
+npm i net -S
+```
+
+- aos
+
+```bash
+npm i --save-dev @types/aos
+```
+
+- styled-components
+
+```bash
+npm i --save-dev @types/styled-components
+```
 
 ### Providers
 
