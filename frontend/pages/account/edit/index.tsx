@@ -42,7 +42,7 @@ interface IEditProfileForm {
 const EditProfile: NextPage = () => {
   const router = useRouter();
   const { user, isLoading } = useUser();
-  console.log(user);
+  // console.log(user);
 
   // input 값 받아옴
   const {

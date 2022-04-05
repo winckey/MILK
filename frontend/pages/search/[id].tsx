@@ -28,7 +28,7 @@ const Search: NextPage = () => {
   const [sortSelected, setSortSelected] = useState("");
   const [roomSelected, setRoomSelected] = useState("");
   const [selectedPrice, setSelectedPrice] = useState([0, 99999]);
-
+  const [priceRange, setPriceRange] = useState(9999);
   const router = useRouter();
   const { id } = router.query;
   console.log(id);
@@ -36,16 +36,20 @@ const Search: NextPage = () => {
 
   // 해당 변수들(필터링, 검색키워드, 정렬) 파라미터 적용하여 변화감지할때마다 api 요청
   async function handler() {
-    if (roomSelected && sortSelected) {
-    }
     const data = await (
       await fetch(
         `${process.env.BASE_URL}/nft/search?enterprise=${id}&ownerIsEnterprise=${roomSelected}&sort=${sortSelected}`
       )
     ).json();
-    setList(data.nftDtoList);
+    console.log(data.statusCode);
+    if (data.statusCode === 404) {
+      alert("검색결과가 없습니다!");
+    } else {
+      setList(data.nftDtoList);
+    }
   }
 
+  console.log(list);
   useEffect(() => {
     handler();
   }, [id, sortSelected, roomSelected, selectedPrice]);
