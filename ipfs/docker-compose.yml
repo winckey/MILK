@@ -41,6 +41,8 @@ services:
       - "9000:8080" # ipfs gateway - expose if needed/wanted
     volumes:
       - ./compose/ipfs0:/data/ipfs
+      - /home/ubuntu/docker-volume/ssl2:/var/www/html
+
       
   cluster0:
     container_name: cluster0
@@ -63,6 +65,7 @@ services:
           # - "9096:9096" # Cluster IPFS Proxy endpoint
     volumes:
       - ./compose/cluster0:/data/ipfs-cluster
+      - /home/ubuntu/docker-volume/ssl2:/var/www/html
 
 ##################################################################################
 ## Cluster PEER 1 ################################################################
@@ -74,6 +77,7 @@ services:
     image: ipfs/go-ipfs:latest
     volumes:
       - ./compose/ipfs1:/data/ipfs
+      - /home/ubuntu/docker-volume/ssl2:/var/www/html
 
   cluster1:
     container_name: cluster1
@@ -88,6 +92,7 @@ services:
       CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
     volumes:
       - ./compose/cluster1:/data/ipfs-cluster
+      - /home/ubuntu/docker-volume/ssl2:/var/www/html
 
 ##################################################################################
 ## Cluster PEER 2 ################################################################
@@ -99,6 +104,7 @@ services:
     image: ipfs/go-ipfs:latest
     volumes:
       - ./compose/ipfs2:/data/ipfs
+      - /home/ubuntu/docker-volume/ssl2:/var/www/html
 
   cluster2:
     container_name: cluster2
@@ -113,6 +119,7 @@ services:
       CLUSTER_MONITORPINGINTERVAL: 2s # Speed up peer discovery
     volumes:
       - ./compose/cluster2:/data/ipfs-cluster
+      - /home/ubuntu/docker-volume/ssl2:/var/www/html
 
 # For adding more peers, copy PEER 1 and rename things to ipfs2, cluster2.
 # Keep bootstrapping to cluster0.
