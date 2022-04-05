@@ -3,16 +3,16 @@
 version: '3.2'
 
 services: 
-   frontend:
-     image: frontend-next
-     build: 
-       context: frontend/
-       dockerfile: dockerfile
-     ports:
-       - 3000:3000
-     volumes:
-       - /home/ubuntu/docker-volume/ssl2:/var/www/html
-     container_name: "frontend"
+  #  frontend:
+  #    image: frontend-next
+  #    build: 
+  #      context: frontend/
+  #      dockerfile: dockerfile
+  #    ports:
+  #      - 3000:3000
+  #    volumes:
+  #      - /home/ubuntu/docker-volume/ssl2:/var/www/html
+  #    container_name: "frontend"
 
    backend:
     image: backend-spring
