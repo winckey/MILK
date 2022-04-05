@@ -68,4 +68,18 @@ public class LiveController {
         return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
     }
 
+    @GetMapping("/{roomId}")
+    @ApiOperation(value = "경매방 상세정보")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "방없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<LiveListResDto> getLive(@PathVariable int roomId){
+
+        LiveDto liveDto = liveService.getLive(roomId);
+
+        return ResponseEntity.status(200).body(LiveListResDto.of(200, "Success", liveDto));
+    }
 }

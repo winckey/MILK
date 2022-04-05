@@ -1,15 +1,18 @@
 package com.jpmp.api.dto.request.live;
 
+import com.jpmp.api.dto.response.BaseResponseBody;
+import com.jpmp.api.dto.response.live.LiveListResDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @Getter
 @Setter
 @ToString
-public class LiveDto {
+public class LiveDto extends BaseResponseBody {
 
     @ApiModelProperty(name = "경매방 Id", hidden = true)
     private int roomId;
@@ -40,4 +43,7 @@ public class LiveDto {
 
     @ApiModelProperty(example = "값 전달 하지 마세요!!!!!",  hidden = true)
     private boolean finish;
+
+    @ApiModelProperty(name = "nft 아이디", example = "nft id")
+    private String nftId;
 }

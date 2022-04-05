@@ -26,10 +26,23 @@ public class LiveListResDto extends BaseResponseBody {
         return res;
     }
 
+    public static LiveListResDto of(Integer statusCode, String message, LiveDto liveDto) {
+        LiveListResDto res = new LiveListResDto();
+        res.setStatusCode(statusCode);
+        res.setMessage(message);
+        res.setLiveDto(liveDto);
+        return res;
+    }
+
     public void setLiveDtoList(List<LiveDto> liveList) {
         LiveDtoList = new ArrayList<>();
         for (int i =0 ; i < liveList.size() ; i ++){
             LiveDtoList.add(liveList.get(i));
         }
+    }
+
+    public void setLiveDto(LiveDto liveDto) {
+        LiveDtoList = new ArrayList<>();
+        LiveDtoList.add(liveDto);
     }
 }
