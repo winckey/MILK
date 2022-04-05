@@ -14,6 +14,7 @@ import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.user.UserRepository;
 import com.jpmp.exception.CustomException;
 import com.jpmp.exception.ErrorCode;
+import com.querydsl.core.Tuple;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +92,7 @@ public class NFTController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<BaseResponseBody> sellNft(@ApiIgnore Authentication authentication,
-                                                        @Valid @RequestBody @ApiParam(value = "nft 토큰 id", required = true) NFTDto nftDto) {
+                                                    @Valid @RequestBody @ApiParam(value = "nft 토큰 id", required = true) NFTDto nftDto) {
 
         User userDetails = userRepository.findByUsername(getUsername());
         nftService.sellNFT(userDetails, nftDto);
@@ -111,12 +112,18 @@ public class NFTController {
         User userDetails = userRepository.findByUsername(getUsername());
 
         List<Nft> nftList = nftService.getNftList(userDetails);
-
-        return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+        if (userDetails != null) {
+            List<Nft> likeList = nftService.getNftLikeList(userDetails);
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList, likeList));
+        } else {
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+        }
     }
 
+
+
     @GetMapping("/user/{nickname}")
-    @ApiOperation(value = "나의 nft 조회", notes = "자신이 소유한 nft 조회")
+    @ApiOperation(value = "타인의 nft 조회", notes = "타인이 소유한 nft 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
@@ -128,7 +135,12 @@ public class NFTController {
 
         List<Nft> nftList = nftService.getNftList(userDetails);
 
-        return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+        if (userDetails != null) {
+            List<Nft> likeList = nftService.getNftLikeList(userDetails);
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList, likeList));
+        } else {
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+        }
     }
 
 
@@ -144,12 +156,16 @@ public class NFTController {
         User userDetails = userRepository.findByUsername(getUsername());
 
         List<Nft> nftList = nftService.getNftLikeList(userDetails);
-
-        return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+        if (userDetails != null) {
+            List<Nft> likeList = nftService.getNftLikeList(userDetails);
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList, likeList));
+        } else {
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+        }
     }
 
     @GetMapping("/like/{nickname}")
-    @ApiOperation(value = "나의 좋아요 nft 조회", notes = "자신이 좋아요한 nft 조회")
+    @ApiOperation(value = "타인의 좋아요 nft 조회", notes = "타인이 좋아요한 nft 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
@@ -157,11 +173,16 @@ public class NFTController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<NFTListResDto> getNftMyLikeListByNickname(@NotNull @PathVariable String nickname) {
+
         User userDetails = userRepository.findByNickname(nickname).get();
 
         List<Nft> nftList = nftService.getNftLikeList(userDetails);
-
-        return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+        if (userDetails != null) {
+            List<Nft> likeList = nftService.getNftLikeList(userDetails);
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList, likeList));
+        } else {
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+        }
     }
 
 
@@ -173,14 +194,14 @@ public class NFTController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<NFTListResDto> getNftList(@RequestParam(value = "keyword",  defaultValue = "") String keyword,
-                                                       @RequestParam(value = "enterprise",  defaultValue = "") String enterprise,
-                                                       @RequestParam(value = "max",  defaultValue = "9999999") int max,
-                                                       @RequestParam(value = "min",  defaultValue = "0") int min,
-                                                       @RequestParam(value = "ownerIsEnterprise", defaultValue = "") Boolean ownerIsEnterprise,
-                                                       @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {//https://brunch.co.kr/@kd4/158
+    public ResponseEntity<NFTListResDto> getNftList(@RequestParam(value = "keyword", defaultValue = "") String keyword,
+                                                    @RequestParam(value = "enterprise", defaultValue = "") String enterprise,
+                                                    @RequestParam(value = "max", defaultValue = "9999999") int max,
+                                                    @RequestParam(value = "min", defaultValue = "0") int min,
+                                                    @RequestParam(value = "ownerIsEnterprise", defaultValue = "") Boolean ownerIsEnterprise,
+                                                    @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {//https://brunch.co.kr/@kd4/158
         ///members?page=0&size=3&sort=id,desc&sort=username,desc
-        System.out.println("enterprise : " +enterprise);
+        System.out.println("enterprise : " + enterprise);
 
 
         User enterpriseEntity =
@@ -195,29 +216,35 @@ public class NFTController {
                 .ownerIsEnterprise(ownerIsEnterprise)
                 .build();
 
-
+        User userDetails = userRepository.findByUsername(getUsername());
         List<Nft> nftList = nftService.getNftList(nftSearchReqDto, pageable);
 
+        if (userDetails != null) {
+            List<Nft> likeList = nftService.getNftLikeList(userDetails);
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList, likeList));
+        } else {
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+        }
 
-        return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+
     }
 
 
-    @GetMapping("/{owner}")
-    @ApiOperation(value = "중고 / 명품 nft 조회", notes = "nft 카테고리별 조회")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 404, message = "사용자 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
-    })
-    public ResponseEntity<BaseResponseBody> getNft(@ApiIgnore Authentication authentication, @NotBlank @PathVariable Boolean ownerIsEnterprise) {
-        User userDetails = userRepository.findByUsername(getUsername());
-
-        nftService.getNftList(userDetails, ownerIsEnterprise);
-
-        return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
-    }
+//    @GetMapping("/{owner}")
+//    @ApiOperation(value = "중고 / 명품 nft 조회", notes = "nft 카테고리별 조회")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "성공"),
+//            @ApiResponse(code = 401, message = "인증 실패"),
+//            @ApiResponse(code = 404, message = "사용자 없음"),
+//            @ApiResponse(code = 500, message = "서버 오류")
+//    })
+//    public ResponseEntity<BaseResponseBody> getNft(@ApiIgnore Authentication authentication, @NotBlank @PathVariable Boolean ownerIsEnterprise) {
+//        User userDetails = userRepository.findByUsername(getUsername());
+//
+//        nftService.getNftList(userDetails, ownerIsEnterprise);
+//
+//        return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
+//    }
 
 
     public String getUsername() {
