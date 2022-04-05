@@ -115,30 +115,6 @@ export const loadMarketItems = async () => {
   };
 };
 
-export const isRealizedItem = async (nftId) => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const res = await nftContract(signer);
-  const tokenId = Number(nftId);
-  const re = await res.isRealization(tokenId);
-  return re;
-};
-
-export const isMarketItem = async (nftId) => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const res1 = await nftContract(signer);
-  const res2 = await marketContract(signer);
-  const itemAccount = await res1.ownerOf(Number(nftId));
-  console.log(itemAccount);
-  console.log(res2.address);
-
-  if (itemAccount === res2.address) {
-    const item = await res2.items(Number(nftId));
-    return item.seller;
-  }
-};
-
 export const loadNFTItems = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -182,6 +158,30 @@ export const loadNFTItems = async () => {
   return items;
 };
 
+export const isRealizedItem = async (nftId) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const res = await nftContract(signer);
+  const tokenId = Number(nftId);
+  const re = await res.isRealization(tokenId);
+  return re;
+};
+
+export const isMarketItem = async (nftId) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const nft = await nftContract(signer);
+  const marketplace = await marketContract(signer);
+  const itemAccount = await nft.ownerOf(Number(nftId));
+  console.log(itemAccount);
+  console.log(marketplace.address);
+
+  if (itemAccount === marketplace.address) {
+    const item = await marketplace.items(Number(nftId));
+    return item.seller;
+  }
+};
+
 export const findNFT = async (nftId) => {
   const items = await loadNFTItems();
   for (let i = 0; i < items.length; i++) {
@@ -194,7 +194,7 @@ export const findNFT = async (nftId) => {
         description: items[i].description.toString(),
         edition: items[i].edition,
         product: items[i].product,
-        nickname: items[i].nickname.toString(),
+        nickname: items[i].nickname,
       };
       // console.log(item);
       return item;
@@ -202,10 +202,40 @@ export const findNFT = async (nftId) => {
   }
 };
 
-export const purchaseMarketItem = async (item, marketplace) => {
+export const findMarketNFT = async (nftId) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const marketplace = await marketContract(signer);
+  const item = await marketplace.items(Number(nftId));
+  return item;
+};
+
+export const purchaseMarketItem = async (nftId) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const nft = await nftContract(signer);
+  const marketplace = await marketContract(signer);
+  const item = await marketplace.items(Number(nftId));
+  const totalPrice = await marketplace.getTotalPrice(Number(nftId));
+  console.log(totalPrice);
+  console.log(item.seller);
   await (
-    await marketplace.purchaseItem(item.itemId, { value: item.totalPrice })
+    await marketplace.purchaseItem(item.itemId, { value: totalPrice })
   ).wait();
+  window.location.reload();
+};
+
+export const sellMarketItem = async (nftId, price) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const nft = await nftContract(signer);
+  const marketplace = await marketContract(signer);
+  const listingPrice = ethers.utils.parseEther(price.toString());
+  const res = await (
+    await marketplace.makeItem(nft.address, Number(nftId), listingPrice)
+  ).wait();
+  window.location.reload();
+  console.log(res);
 };
 
 export const getUserBalance = async () => {

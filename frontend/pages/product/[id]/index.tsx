@@ -8,6 +8,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import {
   connectWallet,
+  findMarketNFT,
   findNFT,
   isMarketItem,
   isRealizedItem,
@@ -54,6 +55,16 @@ const Product: NextPage = () => {
   const [ethUSD, setEthUSD] = useState(0);
   const [exchange, setExchange] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [response, setResponse] = useState<IResponse | undefined>();
+  const [nftUser, setNftUser] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
+  const [isProduct, setIsProduct] = useState(false);
+  const [isRealize, setIsRealize] = useState(false);
+  const [tokenId, setTokenId] = useState<number>(0);
+  const [marketItem, setMarketItem] = useState([]);
+  const [price, setPrice] = useState(0);
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
 
   const cleanupModal = () => {
     setSelectedRealization(null);
@@ -61,24 +72,18 @@ const Product: NextPage = () => {
     setSelectedSell(null);
   };
 
-  const [response, setResponse] = useState<IResponse | undefined>();
-
   const getNFT = async () => {
     const res = await findNFT(nftId);
-
+    const res2 = await findMarketNFT(nftId);
     console.log(res);
+    console.log(res2);
     setResponse(Object(res));
+    setPrice(res2.price);
+    setMarketItem(res2);
     setTokenId(Number(res?.nftId));
     setNftUser(res?.address);
     // return res;
   };
-
-  const resp = async () => {
-    await getNFT();
-  };
-
-  const [nftUser, setNftUser] = useState("");
-  const [currentUser, setCurrentUser] = useState("");
 
   const getAccount = async () => {
     const currentAccounts = await connectWallet();
@@ -97,10 +102,6 @@ const Product: NextPage = () => {
       console.log("이 사람이 주인이 아닙니다.");
     }
   };
-
-  const [isProduct, setIsProduct] = useState(false);
-  const [isRealize, setIsRealize] = useState(false);
-  const [tokenId, setTokenId] = useState<number>(0);
 
   const isRealized = async () => {
     const res = await isRealizedItem(nftId);
@@ -130,6 +131,10 @@ const Product: NextPage = () => {
     }
   };
 
+  // const loadContracts = async (signer) => {
+  //   const res1 = new ethers.Contract()
+  // }
+
   // const buyMarketItem = async (item) => {
   //   await (
   //     await marketplace.purchaseItem(item.itemid, { value: item.totalPrice })
@@ -150,11 +155,13 @@ const Product: NextPage = () => {
       const json2 = await res2.json();
       setExchange(json2[0].basePrice);
       // await isRealized();
-      await resp();
-      await getAccount();
-      await isMarket();
-      await isRealized();
-      await onProduct();
+      if (nftId) {
+        await getNFT();
+        await getAccount();
+        await isMarket();
+        await isRealized();
+        await onProduct();
+      }
     })();
   }, [nftId, isOwner]);
 
@@ -164,9 +171,13 @@ const Product: NextPage = () => {
   // }, []);
 
   // isRealized();
+
   console.log(response);
   console.log(isRealize);
   console.log(sellerAddress);
+  console.log(marketItem);
+  console.log(price);
+  console.log(ethers.utils.formatEther(price));
 
   return (
     <Layout seoTitle="제품명">
@@ -335,15 +346,23 @@ const Product: NextPage = () => {
                                   />
                                 </a>
                               </div>
-                              {/* <div className="ml-1 w-full overflow-hidden text-ellipsis">
-                            {response?.price?.toFixed(2)}
-                          </div> */}
+                              <div className="ml-1 w-full overflow-hidden text-ellipsis">
+                                {Number(
+                                  ethers.utils.formatEther(price)
+                                ).toFixed(2)}
+                              </div>
                             </div>
-                            {/* <div className="text-[15px] mt-[15px]">
-                          <span className="text-textGray overflow-hidden text-ellipsis w-full">
-                            Eth (₩ {(ethUSD * exchange).toFixed(0)}원)
-                          </span>
-                        </div> */}
+                            <div className="text-[15px] mt-[15px]">
+                              <span className="text-textGray overflow-hidden text-ellipsis w-full">
+                                Eth (₩{" "}
+                                {(
+                                  Number(ethers.utils.formatEther(price)) *
+                                  ethUSD *
+                                  exchange
+                                ).toFixed(0)}
+                                원)
+                              </span>
+                            </div>
                           </div>
                           {/* 본인 상품이냐에 따라 다른 UI */}
                           {isLoading ? null : isOwner ? (
@@ -386,7 +405,13 @@ const Product: NextPage = () => {
                                 <div className="inline-flex w-full lg:w-[50%] ml-2">
                                   <button
                                     className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-white hover:bg-lightBg px-5 py-3 border-[1px] border-lightGold text-lightGold w-full"
-                                    onClick={() => setSelectedSell(response!)}
+                                    onClick={() => {
+                                      {
+                                        sellerAddress
+                                          ? alert("이미 판매중인 상품입니다.")
+                                          : setSelectedSell(response!);
+                                      }
+                                    }}
                                   >
                                     <div className="flex mr-3">
                                       <svg
@@ -413,7 +438,11 @@ const Product: NextPage = () => {
                                 <div className="inline-flex w-full">
                                   {/* -------- 구매 버튼 ---------- */}
                                   <button
-                                    onClick={() => setSelectedOrder(response!)}
+                                    onClick={() => {
+                                      sellerAddress
+                                        ? setSelectedOrder(response!)
+                                        : alert("판매중인 상품이 아닙니다.");
+                                    }}
                                     className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full"
                                   >
                                     <div className="mr-3 flex">
@@ -474,6 +503,7 @@ const Product: NextPage = () => {
               <OrderModal
                 ethUSD={ethUSD}
                 response={response}
+                price={price}
                 onClose={cleanupModal}
                 exchange={exchange}
               />

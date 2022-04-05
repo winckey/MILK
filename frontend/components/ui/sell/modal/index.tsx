@@ -5,6 +5,7 @@ import {
   marketContract,
   nftContract,
   loadMarketItems,
+  sellMarketItem,
 } from "../../../../utils/interact";
 import { ethers } from "ethers";
 
@@ -85,14 +86,10 @@ export default function SellModal({ response, onClose }: Iresponse) {
   //   }
   // }, [course]);
   const [price, setPrice] = useState("");
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
   const nftId = response?.nftId;
 
   const onSell = async () => {
-    const res1 = await marketContract(signer);
-    const res2 = await nftContract(signer);
-    await (await res1.makeItem(res2.address, nftId, price)).wait();
+    await sellMarketItem(nftId, price).then(() => console.log("hi"));
   };
 
   const closeModal = () => {
@@ -118,7 +115,7 @@ export default function SellModal({ response, onClose }: Iresponse) {
                     className="mb-7 text-lg font-bold leading-6 text-gray-900"
                     id="modal-title"
                   >
-                    구매하기
+                    판매하기
                   </h3>
                 </div>
 

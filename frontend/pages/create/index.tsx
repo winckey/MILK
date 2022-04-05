@@ -223,6 +223,7 @@ const Create: NextPage = () => {
 
     await (await res2.mint(uri)).wait();
     // get tokenId of new nft
+
     const id = await res2.tokenCount();
     // approve marketplace to spend nft
     await (await res2.setApprovalForAll(res1.address, true)).wait();

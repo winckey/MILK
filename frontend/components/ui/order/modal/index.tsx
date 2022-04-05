@@ -69,6 +69,7 @@ interface Iresponse {
   onClose: Function;
   ethUSD: number;
   exchange: number;
+  price: number;
 }
 
 export default function OrderModal({
@@ -76,6 +77,7 @@ export default function OrderModal({
   onClose,
   ethUSD,
   exchange,
+  price,
 }: Iresponse) {
   const [isOpen, setIsOpen] = useState(true);
   // console.log(response);
@@ -132,10 +134,14 @@ export default function OrderModal({
     setItems(res);
   };
 
-  // const onPurchase = async () => {
-
-  //   await purchaseMarketItem();
-  // };
+  const onPurchase = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const res = await marketContract(signer);
+    console.error("★★★★★지범쨩★★★★★");
+    console.log(res);
+    await purchaseMarketItem(nftId);
+  };
 
   useEffect(() => {
     // isEnough();
@@ -197,10 +203,16 @@ export default function OrderModal({
                         />
                       </div>
                       <div className="ml-1 w-full overflow-hidden text-ellipsis flex items-end">
-                        {/* {response?.price?.toFixed(2)} */}
+                        {Number(ethers.utils.formatEther(price))}
                         <div className="text-[15px] ml-1 mb-1 font-normal">
                           <span className="text-textGray overflow-hidden text-ellipsis w-full">
-                            Eth (₩ {Math.round(ethUSD * exchange)}원)
+                            Eth (₩{" "}
+                            {Math.round(
+                              Number(ethers.utils.formatEther(price)) *
+                                ethUSD *
+                                exchange
+                            )}
+                            원)
                           </span>
                         </div>
                       </div>
@@ -258,6 +270,7 @@ export default function OrderModal({
         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex">
           {enough ? (
             <button
+              onClick={() => onPurchase()}
               // onClick={onClick}
               className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
               // disabled={formState.isDisabled}
@@ -269,6 +282,7 @@ export default function OrderModal({
             </button>
           ) : (
             <button
+              onClick={() => onPurchase()}
               className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white cursor-not-allowed"
               // disabled={formState.isDisabled}
               // onClick={() => {
