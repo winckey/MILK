@@ -34,6 +34,8 @@ const Profile: NextPage = () => {
     }
   }, [data, router]);
 
+  console.log(data);
+
   return (
     <Layout seoTitle="프로필">
       <ProfileLayout>
@@ -51,6 +53,7 @@ const Profile: NextPage = () => {
                       nftId={nft.nftId}
                       nftName={nft.nftName}
                       price={nft.price}
+                      myLike={nft.myLike}
                     />
                   ))}
                 </div>
