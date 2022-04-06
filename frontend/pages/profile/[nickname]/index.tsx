@@ -40,7 +40,6 @@ const Profile: NextPage = () => {
     }
   }, [data, router]);
 
-  console.log(data);
   return (
     <Layout seoTitle="프로필">
       <ProfileLayout>
