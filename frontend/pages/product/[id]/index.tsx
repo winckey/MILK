@@ -119,6 +119,7 @@ const Product: NextPage = () => {
     const nft = await nftContract(signer);
     const itemId = await findItemId(nftId, signer);
     const res = await isRealizedItem(nftId, signer);
+    console.log(res);
     setIsRealize(res);
   };
 
@@ -143,7 +144,7 @@ const Product: NextPage = () => {
   };
 
   const getAlert = () => {
-    if (!isProduct && !isRealize) {
+    if (!isProduct) {
       alert("실물화가 불가능한 상품입니다.");
     } else if (isProduct && isRealize) {
       alert("이미 실물화된 상품입니다.");
@@ -204,7 +205,6 @@ const Product: NextPage = () => {
         {isLoading ? null : (
           <>
             {" "}
-            <button onClick={() => isRealized()}>실물화?</button>
             <div className="max-w-full pt-2 px-2 pb-4 lg:px-0 lg:w-[1280px]">
               <div className="flex flex-col">
                 {/* 제품 상세 */}
@@ -426,7 +426,9 @@ const Product: NextPage = () => {
                                     className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-white hover:bg-lightBg px-5 py-3 border-[1px] border-lightGold text-lightGold w-full"
                                     onClick={() => {
                                       {
-                                        sellerAddress
+                                        isRealize
+                                          ? alert("이미 실물화된 상품입니다.")
+                                          : sellerAddress
                                           ? alert("이미 판매중인 상품입니다.")
                                           : setSelectedSell(response!);
                                       }
@@ -459,7 +461,9 @@ const Product: NextPage = () => {
                                   <button
                                     onClick={() => {
                                       sellerAddress
-                                        ? setSelectedOrder(response!)
+                                        ? isRealize
+                                          ? alert("이미 실물화된 상품입니다.")
+                                          : setSelectedOrder(response!)
                                         : alert("판매중인 상품이 아닙니다.");
                                     }}
                                     className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full"

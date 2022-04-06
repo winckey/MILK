@@ -71,7 +71,6 @@ interface Iresponse {
   ethUSD: number;
   exchange: number;
   price: number;
-  signer: any;
 }
 
 export default function OrderModal({

@@ -121,6 +121,7 @@ export default function RealizationModal({
     // console.log(nftId);
     if (window.confirm("해당 정보로 실물화 신청을 하시겠습니까?") == true) {
       requestRealization({ nftId });
+      onRealization();
     }
   };
 
@@ -137,7 +138,11 @@ export default function RealizationModal({
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const res = await nftContract(signer);
-    res.Realization(realize, nftId);
+    const real = await res.Realization(realize, nftId);
+    console.log(real);
+    if (real) {
+      window.location.reload();
+    }
   };
 
   // server 응답 받았을 때 실행
@@ -272,7 +277,7 @@ export default function RealizationModal({
 
               <div className="flex">
                 <button
-                  onClick={() => onRealization()}
+                  // onClick={() => onRealization()}
                   className="rounded-[10px] font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full mr-2"
                   // onClick={() => {
                   //   onSubmit(order, course);

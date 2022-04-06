@@ -322,11 +322,7 @@ const Create: NextPage = () => {
         <div key={i}>{item.address}</div>
       ))} */}
       {/* {nftItems[0]} */}
-      <div className="min-h-screen w-full bg-lightBg  ">
-        <div className="flex justify-evenly">
-          <button onClick={onClick}>리스트</button>
-          <button onClick={connectMeta}>지갑연결 가즈앙</button>
-        </div>
+      <div className="min-h-screen w-full bg-lightBg pt-16">
         <div className="px-12 ml-12 mr-4 flex justify-center">
           <div className="w-[50]% ">
             <div className="text-3xl font-bold mb-8 "> Create New Item</div>
