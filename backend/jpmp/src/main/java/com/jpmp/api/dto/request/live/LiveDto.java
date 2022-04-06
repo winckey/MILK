@@ -47,5 +47,5 @@ public class LiveDto {
     private String nftId;
 
     @ApiModelProperty(name = "시작시간", example = "123456")
-    private int starttime;
+    private long starttime;
 }
