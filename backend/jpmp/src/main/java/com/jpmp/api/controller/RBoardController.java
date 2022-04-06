@@ -2,11 +2,13 @@ package com.jpmp.api.controller;
 
 
 import com.jpmp.api.dto.request.nft.NtfRequestReqDto;
+import com.jpmp.api.dto.request.rBoard.RBoardReqDto;
 import com.jpmp.api.dto.response.BaseResponseBody;
 import com.jpmp.api.dto.response.rBoard.RBoardDto;
 import com.jpmp.api.dto.response.rBoard.RBoardListResDto;
 import com.jpmp.api.service.nft.RBoardService;
 import com.jpmp.common.util.SecurityUtils;
+import com.jpmp.db.entity.board.RBoardStatus;
 import com.jpmp.db.entity.board.RealizationBoard;
 import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.user.UserRepository;
@@ -68,7 +70,7 @@ public class RBoardController {
 
 
         User user = userRepository.findByUsername(getUsername());
-        List<RealizationBoard> rBoardDtoList = (rBoradService.getRBoradList(user));
+        List<RealizationBoard> rBoardDtoList = (rBoradService.getUserRBoradList(user));
         System.out.println("RBoardController 72 : " + rBoardDtoList);
         return ResponseEntity.status(200).body(RBoardListResDto.of(200, "Success" , rBoardDtoList));
     }
@@ -83,9 +85,10 @@ public class RBoardController {
     })
     public ResponseEntity<BaseResponseBody> getEnterpriseRBoradList() {
 
-
-
-        return null;
+        User user = userRepository.findByUsername(getUsername());
+        List<RealizationBoard> rBoardDtoList = (rBoradService.getEnterpriseRBoradList(user));
+        System.out.println("RBoardController 72 : " + rBoardDtoList);
+        return ResponseEntity.status(200).body(RBoardListResDto.of(200, "Success" , rBoardDtoList));
     }
 
     @PutMapping()//////////////
@@ -96,9 +99,12 @@ public class RBoardController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> updateRBoradList() {
+    public ResponseEntity<BaseResponseBody> updateRBoradList(RBoardReqDto rBoardStatus) {
 
-        return null;
+        User user = userRepository.findByUsername(getUsername());
+        rBoradService.changeEnterpriseRBoradStatus(user , rBoardStatus);
+
+        return ResponseEntity.status(200).body(new BaseResponseBody(200, "Success"));
     }
 
     @DeleteMapping()///////////////////

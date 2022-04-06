@@ -49,6 +49,11 @@ public class RealizationBoard  {
         this.enterprise = enterprise;
     }
 
+    public void changeStatus(RBoardStatus rBoardStatus) {
+        status = rBoardStatus;
+    }
+
+
     @Builder
     public RealizationBoard(Nft nft, User consumer , User enterprise ) {
        this.status = RBoardStatus.STATUS_NOTADM;
