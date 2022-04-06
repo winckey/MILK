@@ -14,4 +14,6 @@ public interface LiveDao {
     void finishLive(int roomId);
 
     public LiveDto getLive(int roomId);
+
+    public int getmaxCost(int roomId);
 }

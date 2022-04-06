@@ -3,8 +3,8 @@
 <mapper namespace="com.jpmp.api.dao.LiveDao">
 
     <insert  id="register" parameterType="com.jpmp.api.dto.request.live.LiveDto">
-        insert into live ( user_id, nickname, cf_key, cf_id, cf_url, room_name, startprice, runtime, nft_id )
-        values (  #{userId}, #{nickname}, #{cfKey}, #{cfId} , #{cfUrl} , #{roomName} , #{startprice} ,#{runtime}, #{nftId} )
+        insert into live ( user_id, nickname, cf_key, cf_id, cf_url, room_name, startprice, runtime, nft_id, starttime)
+        values (  #{userId}, #{nickname}, #{cfKey}, #{cfId} , #{cfUrl} , #{roomName} , #{startprice} ,#{runtime}, #{nftId}, #{starttime} )
         <selectKey keyProperty="roomId" resultType="int" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -23,6 +23,12 @@
     <select id="getLive" parameterType="int" resultType="com.jpmp.api.dto.request.live.LiveDto">
         select *
           from live
+         where room_id = #{roomId}
+    </select>
+
+    <select id="maxCost" parameterType="int" resultType="int">
+        select IFNULL(cost, 0)
+          from live_auction
          where room_id = #{roomId}
     </select>
 

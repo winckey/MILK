@@ -12,4 +12,6 @@ public interface LiveService {
     void finishLive(int roomId);
 
     public LiveDto getLive(int roomId);
+
+    public int getmaxCost(int roomId);
 }
