@@ -103,7 +103,7 @@ public class User  {
         this.nickname = userModifyReqDto.getNickname();
         this.phone = userModifyReqDto.getPhone();
         this.zipCode = userModifyReqDto.getZipCode();
-        this.userRole = UserRole.ROLE_CONSUMER;
+ 
     }
 
     public void changeBackgroundfileImg(String backgroundfileImg) {
