@@ -230,7 +230,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<UserResDto> addUserNftLike(@Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") NFTLikeReqDto nftLikeReqDto) {
+    public ResponseEntity<UserResDto> addUserNftLike(@Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true ) NFTLikeReqDto nftLikeReqDto) {
         User userDetails = userRepository.findByUsername( getUsername());
 
         User result = userService.addUserNftLike(userDetails, nftLikeReqDto.getNftId());
