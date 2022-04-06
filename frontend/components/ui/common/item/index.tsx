@@ -1,6 +1,8 @@
 import useMutation from "@libs/client/useMutation";
 import Link from "next/link";
 import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { accessToken } from "@components/atoms/Auth";
 
 export interface Nft {
   nftId: string;
@@ -30,6 +32,8 @@ export default function Item({
   price,
   myLike,
 }: Nft) {
+  const TOKEN = useRecoilValue(accessToken);
+
   const [likeState, setLikeState] = useState(myLike);
   const [likeCountState, setLikeCountState] = useState(likeCount);
 
@@ -118,7 +122,7 @@ export default function Item({
                 <div className="flex items-center">
                   <div className="flex">
                     <button
-                      onClick={onLikeClick}
+                      onClick={TOKEN ? onLikeClick : undefined}
                       className={`${
                         likeState
                           ? "text-red-500  hover:text-red-600"
