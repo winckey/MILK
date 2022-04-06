@@ -273,9 +273,8 @@ const EditProfile: NextPage = () => {
                       <div className="bg-white rounded-[10px] border w-full p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold">
                         <input
                           {...register("phone", {
-                            required: "필수 정보입니다.",
                             pattern: {
-                              value: /^\d{3}-\d{3,4}-\d{4}$/,
+                              value: /^\d{3}-\d{3,4}-\d{4}$/ || "",
                               message: "전화번호 양식을 지켜주세요.",
                             },
                           })}
