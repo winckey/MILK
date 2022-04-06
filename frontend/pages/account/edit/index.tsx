@@ -1,14 +1,18 @@
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { BackgroundImg, ProfileImg } from "@components/cloudflare";
+import {
+  BackgroundImg,
+  BackgroundVideo,
+  ProfileImg,
+} from "@components/cloudflare";
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { Layout, AccountLayout } from "@components/ui/layout";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-interface IUser {
+export interface User {
   address1: string;
   address2: string;
   backgroundImg: string;
@@ -20,12 +24,13 @@ interface IUser {
   proImg: string;
   userName: string;
   zipCode: string;
+  userRole: string;
 }
 
 interface IEditProfileResponse {
   message: string;
   statusCode: number;
-  user: IUser;
+  user: User;
 }
 
 interface IEditProfileForm {
@@ -40,7 +45,6 @@ interface IEditProfileForm {
 }
 
 const EditProfile: NextPage = () => {
-  const router = useRouter();
   const { user, isLoading } = useUser();
   // console.log(user);
 
@@ -290,7 +294,7 @@ const EditProfile: NextPage = () => {
                   {/* form button */}
                   <div className="my-[30px]">
                     <button className="font-semibold px-5 py-3 rounded-[10px] bg-lightGold border border-lightGold text-white hover:bg-gold hover:shadow-md focus:bg-gold focus:outline-none">
-                      저장
+                      {loading ? <span>수정중</span> : "저장"}
                     </button>
                   </div>
                 </form>
@@ -299,10 +303,17 @@ const EditProfile: NextPage = () => {
                   {/* 프로필 사진 */}
                   <ProfileImg proImg={user?.proImg} userId={user?.id} />
                   {/* 배경 사진 */}
-                  <BackgroundImg
-                    backgroundImg={user?.backgroundImg}
-                    userId={user?.id}
-                  />
+                  {user?.userRole === "ROLE_ENTERPRISE" ? (
+                    <BackgroundVideo
+                      backgroundVideo={user?.backgroundImg}
+                      userId={user?.id}
+                    />
+                  ) : (
+                    <BackgroundImg
+                      backgroundImg={user?.backgroundImg}
+                      userId={user?.id}
+                    />
+                  )}
                 </div>
               </div>
             </div>
