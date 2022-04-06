@@ -2,11 +2,13 @@ package com.jpmp.api.controller;
 
 
 import com.jpmp.api.dto.TokenDto;
+import com.jpmp.api.dto.request.nft.NFTLikeReqDto;
 import com.jpmp.api.dto.request.user.UserImgReqDto;
 import com.jpmp.api.dto.request.user.UserLoginReqDto;
 import com.jpmp.api.dto.request.user.UserModifyReqDto;
 import com.jpmp.api.dto.request.user.UserRegisterReqDto;
 import com.jpmp.api.dto.response.BaseResponseBody;
+import com.jpmp.api.dto.response.user.EnterpriseListResDto;
 import com.jpmp.api.dto.response.user.UserLoginResDto;
 import com.jpmp.api.dto.response.user.UserNicknameCheckResDto;
 import com.jpmp.api.dto.response.user.UserResDto;
@@ -14,6 +16,7 @@ import com.jpmp.api.service.user.UserService;
 import com.jpmp.common.util.JwtTokenUtil;
 import com.jpmp.common.util.SecurityUtils;
 import com.jpmp.db.entity.user.User;
+import com.jpmp.db.entity.user.UserRole;
 import com.jpmp.db.repository.user.UserRepository;
 import com.jpmp.exception.CustomException;
 import com.jpmp.exception.ErrorCode;
@@ -34,6 +37,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 @Slf4j
@@ -132,6 +136,24 @@ public class UserController {
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", userDetails));
     }
 
+    @GetMapping("/enterprise")
+    @ApiOperation(value = "기업 전체 조회", notes = "기업 전체 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공", response = UserResDto.class),
+            @ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+            @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+    })
+    public ResponseEntity<EnterpriseListResDto> getUserEnterprise(@ApiIgnore Authentication authentication) {
+        /**
+         * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
+         * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
+         */
+        List<User> userDetails = userRepository.findByUserRole( UserRole.ROLE_ENTERPRISE).get();
+
+        return ResponseEntity.status(200).body(EnterpriseListResDto.of(200, "Success", userDetails));
+    }
+
     @GetMapping("/info/{nickname}")
     @ApiOperation(value = "nickname 정보 조회", notes = "nickname으로 타회원의 정보를 응답한다.")
     @ApiResponses({
@@ -208,10 +230,10 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<UserResDto> addUserNftLike(@Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") String nftId) {
+    public ResponseEntity<UserResDto> addUserNftLike(@Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true , type = "String") NFTLikeReqDto nftLikeReqDto) {
         User userDetails = userRepository.findByUsername( getUsername());
 
-        User result = userService.addUserNftLike(userDetails, nftId);
+        User result = userService.addUserNftLike(userDetails, nftLikeReqDto.getNftId());
 
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
     }
@@ -225,11 +247,11 @@ public class UserController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<UserResDto> deleteUserNftLike(@Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true) String nftId) {
+    public ResponseEntity<UserResDto> deleteUserNftLike(@Valid @RequestBody @ApiParam(value="nft 토큰 id", required = true) NFTLikeReqDto nftLikeReqDto) {
 
         User userDetails = userRepository.findByUsername( getUsername());
 
-        User result = userService.deleteUserNftLike(userDetails, nftId);
+        User result = userService.deleteUserNftLike(userDetails, nftLikeReqDto.getNftId());
 
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
     }
