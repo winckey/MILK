@@ -61,11 +61,11 @@ interface RealizationModalProps {
   nft: any;
   onClose: Function;
   user: any;
-  nftId: string | undefined;
+  nftId: string | string[] | undefined;
 }
 
 interface IRealizationForm {
-  nftId: string | undefined;
+  nftId: string | string[] | undefined;
   check1: boolean;
   check2: boolean;
   check3: boolean;
@@ -125,15 +125,17 @@ export default function RealizationModal({
   };
 
   const [realize, setRealize] = useState<string>();
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
 
   const marketplace = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
     const res = await marketContract(signer);
     setRealize(res.address);
   };
 
   const onRealization = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
     const res = await nftContract(signer);
     res.Realization(realize, nftId);
   };
