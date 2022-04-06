@@ -134,9 +134,9 @@ public class NFTController {
         User userDetails = userRepository.findByNickname(nickname).get();
 
         List<Nft> nftList = nftService.getNftList(userDetails);
-
-        if (userDetails != null) {
-            List<Nft> likeList = nftService.getNftLikeList(userDetails);
+        User likeUser = userRepository.findByUsername(getUsername());
+        if (likeUser != null) {
+            List<Nft> likeList = nftService.getNftLikeList(likeUser);
             return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList, likeList));
         } else {
             return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
@@ -177,8 +177,9 @@ public class NFTController {
         User userDetails = userRepository.findByNickname(nickname).get();
 
         List<Nft> nftList = nftService.getNftLikeList(userDetails);
-        if (userDetails != null) {
-            List<Nft> likeList = nftService.getNftLikeList(userDetails);
+        User likeUser = userRepository.findByUsername(getUsername());
+        if (likeUser != null) {
+            List<Nft> likeList = nftService.getNftLikeList(likeUser);
             return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList, likeList));
         } else {
             return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
