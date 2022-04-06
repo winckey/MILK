@@ -2,6 +2,7 @@ package com.jpmp.api.service.nft;
 
 import com.jpmp.api.dto.request.nft.NtfRequestReqDto;
 
+import com.jpmp.api.dto.request.rBoard.RBoardReqDto;
 import com.jpmp.db.entity.board.RealizationBoard;
 import com.jpmp.db.entity.nft.Nft;
 import com.jpmp.db.entity.user.User;
@@ -30,18 +31,30 @@ public class RBoardServiceImpl implements RBoardService {
         Nft nft = nftRepository.findByNftId(ntfRequestReqDto.getNftId()).get();
         User enterprise = nft.getEnterprise();
 
-        RealizationBoard realizationBoard = RealizationBoard.builder()
-                .nft(nft)
-                .consumer(user)
-                .enterprise(enterprise)
-                .build();
+        RealizationBoard realizationBoard = new RealizationBoard(nft , user , enterprise );
 
         rBoradRepository.save(realizationBoard);
     }
 
     @Override
-    public List<RealizationBoard> getRBoradList(User user) {
+    public List<RealizationBoard> getUserRBoradList(User user) {
 
         return user.getConsumerBoards();
+    }
+
+    @Override
+    public List<RealizationBoard> getEnterpriseRBoradList(User user) {
+
+        return user.getEnterpriseBoards();
+    }
+
+    @Override
+    public void changeEnterpriseRBoradStatus(User user, RBoardReqDto rBoardReqDto) {
+
+        RealizationBoard realizationBoard = rBoradRepository.findById(rBoardReqDto.getRBoardId()).get();
+
+        realizationBoard.changeStatus(rBoardReqDto.getRBoardStatus());
+
+        rBoradRepository.save(realizationBoard);
     }
 }
