@@ -31,14 +31,6 @@ function MyDropdown({ logout, role }: any) {
             </a>
           </Link>
         </Menu.Item>
-        <Menu.Item>
-          <a
-            onClick={logout}
-            className="px-4 py-2 cursor-pointer hover:bg-gray-300 text-gray-500"
-          >
-            로그아웃
-          </a>
-        </Menu.Item>
         {/* 관리자만 보임 */}
         {role === "ROLE_ADMIN" ? (
           <Menu.Item>
@@ -60,6 +52,14 @@ function MyDropdown({ logout, role }: any) {
             </a>
           </Menu.Item>
         ) : null}
+        <Menu.Item>
+          <a
+            onClick={logout}
+            className="px-4 py-2 cursor-pointer hover:bg-gray-300 text-gray-500"
+          >
+            로그아웃
+          </a>
+        </Menu.Item>
       </Menu.Items>
     </Menu>
   );
