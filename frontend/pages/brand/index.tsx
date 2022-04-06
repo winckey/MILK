@@ -1,8 +1,16 @@
 import { Layout } from "@components/ui/layout";
 import type { NextPage } from "next";
 import Image from "next/image";
+import useSWR from "swr";
+
+interface BrandResponse {}
 
 const Brand: NextPage = () => {
+  const { data } = useSWR<BrandResponse>(
+    `${process.env.BASE_URL}/user/enterprise`
+  );
+  console.log(data);
+
   return (
     <Layout seoTitle="명품관">
       <div className="min-h-screen w-full bg-darkBg">

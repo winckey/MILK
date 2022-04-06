@@ -8,17 +8,23 @@ import { useRouter } from "next/router";
 import { OwnNftResponse } from ".";
 import { useEffect, useState } from "react";
 import { Nft } from "@components/ui/common/item";
+import { useRecoilValue } from "recoil";
+import { accessToken } from "@components/atoms/Auth";
+import { tokenFetcher } from "@libs/client/useUser";
 
 const ProfileCollection: NextPage = () => {
   const router = useRouter();
 
   const [collectionList, setCollectionList] = useState<Nft[]>();
 
-  // 해당 nickname을 가진 유저 정보 가져오기
+  const TOKEN = useRecoilValue(accessToken);
+
+  // 해당 nickname을 가진 유저의 판매/보유 nft 리스트 가져오기
   const { data } = useSWR<OwnNftResponse>(
     router.query.nickname
-      ? `${process.env.BASE_URL}/nft/user/${router.query.nickname}`
-      : null
+      ? [`${process.env.BASE_URL}/nft/user/${router.query.nickname}`, TOKEN]
+      : null,
+    tokenFetcher
   );
 
   // 가져온 리스트에서 보유중인 nft만 필터링
