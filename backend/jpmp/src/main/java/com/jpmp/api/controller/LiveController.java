@@ -2,6 +2,7 @@ package com.jpmp.api.controller;
 
 import com.jpmp.api.dto.request.live.LiveDto;
 import com.jpmp.api.dto.response.BaseResponseBody;
+import com.jpmp.api.dto.response.live.LiveDetailResDto;
 import com.jpmp.api.dto.response.live.LiveResDto;
 import com.jpmp.api.dto.response.live.LiveListResDto;
 import com.jpmp.api.service.live.LiveService;
@@ -76,10 +77,11 @@ public class LiveController {
             @ApiResponse(code = 404, message = "방없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<LiveListResDto> getLive(@PathVariable int roomId){
+    public ResponseEntity<LiveDetailResDto> getLive(@PathVariable int roomId){
 
         LiveDto liveDto = liveService.getLive(roomId);
+        int maxcost = liveService.getmaxCost(roomId);
 
-        return ResponseEntity.status(200).body(LiveListResDto.of(200, "Success", liveDto));
+        return ResponseEntity.status(200).body(LiveDetailResDto.of(200, "Success", liveDto, maxcost));
     }
 }

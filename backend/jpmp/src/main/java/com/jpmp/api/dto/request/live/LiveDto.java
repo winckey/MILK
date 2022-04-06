@@ -1,12 +1,11 @@
 package com.jpmp.api.dto.request.live;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jpmp.api.dto.response.BaseResponseBody;
-import com.jpmp.api.dto.response.live.LiveListResDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import java.util.List;
+import java.time.LocalTime;
 
 @Data
 @Getter
@@ -46,4 +45,8 @@ public class LiveDto extends BaseResponseBody {
 
     @ApiModelProperty(name = "nft 아이디", example = "nft id")
     private String nftId;
+
+    @ApiModelProperty(name = "nft 아이디", example = "nft id")
+    @JsonFormat(pattern = "HH:mm:ss")
+    private LocalTime starttime;
 }

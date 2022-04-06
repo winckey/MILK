@@ -31,4 +31,9 @@ public class LiveServiceImpl implements LiveService{
     public LiveDto getLive(int roomId) {
         return liveDao.getLive(roomId);
     }
+
+    @Override
+    public int getmaxCost(int roomId) {
+        return liveDao.getmaxCost(roomId);
+    }
 }
