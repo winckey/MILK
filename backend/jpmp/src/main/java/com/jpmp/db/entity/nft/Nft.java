@@ -84,7 +84,9 @@ public class Nft {
     public void addLike() {
         likeCount++;
     }
-
+    public void deleteLike() {
+        likeCount--;
+    }
     public void sellNFT(User userDetails) {
         this.seleStatus =true;
 

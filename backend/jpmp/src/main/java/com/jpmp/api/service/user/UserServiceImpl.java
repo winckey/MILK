@@ -121,6 +121,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User deleteUserNftLike(User userDetails, String nftId) {
         Nft nft = nftRepository.findByNftId(nftId).get();//예외처리
+        nft.deleteLike();
+        nftRepository.save(nft);
         nftLikeRepository.deleteByUserAndNft(userDetails , nft);
         return userDetails;
     }
