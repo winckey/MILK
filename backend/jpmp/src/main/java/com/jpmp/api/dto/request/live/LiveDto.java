@@ -11,7 +11,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @ToString
-public class LiveDto extends BaseResponseBody {
+public class LiveDto {
 
     @ApiModelProperty(name = "경매방 Id", hidden = true)
     private int roomId;
