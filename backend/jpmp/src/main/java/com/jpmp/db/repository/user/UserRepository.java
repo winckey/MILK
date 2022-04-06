@@ -2,6 +2,7 @@ package com.jpmp.db.repository.user;
 
 
 import com.jpmp.db.entity.user.User;
+import com.jpmp.db.entity.user.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByNickname(String nickname);
 
-
+    @Transactional(readOnly = true)
+    Optional<List<User>> findByUserRole(UserRole userRole);
 
 
     @Query("select m from User m join fetch m.authorities a where m.username = :username")
