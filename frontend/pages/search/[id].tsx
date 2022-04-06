@@ -131,6 +131,7 @@ const Search: NextPage = () => {
                   nftId={nft.nftId}
                   nftName={nft.nftName}
                   price={nft.price}
+                  myLike={false}
                 />
               ))}
             </div>
