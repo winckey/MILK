@@ -81,6 +81,7 @@ public class LiveController {
 
         LiveDto liveDto = liveService.getLive(roomId);
         int maxcost = liveService.getmaxCost(roomId);
+        if(maxcost == 0) maxcost = liveDto.getStartprice();
 
         return ResponseEntity.status(200).body(LiveDetailResDto.of(200, "Success", liveDto, maxcost));
     }
