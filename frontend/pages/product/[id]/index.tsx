@@ -8,6 +8,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import {
   connectWallet,
+  findItemId,
   findMarketNFT,
   findNFT,
   isMarketItem,
@@ -47,8 +48,8 @@ const Product: NextPage = () => {
     null
   );
   const [selectedSell, setSelectedSell] = useState<null | object>(null);
-  const [marketplace, setMarketplace] = useState({});
-  const [nft, setNFT] = useState({});
+  // const [marketplace, setMarketplace] = useState({});
+  // const [nft, setNFT] = useState({});
   const [sellerAddress, setSellerAddress] = useState("");
   const [itemId, setItemId] = useState(0);
   const [name, setName] = useState("");
@@ -63,8 +64,6 @@ const Product: NextPage = () => {
   const [tokenId, setTokenId] = useState<number>(0);
   const [marketItem, setMarketItem] = useState([]);
   const [price, setPrice] = useState(0);
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
 
   const cleanupModal = () => {
     setSelectedRealization(null);
@@ -73,16 +72,26 @@ const Product: NextPage = () => {
   };
 
   const getNFT = async () => {
+    console.log(nftId);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const marketplace = await marketContract(signer);
+    const nft = await nftContract(signer);
+    const itemId = await findItemId(nftId, signer);
+    console.log(itemId);
+    console.log(nftId);
     const res = await findNFT(nftId);
-    const res2 = await findMarketNFT(nftId);
-    console.log(res);
-    console.log(res2);
+    if (itemId) {
+      const res2 = await findMarketNFT(itemId, signer);
+      console.log(res);
+      // console.log(res2);
+      if (res2) {
+        setPrice(res2.price);
+        setMarketItem(res2);
+      }
+    }
     setResponse(Object(res));
-    setPrice(res2.price);
-    setMarketItem(res2);
-    setTokenId(Number(res?.nftId));
     setNftUser(res?.address);
-    // return res;
   };
 
   const getAccount = async () => {
@@ -104,12 +113,22 @@ const Product: NextPage = () => {
   };
 
   const isRealized = async () => {
-    const res = await isRealizedItem(nftId);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const marketplace = await marketContract(signer);
+    const nft = await nftContract(signer);
+    const itemId = await findItemId(nftId, signer);
+    const res = await isRealizedItem(nftId, signer);
     setIsRealize(res);
   };
 
   const isMarket = async () => {
-    const res3 = await isMarketItem(nftId);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const marketplace = await marketContract(signer);
+    const nft = await nftContract(signer);
+    const itemId = await findItemId(nftId, signer);
+    const res3 = await isMarketItem(nftId, itemId, signer);
     setSellerAddress(res3);
   };
 
@@ -171,7 +190,7 @@ const Product: NextPage = () => {
   // }, []);
 
   // isRealized();
-
+  console.log(nftId);
   console.log(response);
   console.log(isRealize);
   console.log(sellerAddress);

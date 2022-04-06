@@ -187,8 +187,29 @@ function makeItem(NFT _nft, uint _tokenId, uint _price) external nonReentrant {
     );
 
   }
+
   
+  function lastValidTransaction(uint _tokenId) public view returns(uint) {
+    uint curr = itemCount;
+    Item memory ownership = items[curr];
+    if(ownership.tokenId == _tokenId) {
+      if(ownership.sold == false) {
+        return ownership.itemId;
+      }
+    } while(curr > 0) {
+      curr--;
+      ownership = items[curr];
+      if(ownership.tokenId == _tokenId){
+        if(ownership.sold == false) {
+          return ownership.itemId;
+        }
+      }
+    }
+    return 0;
+  }
 }// 구찌가 상품을 냈다 => 민팅했으면 셀 버튼 활성화 => 셀 버튼이 뜨려면 민팅된 아이템이 구찌 아이템인걸 알아야 함
 // 처음 민팅했을 때는 오너(ownerOf(tokenId)) == 민팅한 사람
 // 1. nftId => ownerOf(tokenId) == window.ether~.request(현 지갑 주소) => true(민팅한 주소 == 현재 로그인된 지갑 주소)
 // 2. nftId => onwerOf(tokenId) == marketplace.adress => true(지금 마켓에 판매로 올라가있는 상태)
+
+  

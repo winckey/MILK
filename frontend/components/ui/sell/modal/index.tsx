@@ -87,9 +87,10 @@ export default function SellModal({ response, onClose }: Iresponse) {
   // }, [course]);
   const [price, setPrice] = useState("");
   const nftId = response?.nftId;
-
   const onSell = async () => {
-    await sellMarketItem(nftId, price).then(() => console.log("hi"));
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    await sellMarketItem(nftId, price, signer);
   };
 
   const closeModal = () => {

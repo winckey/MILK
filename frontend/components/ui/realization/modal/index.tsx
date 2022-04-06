@@ -125,15 +125,17 @@ export default function RealizationModal({
   };
 
   const [realize, setRealize] = useState<string>();
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
 
   const marketplace = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
     const res = await marketContract(signer);
     setRealize(res.address);
   };
 
   const onRealization = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
     const res = await nftContract(signer);
     res.Realization(realize, nftId);
   };

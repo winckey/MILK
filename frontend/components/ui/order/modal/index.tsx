@@ -6,6 +6,7 @@ import {
   nftContract,
   loadMarketItems,
   getUserBalance,
+  findItemId,
 } from "../../../../utils/interact";
 import { ethers } from "ethers";
 
@@ -70,6 +71,7 @@ interface Iresponse {
   ethUSD: number;
   exchange: number;
   price: number;
+  signer: any;
 }
 
 export default function OrderModal({
@@ -97,15 +99,14 @@ export default function OrderModal({
   const [enough, setEnough] = useState(true);
   const [items, setItems] = useState({});
   const [balance, setBalance] = useState<string | undefined>("");
+  const [purchase, setPurchase] = useState();
   const getBalance = async () => {
     const res = await getUserBalance();
     setBalance(res);
   };
   console.log(balance);
   // const price = response?.price;
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  console.log(provider);
-  const signer = provider.getSigner();
+
   const nftId = response?.nftId;
   const closeModal = () => {
     setIsOpen(false);
@@ -137,10 +138,11 @@ export default function OrderModal({
   const onPurchase = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const res = await marketContract(signer);
-    console.error("★★★★★지범쨩★★★★★");
-    console.log(res);
-    await purchaseMarketItem(nftId);
+    const marketplace = await marketContract(signer);
+    const nft = await nftContract(signer);
+    const itemId = await findItemId(nftId, signer);
+    const pur = await purchaseMarketItem(itemId, signer);
+    console.log(pur);
   };
 
   useEffect(() => {
