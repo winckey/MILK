@@ -1,8 +1,10 @@
 import { ProfileImg, Timer } from "@components/cloudflare";
 import { Layout } from "@components/ui/layout";
 import Message from "@components/ui/message";
+import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import SockJS from "sockjs-client";
@@ -13,14 +15,39 @@ let stompClient: any = null;
 // 백에서 해당 룸 상세조회 api 만들면 추가해줘야함
 // interface StreamResponse
 
+interface IStreamResponse {
+  message: string;
+  statusCode: number;
+}
+
+interface RoomResponse {
+  message: string;
+  statusCode: number;
+  liveDtoList: {
+    roomId: number;
+    userId: number;
+    nickname: string;
+    cfId: string;
+    roomName: string;
+    startprice: number;
+    cfUrl: string;
+    cfKey: string;
+  }[];
+}
+
 const Stream: NextPage = () => {
   const { user, isLoading } = useUser();
   const [chats, setChats]: any = useState([]);
   const [highMoney, setHighMoney]: any = useState([]);
   const router = useRouter();
-  let time = 20;
+  const { id } = router.query;
+  const [alertPrice, setAlertPrice] = useState(false);
+  const [alertUp, setAlertUp] = useState(false);
+  let time = 0.3;
   // const [time, setTime]:number = useState(20);
   const [highest, setHighest] = useState(0);
+  const [timer, setTimer] = useState(false);
+  const [ishost, setIsHost] = useState(false);
   const [userData, setUserData] = useState({
     nickName: "",
     receivername: "",
@@ -31,29 +58,25 @@ const Stream: NextPage = () => {
     // 응찰가
     money: 0,
   });
-
-  // useEffect(() => {
-  //   setUserData({
-  //     ...userData,
-
-  //     nickName: user.nickname,
-  //   });
-  // }, [user]);
-  // 해당 방 정보 가져오기
-  // const { data,mutate } = useSWR<StreamResponse>(
-  //   router.query.id
-  //     ? `${process.env.BASE_URL}/user/info/${router.query.id}`
-  //     : null
+  // 종료 오세허니한테 물어보기
+  // const [finishStream, { data, loading }] = useMutation<IStreamResponse>(
+  //   `/live?roomId=${router.query.id}`,
+  //   "PUT"
   // );
+  // user 데이터 다 받아오면 소켓 연결합니다
 
   // useEffect(() => {
+  //   if (user && id) {
+  //     registerUser();
+  //     console.log(id);
+  //     console.log(user);
+  //   }
+  // }, [user]);
+  const { data, mutate } = useSWR<RoomResponse>(
+    router.query.id ? `${process.env.BASE_URL}/live/${router.query.id}` : null
+  );
+  console.log(data);
 
-  //   setUserData({
-  //     ...userData,
-  //   });
-  // }, []);
-  // 최초 들어올 때 연결
-  //
   const connect = () => {
     let Sock = new SockJS(`https://j6e206.p.ssafy.io:8080/ws`);
     stompClient = over(Sock);
@@ -73,7 +96,7 @@ const Stream: NextPage = () => {
 
     // 그 방에 대한 정보 subscribe 할 수 있도록
     // stompClient.subscribe(`/subscribe/chat/room/${router.query.id:룸아이디}`, onMessageRecived);
-    stompClient.subscribe(`/subscribe/chat/room/1`, onMessageRecived);
+    stompClient.subscribe(`/subscribe/chat/room/${id}`, onMessageRecived);
   };
   const onMessageRecived = (response: any) => {
     const res = JSON.parse(response.body);
@@ -100,7 +123,7 @@ const Stream: NextPage = () => {
         break;
     }
   };
-
+  // const 최고가 갱신될때마다 시간갱신 시간 다 끝나면 send 버튼 닫고 구매버튼 ㄱ
   const handleMoney = (e: any) => {
     const { value } = e.target;
     setUserData({ ...userData, money: value });
@@ -116,7 +139,7 @@ const Stream: NextPage = () => {
         senderName: userData.nickName,
         message: userData.message,
         status: "MESSAGE",
-        roomId: 1,
+        roomId: id,
       };
       stompClient.send(
         "/publish/chat/message",
@@ -129,12 +152,21 @@ const Stream: NextPage = () => {
 
   const sendPrice = () => {
     if (stompClient && userData.money <= highest) {
-      console.log("돈 더 업");
+      setAlertUp(true);
+    } else if (
+      stompClient &&
+      data &&
+      data.liveDtoList[0].startprice >= userData.money
+    ) {
+      console.log("시작가격보다 높게 응찰하세요");
+      setAlertPrice(true);
     } else if (stompClient) {
+      setAlertUp(false);
+      setAlertPrice(false);
       const priceList = {
         senderName: userData.nickName,
         cost: userData.money,
-        roomId: 1,
+        roomId: id,
         status: "AUCTION",
       };
       console.log("돈보낸디", priceList);
@@ -146,6 +178,7 @@ const Stream: NextPage = () => {
       // }
     }
   };
+
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
       sendValue();
@@ -156,99 +189,164 @@ const Stream: NextPage = () => {
   };
   // user 데이터 다 받아오면 소켓 연결합니다
   useEffect(() => {
-    if (user) {
+    if (user && id) {
       console.log("성공", user);
       console.log(user.nickname, "이다");
+      console.log(id);
       // setUserData({
       //   ...userData,
       //   nickName: user.nickname,
       // });
       registerUser();
     } else "오잉";
-  }, [user]);
-  //
+  }, [user, id]);
+
+  useEffect(() => {
+    if (data && data?.statusCode === 200) {
+      // 최고금액 유저한테 구매 버튼 활성화
+      console.log("성공!");
+    }
+  }, [data]);
+
   return (
     // navbar 뒤로가기만 생성
-    <Layout seoTitle="라이브 경매">
-      <div className="flex justify-center flex-col md:flex-row gap-x-4 min-h-screen">
-        <div className="md:w-2/4 pt-5  md:mb-4">
+    <Layout canGoBack seoTitle="라이브 경매">
+      <div className="flex justify-center flex-col  md:flex-row gap-x-4 min-h-screen px-5">
+        <Link href="/">
+          <a>홈</a>
+        </Link>
+        <div className="md:w-2/4 pt-5  ">
           <div className="flex justify-evenly  md:justify-between px-4 pt-5 text-gray-900">
-            <div className="text-3xl font-bold ">방제목</div>
+            <div className="text-3xl font-bold ">
+              {" "}
+              {data?.liveDtoList[0]?.roomName}
+            </div>
             {/* 브랜드사 클릭하면 해당 상세페이지로 고? */}
-            <div className="text-2xl font-semibold">브랜드사</div>
           </div>
+
           <iframe
             className="aspect-video  w-full border border-gold rounded-md  shadow-sm"
-            src={`https://iframe.videodelivery.net/ff65d18100da52b60d8856264234a3b9`}
+            src={`https://iframe.videodelivery.net/${data?.liveDtoList[0].cfId}`}
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
             allowFullScreen={true}
           ></iframe>
 
-          <div className="flex flex-row mt-3 md:h-1/4">
-            <div className="mr-4 border-2 bg-slate-400 p-2 md:w-1/4 md:h-3/4 rounded-md ">
+          <div className="flex flex-col md:flex-row gap-x-2 ">
+            <div className=" border-2  basis-2/5 bg-lightGold justify-center p-2  flex items-center rounded-md ">
               상품이미지
             </div>
-            <div className="space-y-2">
-              <span className="text-2xl block  text-gray-900">상품 이름</span>
-              <span className="text-2xl block text-gray-900">가격</span>
-              <p className="text-gray-700">경매시작가: 경매단위: </p>
+            <div className="space-y-1 ">
+              <span className="text-xl block font-semibold text-gray-900">
+                판매사 : {data?.liveDtoList[0].nickname}
+              </span>
+              <span className="text-lg block font-semibold text-gray-900">
+                상품 이름 :
+              </span>
+              <span className="text-lg block font-semibold text-gray-900">
+                경매시작가 : {data?.liveDtoList[0]?.startprice}
+                <img
+                  className="w-5 h-5 inline-block object-contain"
+                  src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
+                  alt="ETH"
+                />
+              </span>
+              <span className="text-lg block font-semibold text-gray-900">
+                제품 정보 :{" "}
+              </span>
+              <div className=" border-2  rounded-md hover:border-2 hover:border-slate-300 p-1 bg-slate-200 text-xs">
+                {data?.liveDtoList[0].nickname === userData.nickName ? (
+                  <>
+                    <p>서버 {data.liveDtoList[0].cfUrl}</p>
+                    <p>방송열쇠 {data.liveDtoList[0].cfKey}</p>
+                  </>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>
         {/* 경매열 */}
-        <div className="pt-5 md:mt-14 md:w-1/5 space-y-2 md:mb-5">
+        <div className="pt-5 md:mt-[55px]  md:w-[22vw] ">
           {/* 실시간 응찰 내역 */}
-          <div className="bg-orange-400 md:h-2/4  p-5 rounded-md flex flex-col space-y-3">
-            <span>실시간 응찰</span>
+          <div className="bg-lightGold h-[60vh] p-3 rounded-md  border-2  flex flex-col items-center border-lightBg space-y-3  overflow-y-scroll">
+            <span className="text-2xl  text-center font-bold text-gray-900">
+              실시간 응찰
+            </span>
             {highMoney.map((val: any, i: number) => (
-              <span key={i} className="text-white">
-                <span className="font-medium text-gray-800">
-                  {val.senderName}님께서{" "}
+              <span key={i} className="text-gray-800 ">
+                {val.senderName}님께서{" "}
+                <span className="font-extrabold text-black">
+                  {val.cost}
+                  <img
+                    className="w-5 h-5 inline-block object-contain"
+                    src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
+                    alt="ETH"
+                  />
                 </span>
-                <span className="font-extrabold">{val.cost}</span> 이더
-                응찰하셨습니다!
+                응찰하셨습니다
               </span>
             ))}
           </div>
           {/* 최고가 갱신 */}
-          <div className="bg-orange-400 md:h-1/5 p-5 rounded-md flex flex-col space-y-3">
-            <span>
-              최고가는 <span className="font-extrabold">{highest} </span> 이더
+          <div className="bg-lightGold h-[12vh] text-xl flex rounded-md  border-2  border-lightBg items-center justify-center space-y-3">
+            <span className="text-gray-800">
+              최고가는{" "}
+              <span className="font-extrabold text-black">
+                {highest}
+
+                <img
+                  className="w-5 h-5 inline-block object-contain"
+                  src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
+                  alt="ETH"
+                />
+              </span>
               입니다
             </span>
           </div>
           {/* 응찰하기  */}
-          <div className="bg-orange-400 md:h-1/5 p-5 rounded-md flex flex-col space-y-3">
-            <input
-              type="number"
-              className="input-message"
-              placeholder="응찰가를 입력하세요"
-              value={userData.money}
-              onChange={handleMoney}
-            />
-            <button type="button" className="send-button" onClick={sendPrice}>
-              send
-            </button>
+          <div className="bg-lightGold  h-[13vh] flex flex-col gap-x-1 relative  w-full items-center  mx-auto justify-center border-2 border-lightBg  rounded-md  space-y-3">
+            <div className="flex justify-center ">
+              {alertPrice ? (
+                <div>시작가격보다 높은 금액을 응찰하세요</div>
+              ) : null}
+              {alertUp ? <div>최고가보다 높은 금액을 응찰하세요</div> : null}
+            </div>
+            <div className="flex justify-center  gap-x-2">
+              <input
+                type="text"
+                className="shadow-sm  rounded-md w-5/6 border-gray-300 focus:ring-gold focus:outline-none pr-12 focus:border-lightGold "
+                placeholder="응찰가를 입력하세요"
+                value={userData.money}
+                onChange={handleMoney}
+              />
+              <button
+                type="button"
+                className="focus:ring-2 focus:ring-offset-2 focus:ring-gold focus:duration-300   items-center flex  bg-gold rounded-full px-4 hover:bg-gold text-white"
+                onClick={sendPrice}
+              >
+                +
+              </button>
+            </div>
           </div>
         </div>
         {/* 채팅 */}
-        <div className="pt-5 md:mt-[55px] md:mb-[90px] md:w-1/5 ">
+        <div className="pt-5 md:mt-[55px]  md:w-1/5 ">
           <div className="border-2 rounded-md">
             <h2 className="text-2xl py-2 text-center font-bold bg-white  text-gray-900">
               Live Chat
             </h2>
-            <div className="py-10 pb-16 h-[72vh]   bg-white px-4 space-y-4">
+            <div className="py-10 pb-16 h-[72vh] overflow-y-scroll  bg-white px-4 space-y-4">
               {chats.map((chat: any, index: number) => (
                 <Message
                   key={index}
                   message={chat.message}
                   reversed={chat.senderName === userData.nickName}
                   nickName={chat.senderName}
+                  isHost={chat.senderName === data?.liveDtoList[0].nickname}
                 />
               ))}
             </div>
           </div>
-          <div className=" bottom-0 inset-x-0">
+          <div className=" bottom-0  inset-x-0">
             <div className="flex relative  w-full items-center  mx-auto">
               <input
                 type="text"
@@ -269,10 +367,15 @@ const Stream: NextPage = () => {
           </div>
         </div>
       </div>
-      <Timer time={time} />
+      {/* <Timer
+        time={time}
+        // finishStream={finishStream}
+        timer={timer}
+        setTimer={setTimer}
+      />
       <button type="button" onClick={registerUser}>
-        connect
-      </button>
+        타이머 시작하기
+      </button> */}
     </Layout>
   );
 };

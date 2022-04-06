@@ -46,6 +46,7 @@ const ProfileCollection: NextPage = () => {
                       nftId={nft.nftId}
                       nftName={nft.nftName}
                       price={nft.price}
+                      myLike={nft.myLike}
                     />
                   ))}
                 </div>

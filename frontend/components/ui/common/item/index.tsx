@@ -6,6 +6,7 @@ export interface Nft {
   enterprise: string;
   nftName: string;
   price: number;
+  myLike: boolean;
   likeCount: number;
   owner?: string;
   realStatus?: boolean;
@@ -20,6 +21,7 @@ export default function Item({
   nftId,
   nftName,
   price,
+  myLike,
 }: Nft) {
   const test = () => {
     console.log("test");
@@ -29,7 +31,7 @@ export default function Item({
     <div>
       <div>
         <div className="h-[10px]"></div>
-        <div className="flex flex-col h-full bg-white border rounded-[10px] transition hover:scale-105 cursor-pointer shadow-md hover:shadow-xl">
+        <div className="flex flex-col h-full bg-white rounded-[10px] transition hover:scale-[1.02] cursor-pointer shadow-md hover:shadow-xl">
           <Link href={`/product/${nftId}`}>
             <a className="flex flex-col h-full overflow-hidden rounded-[10px]">
               {/* 이미지 */}
@@ -88,14 +90,18 @@ export default function Item({
                     <div className="flex">
                       <button
                         onClick={test}
-                        className="inline-flex items-center"
+                        className={`${
+                          myLike
+                            ? "text-red-500"
+                            : "text-gray-500 hover:text-red-500"
+                        } inline-flex items-center z-[100] pointer-events-none`}
                       >
                         <svg
                           className="w-5 h-5"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
-                          stroke="gray"
+                          stroke="currentColor"
                           aria-hidden="true"
                         >
                           <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
