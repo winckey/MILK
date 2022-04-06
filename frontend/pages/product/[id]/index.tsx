@@ -1,10 +1,11 @@
 import { Layout } from "@components/ui/layout";
 import { OrderModal } from "@components/ui/order";
 import { RealizationModal } from "@components/ui/realization";
+import { SellModal } from "@components/ui/sell";
+import { StreamModal } from "@components/ui/stream";
 import { ethers } from "ethers";
 import useUser from "@libs/client/useUser";
 import type { NextPage } from "next";
-// import Image from "next/image";
 import { useRouter } from "next/router";
 import {
   connectWallet,
@@ -13,15 +14,10 @@ import {
   findNFT,
   isMarketItem,
   isRealizedItem,
-  loadMarketItems,
   marketContract,
   nftContract,
 } from "utils/interact";
-import ThreeDimension from "@components/ui/image";
 import { useEffect, useState } from "react";
-import useMutation from "@libs/client/useMutation";
-import { useLocation } from "wouter";
-import { SellModal } from "@components/ui/sell";
 
 declare let window: any;
 
@@ -33,26 +29,22 @@ interface IResponse {
   description: any;
   edition: any;
   product: any;
-  nickname: any;
+  brandName: any;
 }
 
 const Product: NextPage = () => {
   const router = useRouter();
   const { user } = useUser();
   // console.log(user);
-
   const nftId = router.query?.id?.toString();
   const [isOwner, setIsOwner] = useState(false); // 본인 상품인지 여부
   const [selectedOrder, setSelectedOrder] = useState<null | object>(null);
   const [selectedRealization, setSelectedRealization] = useState<null | object>(
     null
   );
+  const [selectedStream, setSelectedStream] = useState(false);
   const [selectedSell, setSelectedSell] = useState<null | object>(null);
-  // const [marketplace, setMarketplace] = useState({});
-  // const [nft, setNFT] = useState({});
   const [sellerAddress, setSellerAddress] = useState("");
-  const [itemId, setItemId] = useState(0);
-  const [name, setName] = useState("");
   const [ethUSD, setEthUSD] = useState(0);
   const [exchange, setExchange] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -61,7 +53,6 @@ const Product: NextPage = () => {
   const [currentUser, setCurrentUser] = useState("");
   const [isProduct, setIsProduct] = useState(false);
   const [isRealize, setIsRealize] = useState(false);
-  const [tokenId, setTokenId] = useState<number>(0);
   const [marketItem, setMarketItem] = useState([]);
   const [price, setPrice] = useState(0);
 
@@ -69,22 +60,20 @@ const Product: NextPage = () => {
     setSelectedRealization(null);
     setSelectedOrder(null);
     setSelectedSell(null);
+    setSelectedStream(false);
   };
 
   const getNFT = async () => {
-    console.log(nftId);
+    // console.log(nftId);
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const marketplace = await marketContract(signer);
-    const nft = await nftContract(signer);
     const itemId = await findItemId(nftId, signer);
-    console.log(itemId);
-    console.log(nftId);
+    // console.log(itemId);
+    // console.log(nftId);
     const res = await findNFT(nftId);
     if (itemId) {
       const res2 = await findMarketNFT(itemId, signer);
-      console.log(res);
-      // console.log(res2);
+      // console.log(res);
       if (res2) {
         setPrice(res2.price);
         setMarketItem(res2);
@@ -104,22 +93,18 @@ const Product: NextPage = () => {
     if (nftUser === currentUser || sellerAddress === currentUser) {
       setIsOwner(true);
       setIsLoading(false);
-      console.log("이 사람이 주인입니다.");
+      // console.log("이 사람이 주인입니다.");
     } else {
       setIsOwner(false);
       setIsLoading(false);
-      console.log("이 사람이 주인이 아닙니다.");
+      // console.log("이 사람이 주인이 아닙니다.");
     }
   };
 
   const isRealized = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const marketplace = await marketContract(signer);
-    const nft = await nftContract(signer);
-    const itemId = await findItemId(nftId, signer);
     const res = await isRealizedItem(nftId, signer);
-    console.log(res);
     setIsRealize(res);
   };
 
@@ -137,7 +122,6 @@ const Product: NextPage = () => {
     if (response?.product) {
       setIsProduct(true);
       await isRealized();
-      // console.log(res.isRealization(tokenId));
     } else {
       setIsProduct(false);
     }
@@ -150,16 +134,6 @@ const Product: NextPage = () => {
       alert("이미 실물화된 상품입니다.");
     }
   };
-
-  // const loadContracts = async (signer) => {
-  //   const res1 = new ethers.Contract()
-  // }
-
-  // const buyMarketItem = async (item) => {
-  //   await (
-  //     await marketplace.purchaseItem(item.itemid, { value: item.totalPrice })
-  //   ).wait();
-  // };
 
   useEffect(() => {
     (async () => {
@@ -340,7 +314,7 @@ const Product: NextPage = () => {
                         <div className="text-[#8A939B] inline-flex items-center h-6 w-full text-[14.5px]">
                           Owned by
                           <span className="ml-1 overflow-hidden text-ellipsis text-[#2081e2] cursor-pointer">
-                            {response?.nickname}
+                            {response?.brandName}
                           </span>
                         </div>
                       </div>
@@ -427,9 +401,9 @@ const Product: NextPage = () => {
                                     onClick={() => {
                                       {
                                         isRealize
-                                          ? alert("이미 실물화된 상품입니다.")
+                                          ? alert("실물화 진행중인 상품입니다.")
                                           : sellerAddress
-                                          ? alert("이미 판매중인 상품입니다.")
+                                          ? alert("판매중인 상품입니다.")
                                           : setSelectedSell(response!);
                                       }
                                     }}
@@ -452,6 +426,12 @@ const Product: NextPage = () => {
                                   </button>
                                 </div>
                               </div>
+                              <button
+                                onClick={() => setSelectedStream(true)}
+                                className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full ml-3"
+                              >
+                                Live Stream
+                              </button>
                             </div>
                           ) : (
                             <div className="flex max-w-[420px]">
@@ -462,7 +442,7 @@ const Product: NextPage = () => {
                                     onClick={() => {
                                       sellerAddress
                                         ? isRealize
-                                          ? alert("이미 실물화된 상품입니다.")
+                                          ? alert("실물화 진행중인 상품입니다.")
                                           : setSelectedOrder(response!)
                                         : alert("판매중인 상품이 아닙니다.");
                                     }}
@@ -506,6 +486,12 @@ const Product: NextPage = () => {
                                   </button>
                                 </div>
                               </div>
+                              <button
+                                onClick={() => setSelectedStream(true)}
+                                className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full ml-3"
+                              >
+                                Live Stream
+                              </button>
                             </div>
                           )}
                         </div>
@@ -541,6 +527,9 @@ const Product: NextPage = () => {
             )}
             {selectedSell && (
               <SellModal response={response} onClose={cleanupModal} />
+            )}
+            {selectedStream && (
+              <StreamModal response={response} onClose={cleanupModal} />
             )}
           </>
         )}
