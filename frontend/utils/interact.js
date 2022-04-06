@@ -226,10 +226,11 @@ export const realizeItem = async (nftId, signer) => {
   const real = await (
     await nft.Realization(marketplace.address, Number(nftId))
   ).wait();
+  return real;
   // await real;
-  if (real) {
-    window.location.reload();
-  }
+  // if (real) {
+  //   window.location.reload();
+  // }
 };
 
 export const isRealizedItem = async (nftId, signer) => {
@@ -293,10 +294,10 @@ export const purchaseMarketItem = async (itemId, signer) => {
   ).wait();
   // await res;
 
-  {
-    // res && (await marketplace.cancelItem(itemId)));
-    res && window.location.reload();
-  }
+  // {
+  //   // res && (await marketplace.cancelItem(itemId)));
+  //   res && window.location.reload();
+  // }
 };
 
 export const sellMarketItem = async (nftId, price, signer) => {
