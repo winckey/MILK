@@ -1,10 +1,13 @@
 import { cls } from "@libs/client/utils";
+import { useEffect, useState } from "react";
+import { IoShapesOutline } from "react-icons/io5";
 
 interface MessageProps {
   message: string;
   reversed?: boolean;
   avatarUrl?: string;
   nickName: string;
+  isHost: boolean;
 }
 
 export default function Message({
@@ -12,12 +15,14 @@ export default function Message({
   reversed,
   avatarUrl,
   nickName,
+  isHost,
 }: MessageProps) {
   return (
     <div
       className={cls(
         "flex items-start space-x-2",
-        reversed ? "flex-row-reverse space-x-reverse" : ""
+        reversed ? "flex-row-reverse space-x-reverse " : "",
+        isHost ? "font-semibold" : ""
       )}
     >
       <span>{nickName}</span>
