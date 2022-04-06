@@ -144,12 +144,6 @@ const Create: NextPage = () => {
   //   console.log(marketplace);
   // };
 
-  const purchaseItem = async (item: Iitems) => {
-    console.log(marketplace);
-    const res = await purchaseMarketItem(item, marketplace);
-    console.log(res);
-  };
-
   const uploadIPFS = async (event: any) => {
     event.preventDefault();
     console.log(event);
@@ -180,6 +174,7 @@ const Create: NextPage = () => {
   const timeout = (delay: number) => {
     return new Promise((res) => setTimeout(res, delay));
   };
+
   const createNFT = async (event: any) => {
     event.preventDefault();
     if (!image || !name || !description || !edition) return;
@@ -221,11 +216,16 @@ const Create: NextPage = () => {
     const res1 = await marketContract(signer);
     const res2 = await nftContract(signer);
 
-    await (await res2.mint(uri)).wait();
+    const mintItem = await (await res2.mint(uri)).wait();
+    console.log(mintItem);
     // get tokenId of new nft
+
     const id = await res2.tokenCount();
     // approve marketplace to spend nft
-    await (await res2.setApprovalForAll(res1.address, true)).wait();
+    const approveItem = await (
+      await res2.setApprovalForAll(res1.address, true)
+    ).wait();
+    console.log(approveItem);
     // add nft to marketplace
     // const listingPrice = ethers.utils.parseEther(price.toString());
     console.log(id);
@@ -251,7 +251,7 @@ const Create: NextPage = () => {
         pathname: `/product/${itemId2}`,
       });
     } else {
-      alert("민팅에 실패했으니까 다시 츄라이 부탁합니다^^");
+      alert("민팅에 실패했으니까 다시 민팅해주세요.");
     }
   };
 
@@ -322,11 +322,7 @@ const Create: NextPage = () => {
         <div key={i}>{item.address}</div>
       ))} */}
       {/* {nftItems[0]} */}
-      <div className="min-h-screen w-full bg-lightBg  ">
-        <div className="flex justify-evenly">
-          <button onClick={onClick}>리스트</button>
-          <button onClick={connectMeta}>지갑연결 가즈앙</button>
-        </div>
+      <div className="min-h-screen w-full bg-lightBg pt-16">
         <div className="px-12 ml-12 mr-4 flex justify-center">
           <div className="w-[50]% ">
             <div className="text-3xl font-bold mb-8 "> Create New Item</div>
