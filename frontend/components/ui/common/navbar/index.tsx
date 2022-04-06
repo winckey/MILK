@@ -31,24 +31,6 @@ function MyDropdown({ logout, role }: any) {
             </a>
           </Link>
         </Menu.Item>
-        {role === "ROLE_ADMIN" ? (
-          <Menu.Item>
-            <Link href="/signup/partner">
-              <a className="px-4 py-2 hover:bg-gray-300 text-gray-500">
-                계정 관리
-              </a>
-            </Link>
-          </Menu.Item>
-        ) : (
-          <Menu.Item>
-            <a
-              className="px-4 py-2 hover:bg-gray-300 text-gray-500"
-              href="/create"
-            >
-              NFT생성
-            </a>
-          </Menu.Item>
-        )}
         <Menu.Item>
           <a
             onClick={logout}
@@ -57,6 +39,27 @@ function MyDropdown({ logout, role }: any) {
             로그아웃
           </a>
         </Menu.Item>
+        {/* 관리자만 보임 */}
+        {role === "ROLE_ADMIN" ? (
+          <Menu.Item>
+            <Link href="/signup/partner">
+              <a className="px-4 py-2 hover:bg-gray-300 text-gray-500">
+                계정 관리
+              </a>
+            </Link>
+          </Menu.Item>
+        ) : null}
+        {/* 기업만 보임 */}
+        {role === "ROLE_ENTERPRISE" ? (
+          <Menu.Item>
+            <a
+              className="px-4 py-2 hover:bg-gray-300 text-gray-500"
+              href="/create"
+            >
+              NFT 생성
+            </a>
+          </Menu.Item>
+        ) : null}
       </Menu.Items>
     </Menu>
   );
