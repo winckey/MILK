@@ -1,9 +1,11 @@
 import { Layout } from "@components/ui/layout";
 import type { NextPage } from "next";
 import useSWR from "swr";
-import Image from "next/image";
 import { Item } from "@components/ui/common";
 import { Nft } from "@components/ui/common/item";
+import { useRecoilValue } from "recoil";
+import { accessToken } from "@components/atoms/Auth";
+import { tokenFetcher } from "@libs/client/useUser";
 
 interface IndividualResponse {
   message: string;
@@ -12,11 +14,13 @@ interface IndividualResponse {
 }
 
 const Individual: NextPage = () => {
+  const TOKEN = useRecoilValue(accessToken);
+
   // 개인이 판매중인 nft 조회
   const { data } = useSWR<IndividualResponse>(
-    `${process.env.BASE_URL}/nft/search?ownerIsEnterprise=false`
+    [`${process.env.BASE_URL}/nft/search?ownerIsEnterprise=false`, TOKEN],
+    tokenFetcher
   );
-  console.log(data);
 
   return (
     <Layout seoTitle="개인관">
@@ -72,6 +76,7 @@ const Individual: NextPage = () => {
                   nftId={nft.nftId}
                   nftName={nft.nftName}
                   price={nft.price}
+                  myLike={nft.myLike}
                 />
               ))}
             </div>
