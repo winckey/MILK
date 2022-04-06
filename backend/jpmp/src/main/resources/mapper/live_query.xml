@@ -26,10 +26,8 @@
          where room_id = #{roomId}
     </select>
 
-    <select id="maxCost" parameterType="int" resultType="int">
-        select IFNULL(cost, 0)
-          from live_auction
-         where room_id = #{roomId}
+    <select id="getmaxCost" parameterType="int" resultType="int">
+        select IFNULL((select cost from live_auction where room_id = #{roomId}), 0)
     </select>
 
 </mapper>
