@@ -3,57 +3,9 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { marketContract, nftContract } from "utils/interact";
+import { marketContract, nftContract, realizeItem } from "utils/interact";
 
 import { Modal } from "../../common";
-
-// const defaultOrder = {
-//   price: "",
-//   email: "",
-//   confirmationEmail: "",
-// };
-
-// const _createFormState = (isDisabled = false, message = "") => ({
-//   isDisabled,
-//   message,
-// });
-
-// const createFormState = (
-//   { price, email, confirmationEmail },
-//   hasAgreedTOS,
-//   isNewPurchase
-// ) => {
-//   if (!price || Number(price) <= 0) {
-//     return _createFormState(true, "Price is not valid.");
-//   }
-
-//   if (isNewPurchase) {
-//     if (confirmationEmail.length === 0 || email.length === 0) {
-//       return _createFormState(true);
-//     } else if (email !== confirmationEmail) {
-//       return _createFormState(true, "Email are not matching.");
-//     }
-//   }
-
-//   if (!hasAgreedTOS) {
-//     return _createFormState(
-//       true,
-//       "You need to agree with terms of service in order to submit the form"
-//     );
-//   }
-
-//   return _createFormState();
-// };
-
-// interface Nft {
-//   brand: string;
-//   description: string;
-//   edition: string;
-//   image: string;
-//   name: string;
-//   price: string;
-//   type: boolean;
-// }
 
 declare let window: any;
 
@@ -85,10 +37,6 @@ export default function RealizationModal({
 }: RealizationModalProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-
-  // console.log(user);
-  // console.log(nft);
-  // console.log(nftId);
 
   // input 값 받아옴
   const {
@@ -137,12 +85,7 @@ export default function RealizationModal({
   const onRealization = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const res = await nftContract(signer);
-    const real = await res.Realization(realize, nftId);
-    console.log(real);
-    if (real) {
-      window.location.reload();
-    }
+    const res = await realizeItem(nftId, signer);
   };
 
   // server 응답 받았을 때 실행
@@ -158,9 +101,6 @@ export default function RealizationModal({
   // 취소 버튼
   const closeModal = () => {
     setIsOpen(false);
-    // setOrder(defaultOrder);
-    // setEnablePrice(false);
-    // setHasAgreedTOS(false);
     onClose();
   };
 

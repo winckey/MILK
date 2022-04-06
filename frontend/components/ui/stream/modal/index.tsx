@@ -27,14 +27,12 @@ interface Iresponse {
   onClose: Function;
 }
 
-export default function SellModal({ response, onClose }: Iresponse) {
+export default function StreamModal({ response, onClose }: Iresponse) {
   const [isOpen, setIsOpen] = useState(true);
   const [price, setPrice] = useState("");
   const nftId = response?.nftId;
-  const onSell = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    await sellMarketItem(nftId, price, signer);
+  const onLive = async () => {
+    // 여기에 함수 입력하면 된다
   };
 
   const closeModal = () => {
@@ -55,7 +53,7 @@ export default function SellModal({ response, onClose }: Iresponse) {
                     className="mb-7 text-lg font-bold leading-6 text-gray-900"
                     id="modal-title"
                   >
-                    판매하기
+                    라이브 경매방 생성하기
                   </h3>
                 </div>
 
@@ -79,12 +77,27 @@ export default function SellModal({ response, onClose }: Iresponse) {
                   </div>
                 </div>
                 <div className="block pl-4">
-                  <div className="text-sm font-bold">
-                    Edition {response?.edition} of Total Edition
+                  <div>
+                    <div className="text-sm font-bold mb-1">방제목</div>
+                    <div>
+                      <input
+                        className="bg-white rounded-[10px] border max-w-[600px] p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold mb-4 focus-within:outline-none"
+                        type="text"
+                      />
+                    </div>
                   </div>
-                  <div className="text-xs text-textGray pt-4">Product Name</div>
-                  {/* <div className="text-xl">{response?.name}</div> */}
-                  <div className="text-xs text-textGray pt-4">Price</div>
+                  <div>
+                    <div className="text-sm font-bold mb-1">진행시간</div>
+                    <div>
+                      <input
+                        className="bg-white rounded-[10px] border max-w-[600px] p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold mb-4 focus-within:outline-none"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold mb-1">시작가격</div>
+                  </div>
                   <div className="mb-2 flex flex-wrap">
                     <div className="text-[20px] font-semibold flex items-center">
                       <div>
@@ -96,48 +109,28 @@ export default function SellModal({ response, onClose }: Iresponse) {
                       </div>
                       <div className="ml-1 w-full overflow-hidden text-ellipsis flex items-end">
                         <input
+                          className="bg-white rounded-[10px] border max-w-[600px] p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold mb-4 focus-within:outline-none"
                           type="text"
-                          onChange={(e) => setPrice(e.target.value)}
                         />
-                        {/* {response?.price?.toFixed(2)}
-                        <div className="text-[15px] ml-1 mb-1 font-normal">
-                          <span className="text-textGray overflow-hidden text-ellipsis w-full">
-                            Eth (₩ {(ethUSD * exchange).toFixed(0)}원)
-                          </span>
-                        </div> */}
                       </div>
                     </div>
                     <div className="text-[15px] mt-[15px]"></div>
                   </div>
                 </div>
               </div>
-              <hr className="mt-4 bg-slate-300" />
-              <div className="my-2 font-bold">your current balance</div>
-              <div className="flex items-center">
-                <img
-                  className="w-5 h-5 mr-1 object-contain"
-                  src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
-                  alt="ETH"
-                />
-                <div className="text-lg font-bold">
-                  {/* {response?.balance?.toFixed(2)} */}
-                </div>
-                <span className="ml-1 text-sm text-textGray">Eth</span>
-              </div>
-              <div className="text-xs text-red-500"></div>
             </div>
           </div>
         </div>
         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex">
           <button
-            onClick={() => onSell()}
+            onClick={() => onLive()}
             className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
             // disabled={formState.isDisabled}
             // onClick={() => {
             //   onSubmit(order, course);
             // }}
           >
-            Sell
+            경매 시작하기
           </button>
         </div>
       </div>

@@ -15,11 +15,11 @@ module.exports = {
           mnemonic: {
             phrase: keys.MNEMONIC,
           },
-          providerOrUrl: `https://ropsten.infura.io/v3/${keys.INFURA_PROJECT_ID}`,
-          addressIndex: 3,
+          providerOrUrl: `https://goerli.infura.io/v3/${keys.INFURA_PROJECT_ID}`,
+          addressIndex: 0,
         }),
       // network_id: 3,=> ropsten
-      network_id: 3,
+      network_id: 5777,
       gas: 6000000,
       gasPrice: 20000000000,
       confirmations: 2,

@@ -1,25 +1,16 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { create, CID, Options, IPFSHTTPClient } from "ipfs-http-client";
+import { create, IPFSHTTPClient } from "ipfs-http-client";
 import {
   connectWallet,
-  findNFT,
   getUserBalance,
-  loadMarketItems,
-  loadNFTItems,
   marketContract,
   nftContract,
-  purchaseMarketItem,
 } from "../../utils/interact";
 import { useRouter } from "next/router";
-import detectEthereumProvider from "@metamask/detect-provider";
-import files from "@pages/api/files";
-import Web3 from "web3";
 import useMutation from "@libs/client/useMutation";
 import { useForm } from "react-hook-form";
-import { truncate } from "fs";
-import { SellModal } from "@components/ui/sell";
 import { Layout } from "@components/ui/layout";
 import useUser from "@libs/client/useUser";
 
@@ -56,29 +47,14 @@ const Create: NextPage = () => {
   const { user, isLoading } = useUser();
   // 계정 연결
   const [account, setAccount] = useState("");
-  // const [loading, setLoading] = useState(true);
-  const [items, setitems] = useState<any>([]);
-  const [hidden, setHidden] = useState(true);
-  const [marketplace, setMarketplace] = useState({});
-  const [time, setTime] = useState(false);
-  const [nft, setNFT] = useState({});
-  // const [id, setId] = useState("");
   const [image, setImage] = useState<string | undefined>("");
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [edition, setEdition] = useState(0);
-  const [type, setType] = useState(0);
-  const [loyalty, setLoyalty] = useState(0);
   const [product, setProduct] = useState(false);
   const [nftId, setNftId] = useState("");
   const nickname = user?.nickname;
-  console.log(nickname);
-
-  // const setAccountListener = (provider: any) => {
-  // provider.on("accountsChanged", (_) => window.location.reload());
-  // setLoading(false);
-  // };
+  const brandName = user?.userName;
 
   const [uploadNFT, { loading, data, error }] =
     useMutation<INftResponse>("/nft");
@@ -91,14 +67,9 @@ const Create: NextPage = () => {
     watch,
   } = useForm<INftForm>({ mode: "onBlur" });
 
-  const onValid = (formData: INftForm) => {
-    // console.log(formData);
-    console.log(nftId);
+  const onValid = async (formData: INftForm) => {
     if (loading) return;
-
-    console.error("하이~");
     console.log(formData);
-    // console.log(newFormData);
     if (window.confirm("해당 상품을 NFT로 등록하시겠습니까?") === true) {
       uploadNFT(formData);
     }
@@ -108,7 +79,6 @@ const Create: NextPage = () => {
   try {
     ipfs = create({
       url: "https://ipfs.infura.io:5001/api/v0",
-      // headers: { authorization },
     });
   } catch (error) {
     console.error("IPFS error ", error);
@@ -123,52 +93,20 @@ const Create: NextPage = () => {
       } else {
         alert("지갑을 연결해주세요");
       }
-      // const provider = await detectEthereumProvider();
-      // setAccountListener(provider);
-      console.log(wallet);
     }
   };
 
-  // const loadContracts = async () => {
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   const signer = provider.getSigner();
-  //   const res1 = await marketContract(signer);
-  //   const res2 = await nftContract(signer);
-  //   const items = await loadMarketItems(res1, res2);
-  //   setitems(items);
-  //   setMarketplace(res1);
-  //   setNFT(res2);
-  //   setLoading(false);
-  //   setId(items.id);
-  //   console.log(id);
-  //   console.log(marketplace);
-  // };
-
   const uploadIPFS = async (event: any) => {
     event.preventDefault();
-    console.log(event);
-    console.log(event.target[0]);
     const form = event.target as HTMLFormElement;
-    console.log(form);
     const file = form.files[0];
-    console.log(files);
-    // const file = event.target.files[0];
-    // if (!files || files.length === 0) {
-    //   return alert("No files selected");
-    // }
-    // const file = files[0];
-    console.log(file);
 
     if (typeof file !== "undefined") {
       try {
         const result = await (ipfs as IPFSHTTPClient).add(file);
-        console.log(result);
         setImage(`https://ipfs.infura.io/ipfs/${result.path}`);
-      } catch (error) {
-        console.log("ipfs image upload error: ", error);
-      }
+      } catch (error) {}
     }
-    console.log(typeof image);
   };
 
   const timeout = (delay: number) => {
@@ -177,19 +115,9 @@ const Create: NextPage = () => {
 
   const createNFT = async (event: any) => {
     event.preventDefault();
-    if (!image || !name || !description || !edition) return;
+    if (!image || !name || !description || !edition || !account || !brandName)
+      return;
     try {
-      // let result = [];
-      // for (let index = 1; index <= Number(edition); index++) {
-      //   const tmp = await (ipfs as IPFSHTTPClient).add(
-      //     JSON.stringify({ image, name, description, index })
-      //   );
-      //   console.log(index);
-      //   // await timeout(1000);
-      //   console.log(result);
-      //   result.push(tmp);
-      // }
-      // console.log(result);
       const result = await (ipfs as IPFSHTTPClient).add(
         JSON.stringify({
           image,
@@ -198,10 +126,9 @@ const Create: NextPage = () => {
           edition,
           product,
           account,
-          nickname,
+          brandName,
         })
       );
-      console.log(result);
       mintThenList(result);
     } catch (error) {
       console.log("ipfs uri upload error: ", error);
@@ -212,120 +139,59 @@ const Create: NextPage = () => {
     const uri = `https://ipfs.infura.io/ipfs/${result.path}`;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const jsonRpcProvider = new ethers.providers.JsonRpcProvider();
     const res1 = await marketContract(signer);
     const res2 = await nftContract(signer);
-
     const mintItem = await (await res2.mint(uri)).wait();
-    console.log(mintItem);
-    // get tokenId of new nft
-
     const id = await res2.tokenCount();
-    // approve marketplace to spend nft
+
     const approveItem = await (
       await res2.setApprovalForAll(res1.address, true)
     ).wait();
+
     console.log(approveItem);
-    // add nft to marketplace
-    // const listingPrice = ethers.utils.parseEther(price.toString());
-    console.log(id);
-    console.log(parseInt(id, 16));
+
     const itemId = parseInt(id, 16).toString();
     console.log(itemId);
     const itemId2 = itemId.toString();
     console.log(itemId2);
     setNftId(itemId2);
-    const test = { imgUrl: image, nftId: itemId2, nftName: name, price: "1" };
+    const test = {
+      imgUrl: image,
+      nftId: itemId2,
+      nftName: name,
+      price: "1",
+    };
     const newFormData = Object.assign(test);
-    console.log(newFormData);
-    const balance: any = await getUserBalance();
 
-    handleSubmit(() => onValid(newFormData));
-
-    console.log(res1.itemCount());
-
-    // await (await res1.makeItem(res2.address, id, 1)).wait();
-
-    if (balance) {
-      router.push({
-        pathname: `/product/${itemId2}`,
-      });
-    } else {
-      alert("민팅에 실패했으니까 다시 민팅해주세요.");
+    if (approveItem) {
+      // const balance = await getUserBalance();
+      const res = onValid(newFormData);
+      console.log("submit", newFormData);
+      console.log(res);
+      console.log(data);
     }
-  };
 
-  const [nftItems, setNFTItems] = useState({});
-  const onClick = async () => {
-    // const provider = new ethers.providers.Web3Provider(window.ethereum);
-    // const signer = provider.getSigner();
-    // const res1 = await marketContract(signer);
-    // const res2 = await nftContract(signer);
-    // const itemcount = res1.itemCount;
-    // const itemid = parseInt(itemcount, 16).toString();
-    // console.log(res1.itemCount());
-    // console.log(itemid);
-    // const res = await loadMarketItems();
-    // console.log(res);
-    const response = await loadNFTItems();
-
-    // const itemCounts = parseInt(res, 16).toString();
-    // console.log(itemCounts);
-    console.log(response);
-    // let nftAddress = [];
-    // for (let i = 0; i < res.length; i++) {
-    //   console.log(account);
-    //   console.log(res[i].address);
-    //   if (account === res[i].address) {
-    //     nftAddress.push(res[i].address);
-    //   }
-    // }
-    // setNFTItems(nftAddress);
-    const res2 = await loadMarketItems();
-    console.log(res2);
-    const item = await findNFT("1");
-    console.log(item);
+    router.push({ pathname: `/product/${itemId2}` });
   };
 
   useEffect(() => {
     connectMeta();
-    // onClick();
   }, []);
 
-  // useEffect(() => {
-  //   if (data && data.statusCode === 200) {
-  //     alert("NFT 상품이 등록되었습니다!");
-  //     router.push({
-  //       pathname: `/product/${nftId}`,
-  //       query: { name, image, description, price, edition, type, nftId },
-  //     });
-  //   }
-  // }, [data, router]);
-  // useEffect(() => {
-  //   // web3Handler();
-  //   loadContracts();
-  // }, []);
-  console.log(product);
-  const inputClass =
-    "bg-white rounded-[10px] border max-w-[600px] p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold";
+  console.log(data);
+  console.log(brandName);
 
-  const [owner, setOwner] = useState(false);
-  const isOwner = (item: any) => {
-    if (account === item) {
-      setOwner(true);
-    }
-  };
-  console.log(nftItems);
+  const inputClass =
+    "bg-white rounded-[10px] border max-w-[600px] p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold focus-within:outline-none";
   return (
     <Layout seoTitle="NFT생성">
-      {/* {nftItems.map((item, i) => (
-        <div key={i}>{item.address}</div>
-      ))} */}
-      {/* {nftItems[0]} */}
       <div className="min-h-screen w-full bg-lightBg pt-16">
         <div className="px-12 ml-12 mr-4 flex justify-center">
           <div className="w-[50]% ">
-            <div className="text-3xl font-bold mb-8 "> Create New Item</div>
+            <div className="text-3xl font-black mb-8 ">
+              {" "}
+              새로운 NFT 생성하기{" "}
+            </div>
             <div className="text-xs text-textGray mb-2">
               <span className="text-red-500 font-bold">*</span> 필수 입력항목
             </div>
@@ -335,12 +201,13 @@ const Create: NextPage = () => {
                 <div className="">
                   <div>
                     <div className="font-bold">
-                      Image, Video, Audio, or 3D Model
+                      {/* Image, Video, Audio, or 3D Model */}
+                      이미지, 비디오, 오디오, 혹은 3D 모델
                       <span className="pl-1 text-red-500">*</span>
                     </div>
                     <div className="text-xs text-textGray pb-2 font-medium">
-                      File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3,
-                      WAV, OGG, GLB, GLTF. Max size: 100 MB
+                      지원 파일형식 : JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV,
+                      OGG, GLB, GLTF. Max size: 100 MB
                     </div>
                     <label className="lg:w-[100%] lg:h-[300px] w-[300px] h-[200px] flex flex-col items-center justify-center px-4 py-6 bg-white text-gold rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-gold hover:text-white">
                       <svg
