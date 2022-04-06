@@ -46,7 +46,6 @@ public class LiveDto {
     @ApiModelProperty(name = "nft 아이디", example = "nft id")
     private String nftId;
 
-    @ApiModelProperty(name = "nft 아이디", example = "nft id")
-    @JsonFormat(pattern = "HH:mm:ss")
-    private LocalTime starttime;
+    @ApiModelProperty(name = "시작시간", example = "123456")
+    private int starttime;
 }
