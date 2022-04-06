@@ -32,9 +32,9 @@ const Create: NextPage = () => {
   const router = useRouter();
 
   const [streamData, setStreamData] = useState({
-    cfId: "",
-    cfKey: "",
-    cfUrl: "",
+    // cfId: "",
+    // cfKey: "",
+    // cfUrl: "",
     nickname: "",
     roomName: "",
     runtime: 0,
@@ -54,16 +54,6 @@ const Create: NextPage = () => {
     setStreamData({ ...streamData, startprice: value });
   };
 
-  // cloudflare 데이터 갱신
-  const getStreamId = async () => {
-    const { uid, streamKey, url } = await (await fetch(`/api/streams`)).json();
-    setStreamData({
-      ...streamData,
-      cfId: uid,
-      cfKey: streamKey,
-      cfUrl: url,
-    });
-  };
   // 방 만들기 버튼 누를 때, 스트리밍 생성 함수 실행
   const makeRoom = async () => {
     if (streamData.roomName === "") {
@@ -73,19 +63,20 @@ const Create: NextPage = () => {
     } else if (streamData.startprice === 0) {
       alert("시작 가격을 지정해주세요");
     } else {
-      await getStreamId();
-      // console.log(streamData);
-      await makeStream(streamData);
+      const { uid, streamKey, url } = await (
+        await fetch(`/api/streams`)
+      ).json();
+      console.log(uid, streamKey, url);
+
+      makeStream({
+        ...streamData,
+        cfId: uid,
+        cfKey: streamKey,
+        cfUrl: url,
+      });
     }
   };
 
-  useEffect(() => {
-    if (data && data.statusCode === 200) {
-      console.log(data);
-      // console.log(data.roomId);
-      router.push(`/streams/${data.roomId}`);
-    }
-  }, [data, router]);
   // 최초 들어온 유저 데이터 갱신
   useEffect(() => {
     setStreamData({
@@ -95,7 +86,12 @@ const Create: NextPage = () => {
     });
   }, [user]);
 
-  console.log(streamData);
+  useEffect(() => {
+    // makeStream(streamData);
+    if (data && data.statusCode === 200) {
+      router.push(`/streams/${data.roomId}`);
+    }
+  }, [data, router]);
 
   return (
     <div>

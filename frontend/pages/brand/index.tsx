@@ -16,7 +16,7 @@ const Brand: NextPage = () => {
             <div className="grid sm:grid-cols-2 md:grid-cols-3 md:grid-rows-10 md:grid-flow-col gap-8">
               {/* CELINE */}
               <div className="md:row-start-2 md:row-span-2 h-[350px]">
-                <div className="h-full bg-[#201819] rounded-3xl border-4 border-lightGold hover:border-gold transition hover:scale-[1.02] cursor-pointer shadow-md hover:shadow-xl">
+                <div className="h-full bg-[#201819] rounded-3xl border-4  border-lightGold hover:border-gold transition hover:scale-[1.02] cursor-pointer shadow-md hover:shadow-xl">
                   <a className="h-full flex flex-col justify-between">
                     <div className="p-10 flex justify-center items-center">
                       <svg
