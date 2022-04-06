@@ -16,9 +16,18 @@ export default function Layout({ children, seoTitle, canGoBack }: LayoutProps) {
       <Head>
         <title>MILC | {seoTitle}</title>
       </Head>
-      <Header />
-      <div className="min-h-screen w-full pt-[80px] bg-lightBg">{children}</div>
-      <Footer />
+      {canGoBack ? (
+        <div className="min-h-screen w-full bg-lightBg">{children}</div>
+      ) : (
+        <>
+          <Header />
+
+          <div className="min-h-screen w-full pt-[80px] bg-lightBg">
+            {children}
+          </div>
+          <Footer />
+        </>
+      )}
     </div>
   );
 }

@@ -14,7 +14,7 @@ function MyDropdown({ logout, role }: any) {
     setOpen(!open);
   }
   return (
-    <Menu as="div" className="flex py-3 hover:bg-gold px-3 border rounded-full">
+    <Menu as="div" className="flex py-3 hover:bg-gold px-2 border rounded-full">
       <Menu.Button
         onClick={() => {
           toggleOpen();
@@ -31,6 +31,7 @@ function MyDropdown({ logout, role }: any) {
             </a>
           </Link>
         </Menu.Item>
+        {/* 관리자만 보임 */}
         {role === "ROLE_ADMIN" ? (
           <Menu.Item>
             <Link href="/signup/partner">
@@ -39,16 +40,18 @@ function MyDropdown({ logout, role }: any) {
               </a>
             </Link>
           </Menu.Item>
-        ) : (
+        ) : null}
+        {/* 기업만 보임 */}
+        {role === "ROLE_ENTERPRISE" ? (
           <Menu.Item>
             <a
               className="px-4 py-2 hover:bg-gray-300 text-gray-500"
-              href="/show/arts"
+              href="/create"
             >
-              나의 전시관
+              NFT 생성
             </a>
           </Menu.Item>
-        )}
+        ) : null}
         <Menu.Item>
           <a
             onClick={logout}
@@ -80,31 +83,32 @@ export default function Header() {
   const UserLinks = [
     { name: "개인관", link: "/individual" },
     { name: "명품관", link: "/brand" },
-    { name: "CREATE", link: "/create" },
+    { name: "나의 전시관", link: "/exhibition/arts" },
+    { name: "라이브 경매", link: "/streams" },
   ];
 
   return (
     <div className="shadow-md w-full bg-ourBlack z-10 h-[80px] fixed top-0 left-0 text-white">
-      <div className="flex items-center justify-between md:pt-4  bg-ourBlack   px-2">
+      <div className="flex justify-between lg:pt-3  bg-ourBlack   px-2">
         <div className="font-bold text-2xl cursor-pointer flex pl-4  ">
-          <span className="text-4xl pt-4 md:pt-0 bg-clip-text  text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
+          <div className="text-4xl bg-clip-text  lg:pt-1 pt-4 text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold">
             <Link href={"/"}>
               <a>MILC</a>
             </Link>
-          </span>
+          </div>
         </div>
 
         <div
           onClick={() => setOpen(!open)}
           className="text-3xl absolute right-8 top-6 flex cursor-pointer text-gold
-          md:hidden"
+          lg:hidden"
         >
           <IoMenu />
         </div>
 
         <ul
-          className={`md:flex md:items-center md:flex-row flex flex-col md:pb-0 pb-8 absolute md:static bg-ourBlack z-auto  left-0 w-full md:w-auto md:pl-0 px-9 transition-all duration-500 ease-in md:gap-x-2 ${
-            open ? "top-16 gap-y-5 pt-2 md:pt-0" : " top-[-490px]"
+          className={`lg:flex lg:items-center lg:flex-row flex flex-col lg:pb-0 pb-8 absolute lg:static bg-ourBlack z-auto  left-0 w-full lg:w-auto lg:pl-0 px-9 transition-all duration-500 ease-in lg:gap-x-2 ${
+            open ? "top-16 gap-y-5 pt-2 lg:pt-0" : " top-[-490px]"
           }`}
         >
           <SearchBar />
@@ -127,7 +131,7 @@ export default function Header() {
                   </Link>
                 </li>
               ))}
-          <div className="flex md:border-l-2 md:border-gray-400 text-xl md:pl-3 justify-start gap-3 ">
+          <div className="flex lg:border-l-2 lg:border-gray-400 text-xl lg:pl-3 justify-start gap-3 ">
             {TOKEN ? (
               <MyDropdown logout={logout} role={getRole} />
             ) : (

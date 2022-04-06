@@ -2,7 +2,7 @@
 // POST, PUT fetch (DB의 상태를 mutate)
 
 import { accessToken } from "@components/atoms/Auth";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRecoilValue } from "recoil";
 
 interface UseMutationState<T> {
@@ -26,24 +26,9 @@ export default function useMutation<T = any>(
     error: undefined,
     methodType,
   });
-  // console.log(methodType);
 
   const URL = `${process.env.BASE_URL}${url}`;
   const TOKEN = useRecoilValue(accessToken);
-  // const [headers, setHeaders] = useState({});
-
-  // useEffect(() => {
-  //   if (methodType === "PUT") {
-  //     setHeaders({
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${TOKEN}`,
-  //     });
-  //   } else {
-  //     setHeaders({
-  //       "Content-Type": "application/json",
-  //     });
-  //   }
-  // }, []);
 
   function mutation(data: any) {
     setState((prev) => ({ ...prev, loading: true }));

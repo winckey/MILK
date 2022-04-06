@@ -7,6 +7,9 @@ import { Item } from "@components/ui/common";
 import { Nft } from "@components/ui/common/item";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { accessToken } from "@components/atoms/Auth";
+import { tokenFetcher } from "@libs/client/useUser";
 
 export interface OwnNftResponse {
   message: string;
@@ -19,11 +22,14 @@ const Profile: NextPage = () => {
 
   const [forSaleList, setForSaleList] = useState<Nft[]>();
 
+  const TOKEN = useRecoilValue(accessToken);
+
   // 해당 nickname을 가진 유저의 판매/보유 nft 리스트 가져오기
   const { data } = useSWR<OwnNftResponse>(
     router.query.nickname
-      ? `${process.env.BASE_URL}/nft/user/${router.query.nickname}`
-      : null
+      ? [`${process.env.BASE_URL}/nft/user/${router.query.nickname}`, TOKEN]
+      : null,
+    tokenFetcher
   );
 
   // 가져온 리스트에서 판매중인 nft만 필터링
@@ -33,8 +39,6 @@ const Profile: NextPage = () => {
       setForSaleList(tmp);
     }
   }, [data, router]);
-
-  console.log(data);
 
   return (
     <Layout seoTitle="프로필">

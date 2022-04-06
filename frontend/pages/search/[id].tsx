@@ -6,22 +6,13 @@ import { useState, Fragment, useEffect } from "react";
 import { useRouter } from "next/router";
 import useMutation from "@libs/client/useMutation";
 import useSWR from "swr";
+import { Item } from "@components/ui/common";
+import { Nft } from "@components/ui/common/item";
 
-interface nftDtoList {
-  nftId: string;
-  nftName: string;
-  price: string;
-  imgUrl: null;
-  realStatus: boolean;
-  seleStatus: boolean;
-  owner: string;
-  enterprise: string;
-}
-
-interface INftResponse {
+interface SearchResponse {
   message: string;
   statusCode: number;
-  nftDtoList: nftDtoList[];
+  nftDtoList: Nft[];
 }
 
 const Search: NextPage = () => {
@@ -31,32 +22,19 @@ const Search: NextPage = () => {
   const [priceRange, setPriceRange] = useState(9999);
   const router = useRouter();
   const { id } = router.query;
-  console.log(id);
-  const [list, setList] = useState([]);
 
   // 해당 변수들(필터링, 검색키워드, 정렬) 파라미터 적용하여 변화감지할때마다 api 요청
-  async function handler() {
-    const data = await (
-      await fetch(
-        `${process.env.BASE_URL}/nft/search?enterprise=${id}&ownerIsEnterprise=${roomSelected}&sort=${sortSelected}`
-      )
-    ).json();
-    console.log(data.statusCode);
-    if (data.statusCode === 404) {
-      alert("검색결과가 없습니다!");
-    } else {
-      setList(data.nftDtoList);
-    }
-  }
+  const { data } = useSWR<SearchResponse>(
+    id
+      ? `${process.env.BASE_URL}/nft/search?enterprise=${id}&max=9999&min=0&ownerIsEnterprise=${roomSelected}&sort=${sortSelected}`
+      : null
+  );
 
-  console.log(list);
   useEffect(() => {
-    handler();
-  }, [id, sortSelected, roomSelected, selectedPrice]);
-  // ;
-
-  // 해당 결과가 없으면 보여줄 것
-  //  !updatedList.length ? setResultsFound(false) : setResultsFound(true);
+    if (data && data?.statusCode === 404) {
+      alert("검색결과가 없습니다.");
+    }
+  }, [data, router]);
 
   return (
     <Layout seoTitle="검색 결과">
@@ -144,8 +122,18 @@ const Search: NextPage = () => {
             </div>
             {/* 검색 결과 */}
             <div className="border-2 h-screen flex flex-wrap px-5">
-              {" "}
-              조회 결과
+              {data?.nftDtoList.map((nft) => (
+                <Item
+                  key={nft.nftId}
+                  enterprise={nft.enterprise}
+                  imgUrl={nft.imgUrl}
+                  likeCount={nft.likeCount}
+                  nftId={nft.nftId}
+                  nftName={nft.nftName}
+                  price={nft.price}
+                  myLike={false}
+                />
+              ))}
             </div>
           </div>
         </div>
