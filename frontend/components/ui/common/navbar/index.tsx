@@ -2,7 +2,7 @@ import { IoClose, IoMenu } from "react-icons/io5";
 import SearchBar from "./SearchBar";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { accessToken, role } from "@components/atoms/Auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -71,6 +71,7 @@ export default function Header() {
   const [TOKEN, setTOKEN] = useRecoilState(accessToken);
   const getRole = useRecoilValue(role);
   const [open, setOpen] = useState(false);
+  const [nickname, setNickname] = useState("");
   const router = useRouter();
   const logout = () => {
     router.push("/");
@@ -85,9 +86,14 @@ export default function Header() {
   const UserLinks = [
     { name: "개인관", link: "/individual" },
     { name: "명품관", link: "/brand" },
-    { name: "나의 전시관", link: `/exhibition/${user.nickname}` },
+    { name: "나의 전시관", link: `/exhibition/${nickname}` },
     { name: "라이브 경매", link: "/streams" },
   ];
+  useEffect(() => {
+    if (user) {
+      setNickname(user.nickname);
+    }
+  }, []);
 
   return (
     <div className="shadow-md w-full bg-ourBlack z-10 h-[80px] fixed top-0 left-0 text-white">
