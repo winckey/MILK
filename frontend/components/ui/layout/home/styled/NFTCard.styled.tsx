@@ -133,10 +133,10 @@ export default function NFTCard({ item }: any) {
       <Card>
         <BadgeEl>{enterprise}</BadgeEl>
         <ItemImage>
-          {/* <Image src={im} width="1024" height="1025" /> */}
-          <div className="w-[70vw] sm:w-[40vw] md:w-[20vw] h-60 flex justify-center">
+          <img src={imgUrl} alt="#" width="1024" height="1025" />
+          {/* <div className="w-[70vw] sm:w-[40vw] md:w-[20vw] h-60 flex justify-center">
             사진
-          </div>
+          </div> */}
         </ItemImage>
         <InfoSection>
           <TSection>

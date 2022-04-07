@@ -18,6 +18,7 @@ interface SearchResponse {
   message: string;
   statusCode: number;
   nftDtoList: Nft[];
+  total: number;
 }
 
 const Search: NextPage = () => {
@@ -49,8 +50,7 @@ const Search: NextPage = () => {
   const handleChangePrice = (event: Event, value: any) => {
     setSelectedPrice(value);
   };
-
-  console.log(page);
+  console.log(data);
   return (
     <Layout seoTitle="검색 결과">
       <div className="flex flex-col  max-w-full mx-10 p-10 items-center ">
@@ -95,10 +95,10 @@ const Search: NextPage = () => {
               <div className="font-semibold flex flex-col md:flex-row text-lg pb-3">
                 <span>가격</span> <span>범위</span>
               </div>
-              <RangeSlider
+              {/* <RangeSlider
                 value={selectedPrice}
                 changePrice={handleChangePrice}
-              />
+              /> */}
             </div>
           </div>
           {/* 오른쪽 */}
@@ -150,24 +150,28 @@ const Search: NextPage = () => {
             </div>
             {/* 검색 결과 */}
             <div className=" grid h-80 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 px-2 md">
-              {data?.nftDtoList.map((nft) => (
-                <Item
-                  key={nft.nftId}
-                  enterprise={nft.enterprise}
-                  imgUrl={nft.imgUrl}
-                  likeCount={nft.likeCount}
-                  nftId={nft.nftId}
-                  nftName={nft.nftName}
-                  price={nft.price}
-                  myLike={nft.myLike}
-                />
-              ))}
+              {data && data?.nftDtoList?.length > 0 ? (
+                data.nftDtoList.map((nft) => (
+                  <Item
+                    key={nft.nftId}
+                    enterprise={nft.enterprise}
+                    imgUrl={nft.imgUrl}
+                    likeCount={nft.likeCount}
+                    nftId={nft.nftId}
+                    nftName={nft.nftName}
+                    price={nft.price}
+                    myLike={nft.myLike}
+                  />
+                ))
+              ) : (
+                <div className="flex items-center">검색결과가 없습니다</div>
+              )}
             </div>
             <div className="h-4 mr-10 ">
               <Pagination
                 page={page}
                 onChange={(e, value) => setPage(value)}
-                count={10}
+                count={data?.total}
                 shape="rounded"
               />
             </div>

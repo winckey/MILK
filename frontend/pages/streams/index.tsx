@@ -43,19 +43,19 @@ const Streams: NextPage = () => {
           {/* 메인 글 */}
           <div className="flex flex-col items-center mb-5">
             <span className="text-[40px] font-[600] bg-clip-text text-transparent bg-gradient-to-r from-gold to-lightGold my-7">
-              MILC Live Auction
+              STREAM NOW
             </span>
             <div className="text-center text-textGray p-5">
               <span>
                 브랜드 사의 NFT 한정품을 소장할 수 기회입니다.
                 <br />
                 MILC는 세계에서 하나뿐인 NFT 제품을{" "}
-                <span className="font-semibold">실시간 경매</span>할 수 있는
-                서비스를 제공합니다.
+                <span className="font-semibold">스트리밍으로 경매</span>할 수
+                있는 서비스를 제공합니다.
                 <br />
                 한정된 시간동안 당신의 미래 NFT는 높은 가치로 거듭나고 있습니다.
                 <br />
-                사람들의 가치가 모든 담긴,
+                제품을 실제로 만나보며 사람들의 가치가 모든 담긴,
                 <br />
                 나의 미래 NFT 제품을 소장하십시오.
               </span>
@@ -66,7 +66,7 @@ const Streams: NextPage = () => {
         {/* 카드 */}
         <div>
           <p className="text-2xl font-[600] bg-clip-text text-transparent bg-gradient-to-r from-textGray to-textBlack text-center my-10">
-            Live Auction List
+            Auction List
           </p>
           <div className="px-[52px]">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
