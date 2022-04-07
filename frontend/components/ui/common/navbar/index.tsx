@@ -2,7 +2,7 @@ import { IoClose, IoMenu } from "react-icons/io5";
 import SearchBar from "./SearchBar";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { accessToken, role } from "@components/atoms/Auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";

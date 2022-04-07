@@ -104,7 +104,7 @@ const Create: NextPage = () => {
     if (typeof file !== "undefined") {
       try {
         const result = await (ipfs as IPFSHTTPClient).add(file);
-        setImage(`http://j6e206.p.ssafy.io/ipfs/${result.path}`);
+        setImage(`https://j6e206.p.ssafy.io/ipfs/${result.path}`);
       } catch (error) {}
     }
   };
@@ -136,7 +136,7 @@ const Create: NextPage = () => {
   };
 
   const mintThenList = async (result: any) => {
-    const uri = `http://j6e206.p.ssafy.io/ipfs/${result.path}`;
+    const uri = `https://j6e206.p.ssafy.io/ipfs/${result.path}`;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const res1 = await marketContract(signer);
