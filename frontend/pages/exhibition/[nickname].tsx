@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { accessToken } from "@components/atoms/Auth";
-import { tokenFetcher } from "@libs/client/useUser";
+import useUser, { tokenFetcher } from "@libs/client/useUser";
 import { OwnNftResponse } from "@pages/profile/[nickname]";
 import Arts from "@components/ui/exhibition/arts";
 
@@ -27,10 +27,10 @@ interface Nft {
 
 const Exhibition: NextPage = () => {
   const router = useRouter();
-
+  const { user } = useUser();
   const [collectionList, setCollectionList] = useState<Nft[]>();
   const [loading, setLoading] = useState(true);
-
+  const [nickname, setNickname] = useState("");
   const TOKEN = useRecoilValue(accessToken);
 
   // 해당 nickname을 가진 유저의 판매/보유 nft 리스트 가져오기
@@ -50,6 +50,7 @@ const Exhibition: NextPage = () => {
       const tmp = data.nftDtoList.filter((nft) => nft.seleStatus === false);
       const image = tmp.map((item) => images.push(item.imgUrl));
       setCollectionList(images);
+      setNickname(user.nickname);
       setLoading(false);
     }
   }, [data, router]);
@@ -61,7 +62,7 @@ const Exhibition: NextPage = () => {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <Arts collectionList={collectionList} />
+        <Arts collectionList={collectionList} nickname={nickname} />
       )}
     </div>
   );

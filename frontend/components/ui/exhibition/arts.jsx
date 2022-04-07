@@ -27,7 +27,7 @@ const pexel = (id) =>
 
 const GOLDENRATIO = 1.61803398875;
 
-export default function Arts({ collectionList }) {
+export default function Arts({ collectionList, nickname }) {
   // let collectionItems = [];
   // const mappingImages = collectionList.map((item) =>
   //   collectionItems.push(item)
@@ -126,7 +126,7 @@ export default function Arts({ collectionList }) {
         <fog attach="fog" args={["#191920", 0, 15]} />
         <Environment preset="city" />
         <group position={[0, -0.5, 0]}>
-          <Frames images={artImages} />
+          <Frames images={artImages} nickname={nickname} />
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
             <planeGeometry args={[50, 50]} />
             <MeshReflectorMaterial
@@ -240,6 +240,7 @@ function Frame({ url, ...props }) {
 
 function Frames({
   images,
+  nickname,
   q = new THREE.Quaternion(),
   p = new THREE.Vector3(),
 }) {
@@ -273,7 +274,7 @@ function Frames({
             : "/item/" + e.object.name
         )
       )}
-      onPointerMissed={() => setLocation("/exhibition/arts")}
+      onPointerMissed={() => setLocation(`/exhibition/${nickname}`)}
     >
       {images.map(
         (props) => <Frame key={props.url} {...props} /> /* prettier-ignore */
