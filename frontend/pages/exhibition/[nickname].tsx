@@ -10,7 +10,7 @@ import { useRecoilValue } from "recoil";
 import { accessToken } from "@components/atoms/Auth";
 import { tokenFetcher } from "@libs/client/useUser";
 import { OwnNftResponse } from "@pages/profile/[nickname]";
-import Arts from "@pages/exhibition/arts";
+import Arts from "@components/ui/exhibition/arts";
 
 interface Nft {
   nftId: string;
