@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
 import { create, IPFSHTTPClient } from "ipfs-http-client";
 import {
@@ -78,7 +78,7 @@ const Create: NextPage = () => {
   let ipfs: IPFSHTTPClient | undefined;
   try {
     ipfs = create({
-      url: "https://ipfs.infura.io:5001/api/v0",
+      url: "https://j6e206.p.ssafy.io/api/v0",
     });
   } catch (error) {
     console.error("IPFS error ", error);
@@ -104,7 +104,7 @@ const Create: NextPage = () => {
     if (typeof file !== "undefined") {
       try {
         const result = await (ipfs as IPFSHTTPClient).add(file);
-        setImage(`https://ipfs.infura.io/ipfs/${result.path}`);
+        setImage(`http://j6e206.p.ssafy.io/ipfs/${result.path}`);
       } catch (error) {}
     }
   };
@@ -136,7 +136,7 @@ const Create: NextPage = () => {
   };
 
   const mintThenList = async (result: any) => {
-    const uri = `https://ipfs.infura.io/ipfs/${result.path}`;
+    const uri = `http://j6e206.p.ssafy.io/ipfs/${result.path}`;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const res1 = await marketContract(signer);

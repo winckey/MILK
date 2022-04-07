@@ -57,6 +57,7 @@ export default function OrderModal({
     "PUT"
   );
   console.log(user);
+
   const getBalance = async () => {
     const res = await getUserBalance();
     setBalance(res);
@@ -64,25 +65,12 @@ export default function OrderModal({
   console.log(balance);
 
   const onValid = async () => {
-    const formData = {
-      enterprise: user.id.toString(),
-      imgUrl: response?.image,
-      likeCount: 1,
-      myLike: true,
-      nftId: nftId,
-      nftName: response?.name,
-      owner: user.id.toString(),
-      price: Number(ethers.utils.formatEther(price)),
-      realStatus: response?.product,
-      saleStatus: true,
-    };
-
-    console.log(formData);
     if (loading) return;
     if (window.confirm("해당 상품을 구매하시겠습니까?") === true) {
-      updateNFT(formData);
+      updateNFT({ nftId });
     }
   };
+
   const nftId = response?.nftId;
   const closeModal = () => {
     setIsOpen(false);
@@ -104,7 +92,6 @@ export default function OrderModal({
   };
 
   useEffect(() => {
-    onValid();
     loadItems();
     getBalance();
     if (data && data.statusCode === 200) {
@@ -115,6 +102,7 @@ export default function OrderModal({
       console.log(data?.message, data?.statusCode);
     }
   }, []);
+
   console.log(items);
   console.log(data);
 
