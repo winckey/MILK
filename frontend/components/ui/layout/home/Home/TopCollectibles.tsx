@@ -45,7 +45,7 @@ export default function TopCollectibles() {
         Top Collection
       </div>
 
-      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-x-3">
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-x-6 mx-20">
         {data?.nftDtoList.map((nft) => {
           return (
             <Link key={nft.nftId} href={`/product/${nft.nftId}`} passHref>
