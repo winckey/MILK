@@ -87,11 +87,6 @@ export default function Header() {
     { name: "나의 전시관", link: `/exhibition/arts` },
     { name: "라이브 경매", link: "/streams" },
   ];
-  // useEffect(() => {
-  //   if (user) {
-  //     setNickname(user.nickname);
-  //   }
-  // }, []);
 
   return (
     <div className="shadow-md w-full bg-ourBlack z-10 h-[80px] fixed top-0 left-0 text-white">

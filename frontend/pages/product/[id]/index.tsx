@@ -134,6 +134,8 @@ const Product: NextPage = () => {
       alert("이미 실물화된 상품입니다.");
     }
   };
+  const makeComma = (price: number) =>
+    price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   useEffect(() => {
     (async () => {
@@ -182,7 +184,7 @@ const Product: NextPage = () => {
             <div className="max-w-full pt-2 px-2 pb-4 lg:px-0 lg:w-[1280px]">
               <div className="flex flex-col">
                 {/* 제품 상세 */}
-                <div className="flex">
+                <div className="flex justify-center">
                   {/* 좌 */}
                   <div className="max-w-[43%]">
                     {/* image */}
@@ -348,18 +350,20 @@ const Product: NextPage = () => {
                             <div className="text-[15px] mt-[15px]">
                               <span className="text-textGray overflow-hidden text-ellipsis w-full">
                                 Eth (₩{" "}
-                                {(
-                                  Number(ethers.utils.formatEther(price)) *
-                                  ethUSD *
-                                  exchange
-                                ).toFixed(0)}
-                                원)
+                                {makeComma(
+                                  Math.round(
+                                    Number(ethers.utils.formatEther(price))
+                                  ) *
+                                    Math.round(ethUSD) *
+                                    Math.round(exchange)
+                                )}
+                                )
                               </span>
                             </div>
                           </div>
                           {/* 본인 상품이냐에 따라 다른 UI */}
                           {isLoading ? null : isOwner ? (
-                            <div className="flex max-w-[420px]">
+                            <div className="flex max-w-[560px]">
                               <div className="w-full contents">
                                 <div className="inline-flex w-full">
                                   <button
@@ -375,20 +379,21 @@ const Product: NextPage = () => {
                                             );
                                       }
                                     }}
-                                    className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full"
+                                    className="inline-flex flex-row overflow-hidden whitespace-nowrap items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-8 py-3 border-[1px] border-lightGold text-white w-full"
                                   >
                                     <div className="mr-3 flex">
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         className="h-6 w-6"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={2}
                                       >
-                                        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
                                         <path
-                                          fillRule="evenodd"
-                                          d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
-                                          clipRule="evenodd"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"
                                         />
                                       </svg>
                                     </div>
@@ -397,7 +402,7 @@ const Product: NextPage = () => {
                                 </div>
                                 <div className="inline-flex w-full lg:w-[50%] ml-2">
                                   <button
-                                    className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-white hover:bg-lightBg px-5 py-3 border-[1px] border-lightGold text-lightGold w-full"
+                                    className="inline-flex flex-row overflow-hidden whitespace-nowrap items-center rounded-[10px] justify-center font-semibold bg-white hover:bg-lightBg px-8 py-3 border-[1px] border-lightGold text-lightGold w-full"
                                     onClick={() => {
                                       {
                                         isRealize
@@ -412,13 +417,15 @@ const Product: NextPage = () => {
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         className="h-6 w-6"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={2}
                                       >
                                         <path
-                                          fillRule="evenodd"
-                                          d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
-                                          clipRule="evenodd"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
                                         />
                                       </svg>
                                     </div>
@@ -428,8 +435,27 @@ const Product: NextPage = () => {
                               </div>
                               <button
                                 onClick={() => setSelectedStream(true)}
-                                className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full ml-3"
+                                className="inline-flex flex-row  items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-8 py-3 border-[1px] border-lightGold text-white w-full ml-2"
                               >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-6 w-6"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                                  />
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                  />
+                                </svg>
                                 Live Stream
                               </button>
                             </div>
@@ -446,24 +472,26 @@ const Product: NextPage = () => {
                                           : setSelectedOrder(response!)
                                         : alert("판매중인 상품이 아닙니다.");
                                     }}
-                                    className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full"
+                                    className="inline-flex flex-row items-center rounded-[10px] 
+                                    overflow-hidden whitespace-nowrap justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full"
                                   >
                                     <div className="mr-3 flex">
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         className="h-6 w-6"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={2}
                                       >
-                                        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
                                         <path
-                                          fillRule="evenodd"
-                                          d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
-                                          clipRule="evenodd"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                                         />
                                       </svg>
                                     </div>
-                                    Buy now
+                                    구매
                                   </button>
                                 </div>
                                 <div className="inline-flex w-full lg:w-[50%] ml-2">
@@ -482,16 +510,9 @@ const Product: NextPage = () => {
                                         />
                                       </svg>
                                     </div>
-                                    Make offer
                                   </button>
                                 </div>
                               </div>
-                              <button
-                                onClick={() => setSelectedStream(true)}
-                                className="inline-flex flex-row items-center rounded-[10px] justify-center font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full ml-3"
-                              >
-                                Live Stream
-                              </button>
                             </div>
                           )}
                         </div>
@@ -501,10 +522,10 @@ const Product: NextPage = () => {
                 </div>
 
                 {/* 액티비티 */}
-                <div>activity</div>
+                {/* <div>activity</div> */}
 
                 {/* 해당 유저의 다른 아이템 */}
-                <div>other items</div>
+                {/* <div>other items</div> */}
               </div>
             </div>
             {/* Modal */}
@@ -523,6 +544,7 @@ const Product: NextPage = () => {
                 onClose={cleanupModal}
                 user={user}
                 nftId={nftId}
+                response={response}
               />
             )}
             {selectedSell && (

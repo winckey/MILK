@@ -27,7 +27,7 @@ interface Nft {
 
 const Exhibition: NextPage = () => {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   const [collectionList, setCollectionList] = useState<Nft[]>();
   const [loading, setLoading] = useState(true);
   const [nickname, setNickname] = useState("");
@@ -45,6 +45,13 @@ const Exhibition: NextPage = () => {
 
   // 가져온 리스트에서 보유중인 nft만 필터링
   useEffect(() => {
+    if (
+      router.query.nickname &&
+      user &&
+      router.query.nickname !== user.nickname
+    ) {
+      router.push(`/exhibition/${router.query.nickname}`);
+    }
     if (data && data?.statusCode === 200) {
       let images: any = [];
       const tmp = data.nftDtoList.filter((nft) => nft.seleStatus === false);
