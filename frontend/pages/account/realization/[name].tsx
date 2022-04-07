@@ -80,8 +80,8 @@ const Realization: NextPage = () => {
 
   const onValid = () => {
     const formData = {
-      RBoardId: 25,
-      RBoardStatus: status,
+      rboardId: 25,
+      rboardStatus: status,
     };
     console.log(formData);
     if (loading) return;
