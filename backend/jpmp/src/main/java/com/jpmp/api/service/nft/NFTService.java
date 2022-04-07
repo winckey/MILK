@@ -6,6 +6,7 @@ import com.jpmp.api.dto.request.nft.NFTSearchReqDto;
 import com.jpmp.db.entity.nft.Nft;
 import com.jpmp.db.entity.user.User;
 import com.querydsl.core.Tuple;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface NFTService {
 
     List<Nft> getNftLikeList(User userDetails);
 
-    List<Nft> getNftList(NFTSearchReqDto nftSearchReqDto , Pageable pageable );
+    Page<Nft> getNftList(NFTSearchReqDto nftSearchReqDto , Pageable pageable );
 
     void getNftList(User userDetails, Boolean ownerIsEnterprise);
 }
