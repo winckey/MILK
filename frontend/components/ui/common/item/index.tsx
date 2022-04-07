@@ -99,7 +99,7 @@ export default function Item({
                       </div>
                     </div>
                     <div className="w-full overflow-hidden text-ellipsis">
-                      <div className="text-[#353840] font-medium text-xs text-left">
+                      <div className="text-[#353840] font-medium text-xs text-left overflow-hidden whitespace-nowrap text-ellipsis">
                         {nftName}
                       </div>
                     </div>

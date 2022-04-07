@@ -44,7 +44,7 @@ export default function ProfileImg({ proImg, userId }: IUserProps) {
   useEffect(() => {
     if (proImg)
       setProImgPreview(
-        `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${proImg}/avatar`
+        `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${proImg}/public`
       );
   }, [proImg]);
 
@@ -141,7 +141,7 @@ export default function ProfileImg({ proImg, userId }: IUserProps) {
               {proImgPreview ? (
                 <img
                   src={proImgPreview}
-                  className="h-[150px] w-[150px] rounded-full"
+                  className="h-full w-full rounded-full"
                 />
               ) : (
                 <div className="h-[150px] w-[150px] bg-basicImage rounded-full"></div>
