@@ -62,6 +62,7 @@ public class NFTDto {
                 .enterprise(nft.getEnterprise().getNickname())
                 .likeCount(nft.getLikeCount())
                 .myLike(like)
+                .imgUrl(nft.getImgUrl())
                 .build();
     }
 
@@ -77,6 +78,7 @@ public class NFTDto {
                 .enterprise(nft.getEnterprise().getNickname())
                 .likeCount(nft.getLikeCount())
                 .myLike(false)
+                .imgUrl(nft.getImgUrl())
                 .build();
     }
 }
