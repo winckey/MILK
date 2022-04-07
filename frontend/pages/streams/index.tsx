@@ -78,23 +78,24 @@ const Streams: NextPage = () => {
                 allowFullScreen={true}
               ></iframe> */}
               {/* 진짜감사합니다  */}
-              {data?.liveDtoList.map((val) => (
-                <Link key={val.cfId} href={`/streams/${val.roomId}`}>
-                  <div key={val.cfId}></div>
-                  {/* <Item
+              {data &&
+                data?.liveDtoList?.map((val) => (
+                  <Link key={val.cfId} href={`/streams/${val.roomId}`}>
+                    <div key={val.cfId}>방</div>
+                    {/* <Item
                     key={val.cfId}
                     enterprise={val.nickname}
                     // imgUrl={val.}
-                    likeCount={val.nftId.}
+                    likeCount={val.nftId}
                     nftId={val.}
                     nftName={val.}
                     price={val.}
                     myLike={.}
                     // 현재 최고가
-                    currentBid={}
+                   
                   /> */}
-                </Link>
-              ))}
+                  </Link>
+                ))}
             </div>
           </div>
         </div>
