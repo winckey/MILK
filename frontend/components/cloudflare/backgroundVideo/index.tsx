@@ -3,12 +3,12 @@ import { useForm } from "react-hook-form";
 import useMutation from "@libs/client/useMutation";
 
 interface IUserProps {
-  backgroundImg: string;
+  backgroundVideo: string;
   userId: number;
 }
 
 interface IEditBackgroundImgForm {
-  backgroundImg: FileList;
+  backgroundVideo: FileList;
 }
 
 interface IEditBackgroundImgResponse {
@@ -17,7 +17,10 @@ interface IEditBackgroundImgResponse {
   user: any;
 }
 
-export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
+export default function BackgroundVideo({
+  backgroundVideo,
+  userId,
+}: IUserProps) {
   // console.log(backgroundImg, userId);
   const [onValidLoading, setOnValidLoading] = useState(false);
 
@@ -30,25 +33,25 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
   } = useForm<IEditBackgroundImgForm>();
 
   // 이미지 미리보기
-  const [backgroundImgPreview, setBackgroundImgPreview] = useState(""); // 미리보기 변수
-  const backgroundImgUpload = watch("backgroundImg"); //
+  const [backgroundVideoPreview, setBackgroundVideoPreview] = useState(""); // 미리보기 변수
+  const backgroundVideoUpload = watch("backgroundVideo"); //
   useEffect(() => {
-    if (backgroundImgUpload && backgroundImgUpload.length > 0) {
-      const file = backgroundImgUpload[0];
-      setBackgroundImgPreview(URL.createObjectURL(file));
+    if (backgroundVideoUpload && backgroundVideoUpload.length > 0) {
+      const file = backgroundVideoUpload[0];
+      setBackgroundVideoPreview(URL.createObjectURL(file));
     }
-  }, [backgroundImgUpload]);
+  }, [backgroundVideoUpload]);
 
   // useUser로 불러온 프로필 이미지를 미리보기에 저장
   useEffect(() => {
-    if (backgroundImg)
-      setBackgroundImgPreview(
-        `https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${backgroundImg}/avatar`
+    if (backgroundVideo)
+      setBackgroundVideoPreview(
+        `https://iframe.videodelivery.net/${backgroundVideo}`
       );
-  }, [backgroundImg]);
+  }, [backgroundVideo]);
 
   // onValid form data DB에 요청
-  const [editBackgroundImg, { data, loading }] =
+  const [editBackgroundVideo, { data, loading }] =
     useMutation<IEditBackgroundImgResponse>(`/user/back`, "PUT");
 
   // Mutation 응답 받았을 때 실행
@@ -64,24 +67,22 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
 
     if (window.confirm("배경 사진을 수정하시겠습니까?") == true) {
       if (
-        formData.backgroundImg &&
-        formData.backgroundImg.length > 0
+        formData.backgroundVideo &&
+        formData.backgroundVideo.length > 0
         // backgroundImg
       ) {
         setOnValidLoading(true);
-        const { uploadURL } = await (await fetch(`/api/files`)).json();
+        const { uploadURL, uid } = await (await fetch(`/api/video`)).json();
+        console.log(uploadURL, uid);
         const form = new FormData();
-        form.append("file", formData.backgroundImg[0], userId + "");
-        const {
-          result: { id },
-        } = await (
-          await fetch(uploadURL, {
-            method: "POST",
-            body: form,
-          })
-        ).json();
-        editBackgroundImg({
-          imgUrl: id,
+        form.append("file", formData.backgroundVideo[0], userId + "");
+        const result = await fetch(uploadURL, {
+          method: "POST",
+          body: form,
+        });
+        // console.log(result);
+        editBackgroundVideo({
+          imgUrl: uid,
         });
         setOnValidLoading(false);
       }
@@ -94,7 +95,7 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
         <div className="mb-2 flex flex-col">
           <label className="font-semibold text-[#353840]">
             <div className="flex items-center">
-              <div className="mr-1">배경 사진</div>
+              <div className="mr-1">배경 영상</div>
               <button>
                 {onValidLoading ? null : (
                   <svg
@@ -114,14 +115,14 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
           <div className="relative">
             <div className="p-1 absolute inset-0 rounded-[10px] cursor-pointer border-none z-[2] flex flex-col justify-center items-center">
               <input
-                {...register("backgroundImg")}
-                id="backgroundImg"
+                {...register("backgroundVideo")}
+                id="backgroundVideo"
                 type="file"
                 className="hidden"
-                accept="image/*"
+                accept="video/*"
               />
               <label
-                htmlFor="backgroundImg"
+                htmlFor="backgroundVideo"
                 className="absolute inset-0 z-[70] opacity-0 hover:opacity-[1] hover:h-full rounded-[10px] bg-black/[.15] cursor-pointer"
               >
                 <div className="flex flex-col justify-center items-center h-full">
@@ -137,10 +138,12 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
               </label>
             </div>
             <div className="h-[150px] w-[150px] flex justify-center items-center max-h-full max-w-full overflow-hidden relative rounded-[10px]">
-              {backgroundImgPreview ? (
-                <img
-                  src={backgroundImgPreview}
+              {backgroundVideoPreview ? (
+                <iframe
                   className="h-[150px] w-[150px] rounded-[10px]"
+                  src={backgroundVideoPreview}
+                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                  allowFullScreen={true}
                 />
               ) : (
                 <div className="h-[150px] w-[150px] bg-basicImage rounded-[10px]"></div>

@@ -143,6 +143,7 @@ const Create: NextPage = () => {
     const res2 = await nftContract(signer);
     const mintItem = await (await res2.mint(uri)).wait();
     const id = await res2.tokenCount();
+    console.log(id);
 
     const approveItem = await (
       await res2.setApprovalForAll(res1.address, true)
@@ -150,7 +151,7 @@ const Create: NextPage = () => {
 
     console.log(approveItem);
 
-    const itemId = parseInt(id, 16).toString();
+    const itemId = parseInt(id).toString();
     console.log(itemId);
     const itemId2 = itemId.toString();
     console.log(itemId2);

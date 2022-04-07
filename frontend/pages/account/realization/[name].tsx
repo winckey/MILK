@@ -1,4 +1,4 @@
-import { Layout } from "@components/ui/layout";
+import { AccountLayout, Layout } from "@components/ui/layout";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import {
@@ -6,11 +6,28 @@ import {
   loadNFTItems,
   loadRealizedItems,
 } from "utils/interact";
-import useUser from "@libs/client/useUser";
+import useUser, { tokenFetcher } from "@libs/client/useUser";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
+import { useRecoilValue } from "recoil";
+import { accessToken } from "@components/atoms/Auth";
+import useSWR from "swr";
 
 declare let window: any;
+
+interface apply {
+  applicationDate: string;
+  consumer: string;
+  enterprise: string;
+  nftName: string;
+  status: string;
+}
+
+interface RealizationListResponse {
+  message: string;
+  statusCode: number;
+  rboardDtoList: apply[];
+}
 
 interface IRealizedItems {
   nftId: string;
@@ -31,6 +48,13 @@ const Realization: NextPage = () => {
   const [nftItems, setNFTItems] = useState<IRealizedItems[]>();
   const userName = user?.userName;
   const [loading, setLoading] = useState(true);
+  const TOKEN = useRecoilValue(accessToken);
+
+  const { data } = useSWR<RealizationListResponse>(
+    [`${process.env.BASE_URL}/realization_board/enterpris`, TOKEN],
+    tokenFetcher
+  );
+  console.log(data);
 
   const isRealized = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -76,11 +100,37 @@ const Realization: NextPage = () => {
 
   return (
     <Layout seoTitle="명품관 실물화 처리">
-      <div className="mt-7 mx-[52px] text-textBlack max-w-[800px] flex-1 relative">
-        <div className="flex flex-wrap justify-between mt-9">
-          <div></div>
+      <AccountLayout>
+        <div className="mt-7 mx-[52px] text-textBlack max-w-[800px] flex-1">
+          <div className="mt-9">
+            <h1 className="font-semibold text-[40px]">실물화 요청 리스트</h1>
+          </div>
+          <div className="flex items-center">
+            <div className="flex flex-col pb-[50px] w-full">
+              <div className="my-5 ">
+                <div className="rounded-[10px] bg-white shadow-md ">
+                  <div className="px-8 py-5 text-center text-textGray text-xs">
+                    {realizedItems?.map((item, idx) => (
+                      <>
+                        <div className="flex items-center gap-4">
+                          <div>{item.name}</div>
+                          <img
+                            src={item.image}
+                            className="w-[50px] h-[50px]"
+                            alt=""
+                          />
+                          <div>{item.edition}</div>
+                          <div>{item.address}</div>
+                        </div>
+                      </>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </AccountLayout>
     </Layout>
   );
 };

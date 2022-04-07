@@ -13,7 +13,7 @@ const ProfileActivity: NextPage = () => {
             {/* <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
             </div> */}
             <div className="mx-9 my-6 h-[248px] text-center border flex flex-col justify-center items-center text-[28px] text-textGray">
-              아직 선호하는 상품이 없습니다.
+              판매 현황이 없습니다.
             </div>
           </div>
         </div>
