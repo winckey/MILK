@@ -11,6 +11,8 @@
         select *
           from live_auction
          where cost = (select max(cost) from live_auction where room_id = #{roomId})
+           and room_id = #{roomId}
+         LIMIT 1
     </select>
 
 </mapper>
