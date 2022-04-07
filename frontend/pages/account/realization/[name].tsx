@@ -12,6 +12,7 @@ import { ethers } from "ethers";
 import { useRecoilValue } from "recoil";
 import { accessToken } from "@components/atoms/Auth";
 import useSWR from "swr";
+import useMutation from "@libs/client/useMutation";
 
 declare let window: any;
 
@@ -21,6 +22,11 @@ interface apply {
   enterprise: string;
   nftName: string;
   status: string;
+}
+
+interface IRealizationResponse {
+  message: string;
+  statusCode: number;
 }
 
 interface RealizationListResponse {
@@ -47,14 +53,21 @@ const Realization: NextPage = () => {
   const [realizedItems, setRealizedItems] = useState<IRealizedItems[]>();
   const [nftItems, setNFTItems] = useState<IRealizedItems[]>();
   const userName = user?.userName;
-  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("");
+  // const [loading, setLoading] = useState(true);
   const TOKEN = useRecoilValue(accessToken);
 
-  const { data } = useSWR<RealizationListResponse>(
+  const { data: realizeData } = useSWR<RealizationListResponse>(
     [`${process.env.BASE_URL}/realization_board/enterpris`, TOKEN],
     tokenFetcher
   );
+
+  const [updateRealization, { loading, data, error }] =
+    useMutation<IRealizationResponse>("/realization_board", "PUT");
+  console.log(realizeData);
   console.log(data);
+
+  const [requestItems, setRequestItems] = useState<apply[]>();
 
   const isRealized = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -64,6 +77,18 @@ const Realization: NextPage = () => {
     setRealizedItems(items);
     setNFTItems(nfts);
     console.log(items);
+  };
+
+  const onValid = () => {
+    const formData = {
+      RBoardId: 2,
+      RBoardStatus: status,
+    };
+    console.log(formData);
+    if (loading) return;
+    if (window.confirm("실물화 요청을 처리하시겠습니까?") === true) {
+      updateRealization(formData);
+    }
   };
 
   useEffect(() => {
@@ -88,8 +113,8 @@ const Realization: NextPage = () => {
   }, [userName, setRealizedItems, brandName, isLoading]);
 
   useEffect(() => {
-    if (realizedItems) {
-      setLoading(false);
+    if (realizeData) {
+      setRequestItems(realizeData.rboardDtoList);
     }
   }, []);
 
@@ -97,6 +122,7 @@ const Realization: NextPage = () => {
   console.log(nftItems);
   console.log(userName);
   console.log(brandName);
+  console.log(status);
 
   return (
     <Layout seoTitle="명품관 실물화 처리">
@@ -112,7 +138,7 @@ const Realization: NextPage = () => {
                   <div className="px-8 py-5 text-center text-textGray text-xs">
                     {realizedItems?.map((item, idx) => (
                       <>
-                        <div className="flex items-center gap-4">
+                        <div key={idx} className="flex items-center gap-4">
                           <div>{item.name}</div>
                           <img
                             src={item.image}
@@ -121,6 +147,19 @@ const Realization: NextPage = () => {
                           />
                           <div>{item.edition}</div>
                           <div>{item.address}</div>
+                          <select
+                            onChange={(e) => setStatus(e.target.value)}
+                            // value={
+                            //   requestItems
+                            //     ? requestItems[Number(item.nftId)]
+                            //     : null
+                            // }
+                          >
+                            <option value="STATUS_NOTADM">승인 대기</option>
+                            <option value="STATUS_ADM">승인 완료</option>
+                            <option value="STATUS_COM">실물화 완료</option>
+                          </select>
+                          <button onClick={onValid}>승인</button>
                         </div>
                       </>
                     ))}

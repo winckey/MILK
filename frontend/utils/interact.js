@@ -317,10 +317,10 @@ export const sellMarketItem = async (nftId, price, signer) => {
   ).wait();
   // await res;
 
-  {
-    res && window.location.reload();
-  }
-  console.log(res);
+  // {
+  //   res && window.location.reload();
+  // }
+  // console.log(res);
 };
 
 export const getUserBalance = async () => {
