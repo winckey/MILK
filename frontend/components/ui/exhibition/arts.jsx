@@ -16,60 +16,73 @@ import {
 import { useRoute, useLocation, Link, useRouter } from "wouter";
 import getUuid from "uuid-by-string";
 import Goods from "@components/exhibition/Goods";
+import useSWR from "swr";
+// import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
+import { accessToken } from "@components/atoms/Auth";
+import { tokenFetcher } from "@libs/client/useUser";
 
 const pexel = (id) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`;
-const images = [
-  // Front
-  {
-    position: [0, 0, 1.5],
-    rotation: [0, 0, 0],
-    url: "https://contents.lotteon.com/itemimage/LO/15/66/84/51/83/_1/56/68/45/18/5/LO1566845183_1566845185_1.jpg/dims/resizef/554X554",
-  },
-  // Back
-  { position: [-0.8, 0, -0.6], rotation: [0, 0, 0], url: "/저장.jpg" },
-  {
-    position: [0.8, 0, -0.6],
-    rotation: [0, 0, 0],
-    url: "/구찌가방.PNG",
-  },
-  // Left
-  {
-    position: [-1.75, 0, 0.25],
-    rotation: [0, Math.PI / 2.5, 0],
-    url: "/에르메스.jpg",
-  },
-  {
-    position: [-2.15, 0, 1.5],
-    rotation: [0, Math.PI / 2.5, 0],
-    url: "/구찌.jpg",
-  },
-  {
-    position: [-2, 0, 2.75],
-    rotation: [0, Math.PI / 2.5, 0],
-    url: "/루이비통.jpg",
-  },
-  // Right
-  {
-    position: [1.75, 0, 0.25],
-    rotation: [0, -Math.PI / 2.5, 0],
-    url: "/톰브라운.jpg",
-  },
-  {
-    position: [2.15, 0, 1.5],
-    rotation: [0, -Math.PI / 2.5, 0],
-    url: "/파텍필립.jpg",
-  },
-  {
-    position: [2, 0, 2.75],
-    rotation: [0, -Math.PI / 2.5, 0],
-    url: "/고야드.jpg",
-  },
-];
 
 const GOLDENRATIO = 1.61803398875;
 
-export default function arts() {
+export default function Arts({ collectionList }) {
+  // let collectionItems = [];
+  // const mappingImages = collectionList.map((item) =>
+  //   collectionItems.push(item)
+  // );
+  const artImages = [
+    // Front
+    {
+      position: [0, 0, 1.5],
+      rotation: [0, 0, 0],
+      url: `${collectionList[0]}`,
+    },
+    // Back
+    {
+      position: [-0.8, 0, -0.6],
+      rotation: [0, 0, 0],
+      url: `${collectionList[8] ? collectionList[8] : "/저장.jpg"}`,
+    },
+    {
+      position: [0.8, 0, -0.6],
+      rotation: [0, 0, 0],
+      url: `${collectionList[1] ? collectionList[1] : "/저장.jpg"}`,
+    },
+    // Left
+    {
+      position: [-1.75, 0, 0.25],
+      rotation: [0, Math.PI / 2.5, 0],
+      url: `${collectionList[2] ? collectionList[2] : "/저장.jpg"}`,
+    },
+    {
+      position: [-2.15, 0, 1.5],
+      rotation: [0, Math.PI / 2.5, 0],
+      url: `${collectionList[3] ? collectionList[3] : "/저장.jpg"}`,
+    },
+    {
+      position: [-2, 0, 2.75],
+      rotation: [0, Math.PI / 2.5, 0],
+      url: `${collectionList[4] ? collectionList[4] : "/저장.jpg"}`,
+    },
+    // Right
+    {
+      position: [1.75, 0, 0.25],
+      rotation: [0, -Math.PI / 2.5, 0],
+      url: `${collectionList[5] ? collectionList[5] : "/저장.jpg"}`,
+    },
+    {
+      position: [2.15, 0, 1.5],
+      rotation: [0, -Math.PI / 2.5, 0],
+      url: `${collectionList[6] ? collectionList[6] : "/저장.jpg"}`,
+    },
+    {
+      position: [2, 0, 2.75],
+      rotation: [0, -Math.PI / 2.5, 0],
+      url: `${collectionList[7] ? collectionList[7] : "/저장.jpg"}`,
+    },
+  ];
   function toggleFullScreen() {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
@@ -79,6 +92,26 @@ export default function arts() {
       }
     }
   }
+  //     const router = useRouter();
+
+  //   const [collectionList, setCollectionList] = useState();
+
+  //   const TOKEN = useRecoilValue(accessToken);
+
+  //   // 해당 nickname을 가진 유저의 판매/보유 nft 리스트 가져오기
+  //   const { data } = useSWR<OwnNftResponse>(
+  //     router.query.nickname
+  //       ? [`${process.env.BASE_URL}/nft/user/${router.query.nickname}`, TOKEN]
+  //       : null,
+  //     tokenFetcher
+  // );
+
+  //   useEffect(() => {
+  //     if (data && data?.statusCode === 200) {
+  //       const tmp = data.nftDtoList.filter((nft) => nft.seleStatus === false);
+  //       setCollectionList(tmp);
+  //     }
+  //   }, [data, router]);
 
   return (
     <Canvas
@@ -93,7 +126,7 @@ export default function arts() {
         <fog attach="fog" args={["#191920", 0, 15]} />
         <Environment preset="city" />
         <group position={[0, -0.5, 0]}>
-          <Frames images={images} />
+          <Frames images={artImages} />
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
             <planeGeometry args={[50, 50]} />
             <MeshReflectorMaterial
