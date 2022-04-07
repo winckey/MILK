@@ -10,8 +10,11 @@ import { useEffect, useState } from "react";
 import SockJS from "sockjs-client";
 import { over } from "stompjs";
 import useSWR from "swr";
+import Timer from "@components/ui/timer/index";
 
 let stompClient: any = null;
+// 백에서 해당 룸 상세조회 api 만들면 추가해줘야함
+// interface StreamResponse
 
 interface IStreamResponse {
   message: string;
@@ -44,7 +47,7 @@ const Stream: NextPage = () => {
   const { id } = router.query;
   const [alertPrice, setAlertPrice] = useState(false);
   const [alertUp, setAlertUp] = useState(false);
-  // const [remainTime, setRemainTime] = useState(0);
+  const [remainTime, setRemainTime] = useState(0);
   // const [time, setTime]:number = useState(20);
   const [highest, setHighest] = useState(0);
   const [timer, setTimer] = useState(false);
@@ -59,6 +62,10 @@ const Stream: NextPage = () => {
     // 응찰가
     money: 0,
   });
+  // 종료 오세허니한테 물어보기
+  const [finishStream, { data: mutatedData, loading }] =
+    useMutation<IStreamResponse>(`/live?roomId=${router.query.id}`, "PUT");
+
   const { data, mutate } = useSWR<RoomResponse>(
     router.query.id ? `${process.env.BASE_URL}/live/${router.query.id}` : null
   );
@@ -134,26 +141,39 @@ const Stream: NextPage = () => {
       setUserData({ ...userData, message: "" });
     }
   };
+
   const sendPrice = () => {
-    // if (stompClient && userData.money <= highest) {
-    //   console.log("돈 더 업");
-    // } else if (stompClient) {
-    if (stompClient) {
+    if (stompClient && userData.money <= highest) {
+      setAlertUp(true);
+    } else if (
+      stompClient &&
+      data &&
+      data.liveDto.startprice >= userData.money
+    ) {
+      setAlertPrice(true);
+    } else if (stompClient && userData.money <= 2100000000) {
+      setAlertUp(false);
+      setAlertPrice(false);
       const priceList = {
         senderName: userData.nickName,
-        cost: userData.money,
+        cost: Number(userData.money),
         roomId: id,
         status: "AUCTION",
       };
-      console.log("돈보낸디", priceList);
       stompClient.send("/publish/chat/auction", {}, JSON.stringify(priceList));
+      if (!data) return;
+      mutate(
+        {
+          ...data,
+          maxCost: userData.money,
+        },
+        false
+      );
       // 응찰가격 0으로 리셋
       setUserData({ ...userData, money: 0 });
-      // } else if (stompClient && userData.money <= highMoney) {
-      //   console.log("더 높은 금액을 입력하세요");
-      // }
     }
   };
+
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
       sendValue();
@@ -169,6 +189,23 @@ const Stream: NextPage = () => {
     } else "오잉";
   }, [user, id]);
 
+  useEffect(() => {
+    if (data) {
+      let runtime = data?.liveDto.runtime * 60 * 1000;
+      // console.log(finish);
+      setRemainTime(
+        Math.round(
+          (runtime - (new Date().getTime() - data?.liveDto.starttime)) / 1000
+        )
+      );
+    }
+    if (data && data?.statusCode === 200 && finish) {
+      // db finish 정보 바꾸기
+
+      finishStream(mutatedData);
+    }
+  }, [data, finish]);
+
   return (
     // navbar 뒤로가기만 생성
     <Layout canGoBack seoTitle="라이브 경매">
@@ -183,11 +220,11 @@ const Stream: NextPage = () => {
             <div className="text-3xl font-bold "> {data?.liveDto.nickname}</div>
             {/* 브랜드사 클릭하면 해당 상세페이지로 고? */}
           </div>
-          {/* {remainTime ? (
+          {remainTime ? (
             <Timer setRemainTime={setRemainTime} time={remainTime} />
           ) : (
             <div>경매가 끝났습니다</div>
-          )} */}
+          )}
 
           <iframe
             className="aspect-video  w-full border border-gold rounded-md  shadow-sm"
@@ -256,7 +293,7 @@ const Stream: NextPage = () => {
             <span className="text-gray-800">
               최고가는{" "}
               <span className="font-extrabold text-black">
-                {highest}
+                {data?.maxCost}
 
                 <img
                   className="w-5 h-5 inline-block object-contain"
@@ -275,30 +312,30 @@ const Stream: NextPage = () => {
               ) : null}
               {alertUp ? <div>최고가보다 높은 금액을 응찰하세요</div> : null}
             </div>
-            {/* {remainTime <= 0 &&
+            {remainTime <= 0 &&
             highMoney[highMoney.length - 1]?.senderName ===
               userData.nickName ? (
               <div className="btn hover:cursor-pointer font-bold text-xl hover:scale-105">
                 구매하기
               </div>
-            ) : ( */}
-            <div className="flex justify-center  gap-x-2">
-              <input
-                type="text"
-                className="shadow-sm  rounded-md w-5/6 border-gray-300 focus:ring-gold focus:outline-none pr-12 focus:border-lightGold "
-                placeholder="응찰가를 입력하세요"
-                value={userData.money}
-                onChange={handleMoney}
-              />
-              <button
-                type="button"
-                className="focus:ring-2 focus:ring-offset-2 focus:ring-gold focus:duration-300   items-center flex  bg-gold rounded-full px-4 hover:bg-gold text-white"
-                onClick={sendPrice}
-              >
-                +
-              </button>
-            </div>
-            {/* )} */}
+            ) : (
+              <div className="flex justify-center  gap-x-2">
+                <input
+                  type="text"
+                  className="shadow-sm  rounded-md w-5/6 border-gray-300 focus:ring-gold focus:outline-none pr-12 focus:border-lightGold "
+                  placeholder="응찰가를 입력하세요"
+                  value={userData.money}
+                  onChange={handleMoney}
+                />
+                <button
+                  type="button"
+                  className="focus:ring-2 focus:ring-offset-2 focus:ring-gold focus:duration-300   items-center flex  bg-gold rounded-full px-4 hover:bg-gold text-white"
+                  onClick={sendPrice}
+                >
+                  +
+                </button>
+              </div>
+            )}
           </div>
         </div>
         {/* 채팅 */}
