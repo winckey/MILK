@@ -73,14 +73,12 @@ export default function BackgroundVideo({
       ) {
         setOnValidLoading(true);
         const { uploadURL, uid } = await (await fetch(`/api/video`)).json();
-        console.log(uploadURL, uid);
         const form = new FormData();
         form.append("file", formData.backgroundVideo[0], userId + "");
         const result = await fetch(uploadURL, {
           method: "POST",
           body: form,
         });
-        // console.log(result);
         editBackgroundVideo({
           imgUrl: uid,
         });
