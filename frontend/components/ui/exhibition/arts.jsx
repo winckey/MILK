@@ -16,18 +16,14 @@ import {
 import { useRoute, useLocation, Link, useRouter } from "wouter";
 import getUuid from "uuid-by-string";
 import Goods from "@components/exhibition/Goods";
-import useSWR from "swr";
-// import { useRouter } from "next/router";
-import { useRecoilValue } from "recoil";
-import { accessToken } from "@components/atoms/Auth";
-import { tokenFetcher } from "@libs/client/useUser";
 
 const pexel = (id) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`;
 
 const GOLDENRATIO = 1.61803398875;
 
-export default function Arts({ collectionList, nickname }) {
+export default function Arts({ collectionList }) {
+  console.log(collectionList);
   // let collectionItems = [];
   // const mappingImages = collectionList.map((item) =>
   //   collectionItems.push(item)
@@ -126,7 +122,7 @@ export default function Arts({ collectionList, nickname }) {
         <fog attach="fog" args={["#191920", 0, 15]} />
         <Environment preset="city" />
         <group position={[0, -0.5, 0]}>
-          <Frames images={artImages} nickname={nickname} />
+          <Frames images={artImages} />
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
             <planeGeometry args={[50, 50]} />
             <MeshReflectorMaterial
@@ -240,7 +236,6 @@ function Frame({ url, ...props }) {
 
 function Frames({
   images,
-  nickname,
   q = new THREE.Quaternion(),
   p = new THREE.Vector3(),
 }) {
@@ -274,7 +269,7 @@ function Frames({
             : "/item/" + e.object.name
         )
       )}
-      onPointerMissed={() => setLocation(`/exhibition/${nickname}`)}
+      onPointerMissed={() => setLocation(`/exhibition/arts`)}
     >
       {images.map(
         (props) => <Frame key={props.url} {...props} /> /* prettier-ignore */
