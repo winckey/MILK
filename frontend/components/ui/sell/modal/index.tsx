@@ -8,6 +8,7 @@ import {
   sellMarketItem,
 } from "../../../../utils/interact";
 import { ethers } from "ethers";
+import useMutation from "@libs/client/useMutation";
 
 declare let window: any;
 
@@ -27,20 +28,33 @@ interface Iresponse {
   onClose: Function;
 }
 
+interface ISellResponse {
+  message: string;
+  statusCode: number;
+}
+
 export default function SellModal({ response, onClose }: Iresponse) {
   const [isOpen, setIsOpen] = useState(true);
   const [price, setPrice] = useState("");
   const nftId = response?.nftId;
+  const [uploadSell, { loading, data, error }] = useMutation<ISellResponse>(
+    "/nft/sell",
+    "PUT"
+  );
+
   const onSell = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     await sellMarketItem(nftId, price, signer);
+    uploadSell({ nftId });
   };
 
   const closeModal = () => {
     setIsOpen(false);
     onClose();
   };
+
+  console.log(data);
 
   return (
     <Modal isOpen={isOpen}>

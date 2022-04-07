@@ -95,7 +95,7 @@ export default function RealizationModal({
     setIsOpen(false);
     onClose();
   };
-
+  console.log(data);
   return (
     <Modal isOpen={isOpen}>
       <div className="inline-block align-bottom bg-lightBg rounded-lg text-textBlack text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
