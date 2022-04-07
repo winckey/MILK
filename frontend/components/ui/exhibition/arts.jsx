@@ -23,62 +23,60 @@ const pexel = (id) =>
 const GOLDENRATIO = 1.61803398875;
 
 export default function Arts({ collectionList }) {
-  console.log(collectionList);
-  // let collectionItems = [];
-  // const mappingImages = collectionList.map((item) =>
-  //   collectionItems.push(item)
-  // );
+  console.log(collectionList.length);
   const artImages = [
     // Front
     {
       position: [0, 0, 1.5],
       rotation: [0, 0, 0],
-      url: `${collectionList[0]}`,
+      url: `${collectionList[0] ? collectionList[0] : "/BG.jpg"}`,
     },
     // Back
     {
       position: [-0.8, 0, -0.6],
       rotation: [0, 0, 0],
-      url: `${collectionList[8] ? collectionList[8] : "/저장.jpg"}`,
+      url: `${collectionList[4] ? collectionList[4] : "/BG.jpg"}`,
     },
     {
       position: [0.8, 0, -0.6],
       rotation: [0, 0, 0],
-      url: `${collectionList[1] ? collectionList[1] : "/저장.jpg"}`,
+      url: `${collectionList[5] ? collectionList[5] : "/BG.jpg"}`,
     },
     // Left
     {
       position: [-1.75, 0, 0.25],
       rotation: [0, Math.PI / 2.5, 0],
-      url: `${collectionList[2] ? collectionList[2] : "/저장.jpg"}`,
+      url: `${collectionList[3] ? collectionList[3] : "/BG.jpg"}`,
     },
     {
       position: [-2.15, 0, 1.5],
       rotation: [0, Math.PI / 2.5, 0],
-      url: `${collectionList[3] ? collectionList[3] : "/저장.jpg"}`,
+      url: `${collectionList[2] ? collectionList[2] : "/BG.jpg"}`,
     },
     {
       position: [-2, 0, 2.75],
       rotation: [0, Math.PI / 2.5, 0],
-      url: `${collectionList[4] ? collectionList[4] : "/저장.jpg"}`,
+      url: `${collectionList[1] ? collectionList[1] : "/BG.jpg"}`,
     },
     // Right
     {
       position: [1.75, 0, 0.25],
       rotation: [0, -Math.PI / 2.5, 0],
-      url: `${collectionList[5] ? collectionList[5] : "/저장.jpg"}`,
+      url: `${collectionList[6] ? collectionList[6] : "/BG.jpg"}`,
     },
     {
       position: [2.15, 0, 1.5],
       rotation: [0, -Math.PI / 2.5, 0],
-      url: `${collectionList[6] ? collectionList[6] : "/저장.jpg"}`,
+      url: `${collectionList[7] ? collectionList[7] : "/BG.jpg"}`,
     },
     {
       position: [2, 0, 2.75],
       rotation: [0, -Math.PI / 2.5, 0],
-      url: `${collectionList[7] ? collectionList[7] : "/저장.jpg"}`,
+      url: `${collectionList[8] ? collectionList[8] : "/BG.jpg"}`,
     },
   ];
+
+  console.log(artImages);
   function toggleFullScreen() {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
@@ -265,14 +263,14 @@ function Frames({
         e.stopPropagation(),
         setLocation(
           clicked.current === e.object
-            ? "/exhibition/arts"
+            ? "/exhibition"
             : "/item/" + e.object.name
         )
       )}
-      onPointerMissed={() => setLocation(`/exhibition/arts`)}
+      onPointerMissed={() => setLocation(`/exhibition`)}
     >
       {images.map(
-        (props) => <Frame key={props.url} {...props} /> /* prettier-ignore */
+        (props) => <Frame key={props.position} {...props} /> /* prettier-ignore */
       )}
     </group>
   );
