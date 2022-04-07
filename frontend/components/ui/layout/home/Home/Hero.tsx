@@ -19,11 +19,6 @@ const Title = styled.h1`
     font-size: 2.7rem;
   }
 `;
-const Heading = styled.span``;
-const Sub = styled.span`
-  font-size: 1.1rem;
-  display: block;
-`;
 
 const Slider = styled.div`
   position: relative;
@@ -160,13 +155,15 @@ export default function Hero() {
       data-aos-duration="1000"
     >
       <Title>
-        <Heading
+        <span
           data-aos="zoom-y-out"
           className="bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold"
         >
           Melt In Luxury Collection
-        </Heading>
-        <Sub>Buy, sell, and showcase NFTs</Sub>
+        </span>
+        <div className="text-lightBg text-2xl">
+          Buy, sell, and showcase NFTs
+        </div>
       </Title>
       <Slider>
         <InfoContainer>

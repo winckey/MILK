@@ -108,6 +108,16 @@ npm i --save-dev @types/aos
 npm i --save-dev @types/styled-components
 ```
 
+- material UI
+
+```bash
+npm i @emotion/react @emotion/styled @material-ui/core @mui/material
+```
+
+
+
+
+
 ### Providers
 
 - web3

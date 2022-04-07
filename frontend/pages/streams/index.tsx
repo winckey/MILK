@@ -3,6 +3,7 @@ import useSWR from "swr";
 import { Layout } from "@components/ui/layout";
 import { useRouter } from "wouter";
 import Link from "next/link";
+import { Item } from "@components/ui/common";
 
 interface DataList {
   roomId: number;
@@ -33,7 +34,7 @@ const Streams: NextPage = () => {
           <div className="h-[220px] overflow-hidden bg-basicImage shadow-2xl">
             <div className="h-[600px] w-full max-h-full max-w-full">
               <img
-                src="https://lh3.googleusercontent.com/Vw6MpADIga_ZwmXOmclK87L8ax6pI_DylBcn-69kcr1Uhgw5Ij2RvXJD2MFJ0VarfIGeoFZw7NvpGLePX3e2VMztvg7XCQDNo12dLQ=h600"
+                src="https://lh3.googleusercontent.com/7_XGEc0KSA9CHU4L5IxTm9Fc2pef8Hdl_3M5ci-GodpfWoxTOkYdMqsJ2C-tEI0EpHKBwBuedIK95KB_x64I-pTCriyKXkWYScUdOFItce0jCnwWWradnF3DDpv47H7tJpm-kZEjEGhjo1SktlJhwwhGDaxEJgMj-GhvAzQOQU3_B0qAK9fiu-cdjnOHqNdIn5vjHjBFmAzw0hfJlCTRSdVoG1-ckJ8p9fGlIqYNuBeiN18egjkc-6MVb9qgrd4h09Q78Iz1Irtq1_CsZk4_WQebj4YcKFFmOBonYvfA7mUhbeWyRFx9Dm3cGoy0qilbjYP5tTqpcAtsdd55ZdZUbJYb5diyqYJMPGn_uJlI6vfpFpC7F2OPHxu8lzUfTp5FDnD0knGIAqZPO9MMbWTI8bmo82ymwSTO15MaAvuYB7HpiIFNpTE4aOR6PlzmK_kX5_BTzG_5r2aVW5rhXyKDsWOxLZUyhghbpeIfgeobbkdm9kLpF0GN2BXWyLoJ-wS1mVk_niNyGZ5gCcGSX6nmR__pQwbwAEFesCS0kmpkt3a1-LpwLp6Uxl0S8-5U_L7AVlChoG3sqErVYLpl5oLucMaM_lmO6PmxVdiRfDbTwxJhDJzzDnRnDi2VeEU57x9xyxUJmdbrd1GBc-4rrX9xwREt-_rNza2TJkX9zkC6fuVK93LWZJ3R1H2rUSP8qULk8K_3yxfc6XT1f_DF6REdSssVSWl15xesZaY2tpLo7LrmnTEug0AGRJmg2z-u=w798-h294-no?authuser=0"
                 alt="#"
                 className="w-full h-full object-cover "
               />
@@ -80,7 +81,17 @@ const Streams: NextPage = () => {
               {/* 진짜감사합니다  */}
               {data?.liveDtoList.map((val) => (
                 <Link key={val.cfId} href={`/streams/${val.roomId}`}>
-                  <a>{val.roomName}</a>
+                  <div key={val.cfId}></div>
+                  {/* <Item
+                    key={val.cfId}
+                    enterprise={val.nickname}
+                    // imgUrl={val.}
+                    likeCount={val.nftId.}
+                    nftId={val.}
+                    nftName={val.}
+                    price={val.}
+                    myLike={.}
+                  /> */}
                 </Link>
               ))}
             </div>
