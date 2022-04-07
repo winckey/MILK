@@ -21,6 +21,7 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.jpmp.common.util.SecurityUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -247,13 +248,13 @@ public class NFTController {
                 .build();
 
         User userDetails = userRepository.findByUsername(getUsername());
-        List<Nft> nftList = nftService.getNftList(nftSearchReqDto, pageable);
-
+        Page<Nft> nftListPage = nftService.getNftList(nftSearchReqDto, pageable);
+        List<Nft> nftList = nftListPage.getContent();
         if (userDetails != null) {
             List<Nft> likeList = nftService.getNftLikeList(userDetails);
-            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList, likeList));
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList, likeList , nftListPage.getTotalPages()));
         } else {
-            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+            return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList ,  nftListPage.getTotalPages()));
         }
 
     }

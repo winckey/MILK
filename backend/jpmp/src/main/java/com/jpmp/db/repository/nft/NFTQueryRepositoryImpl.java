@@ -11,10 +11,13 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,9 +46,22 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
-    public List<Nft> findByNFTSearchDto(NFTSearchReqDto reqDto, Pageable pageable) {
+    public Page<Nft> findByNFTSearchDto(NFTSearchReqDto reqDto, Pageable pageable) {
 
-        JPAQuery<Nft> query = queryFactory
+        List<Nft> nftList = queryFactory
+                .select(qnft)
+                .from(qnft)
+                .where(eqNntName(reqDto.getKeyword()),
+                        eqEnterprise(reqDto.getEnterprise()),
+                        eqSeleOwner(reqDto.getOwnerIsEnterprise()),
+                        qnft.price.between(reqDto.getMin(), reqDto.getMax()),
+                        qnft.seleStatus.eq(true)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPQLQuery<Nft> count = queryFactory
                 .select(qnft)
                 .from(qnft)
                 .where(eqNntName(reqDto.getKeyword()),
@@ -55,8 +71,8 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
                         qnft.seleStatus.eq(true)
                 );
 
+        return PageableExecutionUtils.getPage( nftList, pageable , count::fetchCount);
 
-        return getQuerydsl().applyPagination(pageable, query).fetch();
     }
 
     @Override
