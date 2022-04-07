@@ -45,7 +45,7 @@ interface RoomResponse {
 }
 
 const Stream: NextPage = () => {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
   const [chats, setChats]: any = useState([]);
   const [highMoney, setHighMoney]: any = useState([]);
   const router = useRouter();
@@ -55,7 +55,7 @@ const Stream: NextPage = () => {
   const [remainTime, setRemainTime] = useState(0);
   // const [time, setTime]:number = useState(20);
   const [highest, setHighest] = useState(0);
-  const [timer, setTimer] = useState(false);
+  const [wallet, setWallet] = useState<string | undefined>();
   const [finish, setFinish] = useState(false);
   const [userData, setUserData] = useState({
     nickName: "",
@@ -76,9 +76,9 @@ const Stream: NextPage = () => {
     router.query.id ? `${process.env.BASE_URL}/live/${router.query.id}` : null
   );
 
-  console.log(data);
   const myWallet = async () => {
-    return await getUserBalance();
+    const tmp = await getUserBalance();
+    setWallet(tmp);
   };
   console.log(myWallet);
   const connect = () => {
@@ -289,10 +289,12 @@ const Stream: NextPage = () => {
                       {data.liveNftResDto?.cfKey}
                     </p>
                   </div>
-                ) : //   <div className=" border-2 h-[17vh] rounded-md hover:border-2 hover:border-slate-300 p-1 bg-slate-200 text-xs">
-
-                // </div>
-                null}
+                ) : (
+                  <div className=" border-2 h-[17vh] rounded-md hover:border-2 hover:border-slate-300 p-1 bg-slate-200 text-base">
+                    나의 지갑 자산 :
+                    <span className="text-lg  font-semibold">{wallet}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
