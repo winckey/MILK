@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
 
 const useStyles = makeStyles({
@@ -29,10 +28,10 @@ const SliderProton = ({ value, changePrice }: SliderProtonProps) => {
     <div className={classes.root}>
       <Slider
         value={value}
-        onChange={changePrice}
+        onChange={() => changePrice()}
         valueLabelDisplay="on"
         min={0}
-        max={1000}
+        max={99999}
         classes={{
           thumb: classes.thumb,
           rail: classes.rail,

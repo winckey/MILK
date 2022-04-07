@@ -136,11 +136,10 @@ export default function Carousel() {
   const ItemContainerRef: any = useRef(null);
   // b => beginning | m => middle | e => end
   const [ScrollInd, setScrollInd]: any = useState("b");
-  const [list, setList] = useState([]);
+
   const { data } = useSWR<BrandResponse>(
     `${process.env.BASE_URL}/user/enterprise`
   );
-  console.log(data?.users);
 
   return (
     <CarouselEl
@@ -192,11 +191,13 @@ export default function Carousel() {
               <a>
                 <Item>
                   <Avatar>
-                    <Image
-                      src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${brand.proImg}/avatar`}
-                      height="120"
-                      width="120"
-                    />
+                    {brand && brand.proImg ? (
+                      <Image
+                        src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${brand.proImg}/avatar`}
+                        height="120"
+                        width="120"
+                      />
+                    ) : null}
                   </Avatar>
                   <Name>{brand.nickname}</Name>
                   <BottomSection>
