@@ -57,7 +57,7 @@ const PartnerSignup: NextPage = () => {
   useEffect(() => {
     if (data && data.statusCode === 200) {
       alert(`고객사 계정이 생성되었습니다!`);
-      router.push(`/login`); // 로그인 페이지로 이동
+      router.push(`/`); // 로그인 페이지로 이동
     }
   }, [data, router]);
 
@@ -152,14 +152,9 @@ const PartnerSignup: NextPage = () => {
                       <input
                         {...register("realName", {
                           required: "필수 정보입니다.",
-                          pattern: {
-                            value: /^[가-힣a-zA-Z0-9]{2,10}$/,
-                            message:
-                              "2~10자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
-                          },
                         })}
                         className="w-full outline-none placeholder:text-sm placeholder:text-textGray px-3 py-2"
-                        placeholder="한글/영문/숫자 중 2~10자를 입력해주세요."
+                        placeholder="이름을 입력해주세요."
                       />
                       <p className="mt-[3px] text-xs text-[#ff5e57] px-3">
                         {errors?.realName?.message}
@@ -176,11 +171,6 @@ const PartnerSignup: NextPage = () => {
                       <input
                         {...register("nickname", {
                           required: "필수 정보입니다.",
-                          pattern: {
-                            value: /^[가-힣a-zA-Z0-9]{2,10}$/,
-                            message:
-                              "2~10자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
-                          },
                           validate: {
                             checkNickname: async (value) =>
                               (await fetch(
@@ -195,7 +185,7 @@ const PartnerSignup: NextPage = () => {
                           },
                         })}
                         className="w-full outline-none placeholder:text-sm placeholder:text-textGray px-3 py-2"
-                        placeholder="한글/영문/숫자 중 2~10자를 입력해주세요."
+                        placeholder="닉네임을 입력해주세요."
                       />
                       {startCheckNick && !errors?.nickname?.message ? (
                         <p className="mt-[3px] text-xs text-[#05c46b] px-3">

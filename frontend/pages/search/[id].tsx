@@ -12,6 +12,7 @@ import { useRecoilValue } from "recoil";
 import { accessToken } from "@components/atoms/Auth";
 import { tokenFetcher } from "@libs/client/useUser";
 import RangeSlider from "@components/ui/common/rangebar";
+import Pagination from "@mui/material/Pagination";
 
 interface SearchResponse {
   message: string;
@@ -24,7 +25,7 @@ const Search: NextPage = () => {
   const [sortSelected, setSortSelected] = useState("");
   const [roomSelected, setRoomSelected] = useState("");
   const [selectedPrice, setSelectedPrice] = useState([0, 999999]);
-  const [priceRange, setPriceRange] = useState(9999);
+  const [page, setPage] = useState(1);
   const router = useRouter();
   const { id } = router.query;
 
@@ -32,7 +33,7 @@ const Search: NextPage = () => {
   const { data } = useSWR<SearchResponse>(
     id
       ? [
-          `${process.env.BASE_URL}/nft/search?keyword=${id}&max=${selectedPrice[1]}&min=${selectedPrice[0]}&ownerIsEnterprise=${roomSelected}&sort=${sortSelected}`,
+          `${process.env.BASE_URL}/nft/search?keyword=${id}&max=${selectedPrice[1]}&min=${selectedPrice[0]}&pageNumber=${page}&ownerIsEnterprise=${roomSelected}&sort=${sortSelected}`,
           TOKEN,
         ]
       : null,
@@ -44,17 +45,23 @@ const Search: NextPage = () => {
       alert("검색결과가 없습니다.");
     }
   }, [data, router]);
-  console.log(data);
 
   const handleChangePrice = (event: Event, value: any) => {
     setSelectedPrice(value);
-    console.log(value);
   };
+
+  console.log(page);
   return (
     <Layout seoTitle="검색 결과">
       <div className="flex flex-col  max-w-full mx-10 p-10 items-center ">
         {/* 검색결과 */}
-        <div className=" font-medium text-5xl">{id} 검색 결과</div>
+        <div className=" font-[550] text-[36px]">
+          <span className="font-[600] text-[40px] bg-clip-text text-transparent bg-gradient-to-r from-gold to-lightGold mr-2">
+            {id}
+          </span>
+          검색 결과
+        </div>
+
         <div className="flex w-full pt-5 flex-row gap-x-4">
           {/* 필터링 */}
           <div className=" w-1/5 flex flex-col pt-2 pb-10 items-center bg-slate-100  gap-y-7 mr-2">
@@ -95,9 +102,9 @@ const Search: NextPage = () => {
             </div>
           </div>
           {/* 오른쪽 */}
-          <div className="  w-4/5 flex flex-col bg-slate-100  ">
+          <div className="  w-4/5 flex items-center flex-col bg-slate-100  ">
             {/* 정렬  */}
-            <div className=" ml-4  self-end  mb-16">
+            <div className=" ml-4  h-16 self-end  mb-16">
               <div className="flex  gap-x-5 gap  transition text-gray-600 duration-200">
                 <button
                   className={`font-semibold hover:border-b-2 cursor-pointer  ${
@@ -142,7 +149,7 @@ const Search: NextPage = () => {
               </div>
             </div>
             {/* 검색 결과 */}
-            <div className=" grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 px-2 md">
+            <div className=" grid h-80 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 px-2 md">
               {data?.nftDtoList.map((nft) => (
                 <Item
                   key={nft.nftId}
@@ -155,6 +162,14 @@ const Search: NextPage = () => {
                   myLike={nft.myLike}
                 />
               ))}
+            </div>
+            <div className="h-4 mr-10 ">
+              <Pagination
+                page={page}
+                onChange={(e, value) => setPage(value)}
+                count={10}
+                shape="rounded"
+              />
             </div>
           </div>
         </div>

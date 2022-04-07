@@ -67,11 +67,9 @@ function MyDropdown({ logout, role }: any) {
 }
 
 export default function Header() {
-  const { user, isLoading } = useUser();
   const [TOKEN, setTOKEN] = useRecoilState(accessToken);
   const getRole = useRecoilValue(role);
   const [open, setOpen] = useState(false);
-  const [nickname, setNickname] = useState("");
   const router = useRouter();
   const logout = () => {
     router.push("/");
@@ -86,14 +84,14 @@ export default function Header() {
   const UserLinks = [
     { name: "개인관", link: "/individual" },
     { name: "명품관", link: "/brand" },
-    { name: "나의 전시관", link: `/exhibition/${nickname}` },
+    { name: "나의 전시관", link: `/exhibition/arts` },
     { name: "라이브 경매", link: "/streams" },
   ];
-  useEffect(() => {
-    if (user) {
-      setNickname(user.nickname);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     setNickname(user.nickname);
+  //   }
+  // }, []);
 
   return (
     <div className="shadow-md w-full bg-ourBlack z-10 h-[80px] fixed top-0 left-0 text-white">

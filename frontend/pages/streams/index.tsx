@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { Layout } from "@components/ui/layout";
 import { useRouter } from "wouter";
 import Link from "next/link";
-import { Item } from "@components/ui/common";
+import Item from "@components/ui/stream/card/index";
 
 interface DataList {
   roomId: number;
@@ -43,22 +43,21 @@ const Streams: NextPage = () => {
           {/* 메인 글 */}
           <div className="flex flex-col items-center mb-5">
             <span className="text-[40px] font-[600] bg-clip-text text-transparent bg-gradient-to-r from-gold to-lightGold my-7">
-              Explore Luxury goods
+              MILC Live Auction
             </span>
             <div className="text-center text-textGray p-5">
               <span>
-                고유성에 가치를 두는 명품 패션 시장도 NFT 시장에 눈을 돌리기
-                시작했습니다.
+                브랜드 사의 NFT 한정품을 소장할 수 기회입니다.
                 <br />
-                실물 소재와 제작 과정, 장인 정신과 브랜드 헤리티지에 따라 고가의
-                가치가 매겨졌는데,
-                <br /> NFT가 대상 하나하나에 고유의 객체라는 존재감을 나타낼 수
-                있어서 실물 명품보다 희소성은 우위에 있다고 볼 수 있습니다.
+                MILC는 세계에서 하나뿐인 NFT 제품을{" "}
+                <span className="font-semibold">실시간 경매</span>할 수 있는
+                서비스를 제공합니다.
                 <br />
-                MILC는 세계적인 명품 브랜드와 협업하여 NFT 뿐만 아니라 실물까지
-                받을 수 있도록 제공하고 있습니다.
+                한정된 시간동안 당신의 미래 NFT는 높은 가치로 거듭나고 있습니다.
                 <br />
-                여기서 구매한 NFT를 자유롭게 거래하십시오.
+                사람들의 가치가 모든 담긴,
+                <br />
+                나의 미래 NFT 제품을 소장하십시오.
               </span>
             </div>
           </div>
@@ -67,7 +66,7 @@ const Streams: NextPage = () => {
         {/* 카드 */}
         <div>
           <p className="text-2xl font-[600] bg-clip-text text-transparent bg-gradient-to-r from-textGray to-textBlack text-center my-10">
-            Trending collections
+            Live Auction List
           </p>
           <div className="px-[52px]">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
@@ -91,6 +90,8 @@ const Streams: NextPage = () => {
                     nftName={val.}
                     price={val.}
                     myLike={.}
+                    // 현재 최고가
+                    currentBid={}
                   /> */}
                 </Link>
               ))}

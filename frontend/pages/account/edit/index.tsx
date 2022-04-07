@@ -185,9 +185,9 @@ const EditProfile: NextPage = () => {
                           {...register("nickname", {
                             required: "필수 정보입니다.",
                             pattern: {
-                              value: /^[가-힣a-zA-Z0-9]{2,10}$/,
+                              value: /^[가-힣a-zA-Z0-9\s]{2,20}$/,
                               message:
-                                "2~10자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
+                                "2~20자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
                             },
                             validate: {
                               checkNickname: async (value) =>
@@ -272,13 +272,13 @@ const EditProfile: NextPage = () => {
                   <div className="mb-6 flex flex-col">
                     <div className="flex flex-col">
                       <div className="mb-2">
-                        <label className="font-semibold">휴대전화</label>
+                        <label className="font-semibold">전화번호</label>
                       </div>
                       <div className="bg-white rounded-[10px] border w-full p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold">
                         <input
                           {...register("phone", {
                             pattern: {
-                              value: /^\d{3}-\d{3,4}-\d{4}$/ || "",
+                              value: /^\d{2,3}-\d{3,4}-\d{4}$/ || "",
                               message: "전화번호 양식을 지켜주세요.",
                             },
                           })}
