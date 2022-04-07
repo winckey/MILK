@@ -48,7 +48,7 @@ export const connectWallet = async () => {
 
 export const marketContract = async (signer) => {
   const contract = new ethers.Contract(
-    Marketplace.networks["42"].address,
+    Marketplace.networks["5777"].address,
     Marketplace.abi,
     signer
   );
@@ -57,7 +57,7 @@ export const marketContract = async (signer) => {
 
 export const nftContract = async (signer) => {
   const contract = new ethers.Contract(
-    NFT.networks["42"].address,
+    NFT.networks["5777"].address,
     NFT.abi,
     signer
   );
@@ -220,19 +220,6 @@ export const findItemId = async (nftId, signer) => {
   }
 };
 
-export const realizeItem = async (nftId, signer) => {
-  const nft = await nftContract(signer);
-  const marketplace = await marketContract(signer);
-  const real = await (
-    await nft.Realization(marketplace.address, Number(nftId))
-  ).wait();
-  return real;
-  // await real;
-  // if (real) {
-  //   window.location.reload();
-  // }
-};
-
 export const isRealizedItem = async (nftId, signer) => {
   const res = await nftContract(signer);
   const tokenId = Number(nftId);
@@ -265,12 +252,21 @@ export const findNFT = async (nftId) => {
         description: items[i].description.toString(),
         edition: items[i].edition,
         product: items[i].product,
-        brandName: items[i].brandName,
+        nickname: items[i].nickname,
       };
       // console.log(item);
       return item;
     }
   }
+};
+
+export const realizeItem = async (nftId, signer) => {
+  const nft = await nftContract(signer);
+  const marketplace = await marketContract(signer);
+  const real = await (
+    await nft.Realization(marketplace.address, Number(nftId))
+  ).wait();
+  return real;
 };
 
 export const findMarketNFT = async (itemId, signer) => {
@@ -290,14 +286,14 @@ export const purchaseMarketItem = async (itemId, signer) => {
   console.log(item.seller);
   console.log(item.itemId);
   const res = await (
-    await marketplace.purchaseItem(item.itemId, { value: totalPrice })
+    await marketplace.purchaseItem(nft.address, item.itemId, {
+      value: totalPrice,
+    })
   ).wait();
-  // await res;
-
-  // {
-  //   // res && (await marketplace.cancelItem(itemId)));
-  //   res && window.location.reload();
-  // }
+  {
+    // res && (await marketplace.cancelItem(itemId)));
+    res && window.location.reload();
+  }
 };
 
 export const sellMarketItem = async (nftId, price, signer) => {
@@ -310,17 +306,14 @@ export const sellMarketItem = async (nftId, price, signer) => {
   const approveItem = await (
     await nft.setApprovalForAll(marketplace.address, true)
   ).wait();
-  // await approveItem;
 
   const res = await (
     await marketplace.makeItem(nft.address, Number(nftId), listingPrice)
   ).wait();
-  // await res;
-
-  // {
-  //   res && window.location.reload();
-  // }
-  // console.log(res);
+  {
+    res && window.location.reload();
+  }
+  console.log(res);
 };
 
 export const getUserBalance = async () => {

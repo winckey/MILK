@@ -32,8 +32,6 @@ const Profile: NextPage = () => {
     tokenFetcher
   );
 
-  console.log(data);
-
   // 가져온 리스트에서 판매중인 nft만 필터링
   useEffect(() => {
     if (data && data?.statusCode === 200) {

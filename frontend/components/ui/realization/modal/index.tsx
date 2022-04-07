@@ -9,11 +9,23 @@ import { Modal } from "../../common";
 
 declare let window: any;
 
-interface RealizationModalProps {
+interface Iresponse {
   nft: any;
   onClose: Function;
   user: any;
   nftId: string | string[] | undefined;
+  response:
+    | {
+        nftId: string;
+        address: any;
+        image: any;
+        name: any;
+        description: any;
+        edition: any;
+        product: any;
+        brandName: any;
+      }
+    | undefined;
 }
 
 interface IRealizationForm {
@@ -34,7 +46,8 @@ export default function RealizationModal({
   onClose,
   user,
   nftId,
-}: RealizationModalProps) {
+  response,
+}: Iresponse) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -110,7 +123,7 @@ export default function RealizationModal({
               <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">
                 <div className="font-semibold px-4">상품명</div>
                 <div className="bg-[#fbfdff] border-t border-lightBg px-4">
-                  {nft.name}
+                  {response?.name}
                 </div>
               </div>
               <div className="relative rounded-md bg-white py-1 mb-3 shadow-sm">

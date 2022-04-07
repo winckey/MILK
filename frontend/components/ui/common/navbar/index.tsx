@@ -2,11 +2,10 @@ import { IoClose, IoMenu } from "react-icons/io5";
 import SearchBar from "./SearchBar";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { accessToken, role } from "@components/atoms/Auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useUser from "@libs/client/useUser";
 // hi
 
 function MyDropdown({ logout, role }: any) {
@@ -67,16 +66,17 @@ function MyDropdown({ logout, role }: any) {
 }
 
 export default function Header() {
-  const { user, isLoading } = useUser();
   const [TOKEN, setTOKEN] = useRecoilState(accessToken);
   const getRole = useRecoilValue(role);
   const [open, setOpen] = useState(false);
   const router = useRouter();
+
   const logout = () => {
     router.push("/");
     localStorage.clear();
     setTOKEN("");
   };
+
   const AllLinks = [
     { name: "개인관", link: "/individual" },
     { name: "명품관", link: "/brand" },
@@ -85,7 +85,7 @@ export default function Header() {
   const UserLinks = [
     { name: "개인관", link: "/individual" },
     { name: "명품관", link: "/brand" },
-    { name: "나의 전시관", link: `/exhibition/${user?.nickname}` },
+    { name: "나의 전시관", link: `/exhibition` },
     { name: "라이브 경매", link: "/streams" },
   ];
 
