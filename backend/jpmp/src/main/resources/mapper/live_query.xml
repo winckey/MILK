@@ -10,8 +10,9 @@
         </selectKey>
     </insert>
 
-    <select id="getLiveList" resultType="com.jpmp.api.dto.request.live.LiveDto">
-        select * from live
+    <select id="getLiveList" resultType="com.jpmp.api.dto.response.live.LiveNftResDto">
+        SELECT l.room_id, l.user_id, l.nickname, l.cf_key, l.cf_id, l.cf_url, l.room_name, l.startprice, l.runtime, l.finish, l.nft_id, l.starttime, n.id, n.img_url, n.nft_name, n.price, n.realization_status, n.sele_status, n.enterprise, n.owner
+        FROM jpmp.live l join nft n on (l.nft_id = n.nft_id)
     </select>
 
     <update id="finishLive" parameterType="int">
@@ -20,10 +21,10 @@
         where room_id = #{roomId}
     </update>
 
-    <select id="getLive" parameterType="int" resultType="com.jpmp.api.dto.request.live.LiveDto">
-        select *
-          from live
-         where room_id = #{roomId}
+    <select id="getLive" parameterType="int" resultType="com.jpmp.api.dto.response.live.LiveNftResDto">
+        SELECT l.room_id, l.user_id, l.nickname, l.cf_key, l.cf_id, l.cf_url, l.room_name, l.startprice, l.runtime, l.finish, l.nft_id, l.starttime, n.id, n.img_url, n.nft_name, n.price, n.realization_status, n.sele_status, n.enterprise, n.owner
+        FROM jpmp.live l join nft n on (l.nft_id = n.nft_id)
+         and room_id = #{roomId}
     </select>
 
     <select id="getmaxCost" parameterType="int" resultType="int">

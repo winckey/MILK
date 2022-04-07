@@ -15,16 +15,18 @@ import lombok.ToString;
 public class LiveDetailResDto extends BaseResponseBody {
 
     @ApiModelProperty(name="경매방 정보")
-    private LiveDto liveDto;
+    private LiveNftResDto liveNftResDto;
 
     @ApiModelProperty(name="최고 입찰가")
     private int maxCost;
 
-    public static LiveDetailResDto of(Integer statusCode, String message, LiveDto dto, int maxcost) {
+
+
+    public static LiveDetailResDto of(Integer statusCode, String message, LiveNftResDto dto, int maxcost) {
         LiveDetailResDto res = new LiveDetailResDto();
         res.setStatusCode(statusCode);
         res.setMessage(message);
-        res.setLiveDto(dto);
+        res.setLiveNftResDto(dto);
         res.setMaxCost(maxcost);
         return res;
     }
