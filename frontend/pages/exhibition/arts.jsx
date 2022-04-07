@@ -13,7 +13,7 @@ import {
   Html,
   useGLTF,
 } from "@react-three/drei";
-import { useRoute, useLocation, Link } from "wouter";
+import { useRoute, useLocation, Link, useRouter } from "wouter";
 import getUuid from "uuid-by-string";
 import Goods from "@components/exhibition/Goods";
 
@@ -79,6 +79,7 @@ export default function arts() {
       }
     }
   }
+
   return (
     <Canvas
       gl={{ alpha: false }}
@@ -109,9 +110,23 @@ export default function arts() {
             />
           </mesh>
         </group>
-        <Html as="div" position={[-0.2, -3, 0]}>
-          <button onClick={toggleFullScreen}>full screen</button>
+        <Html as="div" position={[-0.8, -3.3, 0]}>
+          <div className="flex flex-row justify-center gap-x-2 ">
+            <button
+              className=" text-gray-700 w-24  bg-gray-300 hover:bg-gray-500 hover:text-white hover:duration-300 p-2 rounded-md"
+              onClick={toggleFullScreen}
+            >
+              전체화면
+            </button>
+            <a
+              className=" text-gray-700  bg-gray-300 hover:bg-gray-500 hover:text-white hover:duration-300 p-2 rounded-md"
+              href="/"
+            >
+              홈
+            </a>
+          </div>
         </Html>
+        {/* <Html as="div" position={[8, -3.4, 0]}></Html> */}
       </Suspense>
     </Canvas>
   );
@@ -220,10 +235,12 @@ function Frames({
       onClick={(e) => (
         e.stopPropagation(),
         setLocation(
-          clicked.current === e.object ? "/show/arts" : "/item/" + e.object.name
+          clicked.current === e.object
+            ? "/exhibition/arts"
+            : "/item/" + e.object.name
         )
       )}
-      onPointerMissed={() => setLocation("/show/arts")}
+      onPointerMissed={() => setLocation("/exhibition/arts")}
     >
       {images.map(
         (props) => <Frame key={props.url} {...props} /> /* prettier-ignore */

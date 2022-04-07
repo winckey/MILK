@@ -67,12 +67,17 @@ const Create: NextPage = () => {
         await fetch(`/api/streams`)
       ).json();
       console.log(uid, streamKey, url);
-
+      /////////////////////////////////////////////////
+      const startTime = new Date().getTime();
+      console.log(startTime);
+      console.log();
       makeStream({
         ...streamData,
         cfId: uid,
         cfKey: streamKey,
         cfUrl: url,
+        starttime: startTime,
+        nftId: "12334",
       });
     }
   };
@@ -88,6 +93,7 @@ const Create: NextPage = () => {
 
   useEffect(() => {
     // makeStream(streamData);
+    console.log(streamData);
     if (data && data.statusCode === 200) {
       router.push(`/streams/${data.roomId}`);
     }
