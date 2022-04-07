@@ -30,7 +30,6 @@ const Create: NextPage = () => {
   const [makeStream, { data, loading }] = useMutation<CreateResponse>(`/live`);
   const { user, isLoading } = useUser();
   const router = useRouter();
-
   const [streamData, setStreamData] = useState({
     // cfId: "",
     // cfKey: "",

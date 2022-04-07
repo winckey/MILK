@@ -17,6 +17,7 @@ import useMutation from "@libs/client/useMutation";
 declare let window: any;
 
 interface apply {
+  id: number;
   applicationDate: string;
   consumer: string;
   enterprise: string;
@@ -61,13 +62,11 @@ const Realization: NextPage = () => {
     [`${process.env.BASE_URL}/realization_board/enterpris`, TOKEN],
     tokenFetcher
   );
-
   const [updateRealization, { loading, data, error }] =
     useMutation<IRealizationResponse>("/realization_board", "PUT");
+  const [requestItems, setRequestItems] = useState<apply[]>();
   console.log(realizeData);
   console.log(data);
-
-  const [requestItems, setRequestItems] = useState<apply[]>();
 
   const isRealized = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -81,7 +80,7 @@ const Realization: NextPage = () => {
 
   const onValid = () => {
     const formData = {
-      RBoardId: 2,
+      RBoardId: 25,
       RBoardStatus: status,
     };
     console.log(formData);
@@ -136,33 +135,76 @@ const Realization: NextPage = () => {
               <div className="my-5 ">
                 <div className="rounded-[10px] bg-white shadow-md ">
                   <div className="px-8 py-5 text-center text-textGray text-xs">
-                    {realizedItems?.map((item, idx) => (
-                      <>
-                        <div key={idx} className="flex items-center gap-4">
-                          <div>{item.name}</div>
-                          <img
-                            src={item.image}
-                            className="w-[50px] h-[50px]"
-                            alt=""
-                          />
-                          <div>{item.edition}</div>
-                          <div>{item.address}</div>
-                          <select
-                            onChange={(e) => setStatus(e.target.value)}
-                            // value={
-                            //   requestItems
-                            //     ? requestItems[Number(item.nftId)]
-                            //     : null
-                            // }
-                          >
-                            <option value="STATUS_NOTADM">승인 대기</option>
-                            <option value="STATUS_ADM">승인 완료</option>
-                            <option value="STATUS_COM">실물화 완료</option>
-                          </select>
-                          <button onClick={onValid}>승인</button>
-                        </div>
-                      </>
-                    ))}
+                    <div></div>
+                    <div className="flex justify-evenly text-[14px] font-bold">
+                      <div>상품명</div>
+                      <div>에디션</div>
+                      <div>소유주</div>
+                      <div>요청 상태</div>
+                    </div>
+                    <div className="flex w-full">
+                      <div className="pr-2">
+                        {realizedItems?.map((item, idx) => (
+                          <>
+                            <div
+                              key={idx}
+                              className="flex justify-center items-center gap-4 mb-5"
+                            >
+                              <div className="h-[100px]">
+                                <img
+                                  className="w-[auto] h-[100px]"
+                                  src={item.image}
+                                  alt=""
+                                />
+                              </div>
+                            </div>
+                          </>
+                        ))}
+                      </div>
+                      <div className="w-full">
+                        {realizedItems?.map((item, idx) => (
+                          <>
+                            <div key={idx} className="gap-4 mb-5 w-full">
+                              <div className="h-[100px] w-full flex justify-evenly items-center text-[14px]">
+                                <div>{item.name}</div>
+                                <div>{item.edition}</div>
+                                <div>
+                                  {requestItems?.map((i, idx) =>
+                                    i.id === Number(item.nftId) ? (
+                                      <div>{i.consumer}</div>
+                                    ) : null
+                                  )}
+                                </div>
+                                <select
+                                  className=""
+                                  onChange={(e) => setStatus(e.target.value)}
+                                  // value={
+                                  //   requestItems
+                                  //     ? requestItems[Number(item.nftId)]
+                                  //     : null
+                                  // }
+                                >
+                                  <option value="STATUS_NOTADM">
+                                    승인 대기
+                                  </option>
+                                  <option value="STATUS_ADM">승인 완료</option>
+                                  <option value="STATUS_COM">
+                                    실물화 완료
+                                  </option>
+                                </select>
+
+                                <button
+                                  onClick={onValid}
+                                  className="font-bold px-5 py-3 rounded-[10px] bg-lightGold border border-lightGold text-white hover:bg-gold hover:shadow-md focus:bg-gold focus:outline-none"
+                                >
+                                  승인
+                                </button>
+                              </div>
+                            </div>
+                          </>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

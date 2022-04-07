@@ -15,14 +15,48 @@ module.exports = {
           mnemonic: {
             phrase: keys.MNEMONIC,
           },
-          providerOrUrl: `https://goerli.infura.io/v3/${keys.INFURA_PROJECT_ID}`,
+          providerOrUrl: `https://ropsten.infura.io/v3/${keys.INFURA_PROJECT_ID}`,
           addressIndex: 0,
         }),
       // network_id: 3,=> ropsten
-      network_id: 5777,
-      gas: 6000000,
+      network_id: 3,
+      gas: 5500000,
       gasPrice: 20000000000,
       confirmations: 2,
+      timeoutBlocks: 200,
+    },
+    rinkeby: {
+      // must be a thunk, otherwise truffle commands may hang in CI
+      provider: () =>
+        new HDWalletProvider({
+          mnemonic: {
+            phrase: keys.MNEMONIC,
+          },
+          providerOrUrl: `https://rinkeby.infura.io/v3/${keys.INFURA_PROJECT_ID}`,
+          addressIndex: 0,
+        }),
+      // network_id: 3,=> ropsten
+      network_id: 4,
+      gas: 5500000,
+      gasPrice: 20000000000,
+      confirmations: 2,
+      timeoutBlocks: 200,
+    },
+    kovan: {
+      // must be a thunk, otherwise truffle commands may hang in CI
+      provider: () =>
+        new HDWalletProvider({
+          mnemonic: {
+            phrase: keys.MNEMONIC,
+          },
+          providerOrUrl: `https://kovan.infura.io/v3/${keys.INFURA_PROJECT_ID}`,
+          addressIndex: 0,
+        }),
+      // network_id: 3,=> ropsten
+      network_id: 42,
+      gas: 5500000,
+      gasPrice: 20000000000,
+      confirmations: 4,
       timeoutBlocks: 200,
     },
   },
