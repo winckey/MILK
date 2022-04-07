@@ -105,43 +105,61 @@ const Bar2 = styled(Bar1)`
   /* filter: brightness(0.5); */
   z-index: 0;
 `;
-
+export interface Nft {
+  nftId: string;
+  imgUrl: string;
+  enterprise: string;
+  nftName: string;
+  price: number;
+  myLike: boolean;
+  likeCount: number;
+  owner?: string;
+  realStatus?: boolean;
+  seleStatus?: boolean;
+}
 export default function NFTCard({ item }: any) {
   const {
-    Id,
-    Badge,
-    ImageUrl,
-    Edition,
-    Stock,
-    Title,
+    nftId,
+    imgUrl,
+    enterprise,
+    nftName,
+    price,
+    myLike,
     Price,
-    Avatar,
-    Author,
-    Likes,
+    likeCount,
   } = item;
   return (
-    <NFTCardEl>
+    <NFTCardEl className="hover:scale-[1.02] duration-300">
       <Card>
-        <BadgeEl>{Badge}</BadgeEl>
+        <BadgeEl>{enterprise}</BadgeEl>
         <ItemImage>
-          <Image src={ImageUrl} width="1024" height="1025" />
+          <img src={imgUrl} alt="#" width="1024" height="1025" />
+          {/* <div className="w-[70vw] sm:w-[40vw] md:w-[20vw] h-60 flex justify-center">
+            사진
+          </div> */}
         </ItemImage>
         <InfoSection>
           <TSection>
-            <EditionEl>
-              {Edition} {Edition > 1 ? "Editions" : "Edition"} Minted
-            </EditionEl>
-            <StockEl>{Stock} for sale</StockEl>
+            {/* <EditionEl>
+              {nftName} {nftName > 1 ? "Editions" : "Edition"} Minted
+            </EditionEl> */}
+            <StockEl>
+              <img
+                className="w-5 h-5 inline-block object-contain"
+                src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
+                alt="ETH"
+              />
+              {price} eth for sale
+            </StockEl>
           </TSection>
-          <ItemTitle>{Title}</ItemTitle>
-          <PriceSection>{Price}</PriceSection>
+          <ItemTitle>{nftName}</ItemTitle>
+
           <BottomSection>
             <AvatarEl>
-              <Image src={Avatar} width="50" height="50" />
+              {/* <Image src={Avatar} width="50" height="50" /> */}
             </AvatarEl>
-            <AuthorEl>{Author}</AuthorEl>
             <LikesEl>
-              <BsHeart /> {Likes}
+              <BsHeart /> {likeCount}
             </LikesEl>
           </BottomSection>
         </InfoSection>

@@ -9,50 +9,10 @@ import {
   findItemId,
 } from "../../../../utils/interact";
 import { ethers } from "ethers";
-
-// const defaultOrder = {
-//   price: "",
-//   email: "",
-//   confirmationEmail: "",
-// };
-
-// const _createFormState = (isDisabled = false, message = "") => ({
-//   isDisabled,
-//   message,
-// });
-
-// const createFormState = (
-//   { price, email, confirmationEmail },
-//   hasAgreedTOS,
-//   isNewPurchase
-// ) => {
-//   if (!price || Number(price) <= 0) {
-//     return _createFormState(true, "Price is not valid.");
-//   }
-
-//   if (isNewPurchase) {
-//     if (confirmationEmail.length === 0 || email.length === 0) {
-//       return _createFormState(true);
-//     } else if (email !== confirmationEmail) {
-//       return _createFormState(true, "Email are not matching.");
-//     }
-//   }
-
-//   if (!hasAgreedTOS) {
-//     return _createFormState(
-//       true,
-//       "You need to agree with terms of service in order to submit the form"
-//     );
-//   }
-
-//   return _createFormState();
-// };
+import useMutation from "@libs/client/useMutation";
+import useUser from "@libs/client/useUser";
 
 declare let window: any;
-
-interface RealizationModalProps {
-  onClose: Function;
-}
 
 interface Iresponse {
   response:
@@ -64,13 +24,18 @@ interface Iresponse {
         description: any;
         edition: any;
         product: any;
-        nickname: any;
+        brandName: any;
       }
     | undefined;
   onClose: Function;
   ethUSD: number;
   exchange: number;
   price: number;
+}
+
+interface INftResponse {
+  message: string;
+  statusCode: number;
 }
 
 export default function OrderModal({
@@ -80,54 +45,37 @@ export default function OrderModal({
   exchange,
   price,
 }: Iresponse) {
+  const { user } = useUser();
   const [isOpen, setIsOpen] = useState(true);
-  // console.log(response);
-  // const [order, setOrder] = useState(defaultOrder);
-  // const [enablePrice, setEnablePrice] = useState(false);
-  // const [hasAgreedTOS, setHasAgreedTOS] = useState(false);
-
-  // useEffect(() => {
-  //   if (!!course) {
-  //     setIsOpen(true);
-  //     setOrder({
-  //       ...defaultOrder,
-  //       price: eth.perItem,
-  //     });
-  //   }
-  // }, [course]);
   const [enough, setEnough] = useState(true);
   const [items, setItems] = useState({});
   const [balance, setBalance] = useState<string | undefined>("");
   const [purchase, setPurchase] = useState();
+
+  const [updateNFT, { loading, data, error }] = useMutation<INftResponse>(
+    "/nft",
+    "PUT"
+  );
+  console.log(user);
+
   const getBalance = async () => {
     const res = await getUserBalance();
     setBalance(res);
   };
   console.log(balance);
-  // const price = response?.price;
+
+  const onValid = async () => {
+    if (loading) return;
+    if (window.confirm("해당 상품을 구매하시겠습니까?") === true) {
+      updateNFT({ nftId });
+    }
+  };
 
   const nftId = response?.nftId;
   const closeModal = () => {
     setIsOpen(false);
-    // setOrder(defaultOrder);
-    // setEnablePrice(false);
-    // setHasAgreedTOS(false);
     onClose();
   };
-
-  // const formState = createFormState(order, hasAgreedTOS, isNewPurchase);
-
-  // const isEnough = () => {
-  //   if (!price || !balance) {
-  //     window.location.reload();
-  //     return null;
-  //   }
-  //   if (balance >= price) {
-  //     setEnough(true);
-  //   } else {
-  //     setEnough(false);
-  //   }
-  // };
 
   const loadItems = async () => {
     const res = await loadMarketItems();
@@ -137,19 +85,26 @@ export default function OrderModal({
   const onPurchase = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const marketplace = await marketContract(signer);
-    const nft = await nftContract(signer);
     const itemId = await findItemId(nftId, signer);
     const pur = await purchaseMarketItem(itemId, signer);
+    onValid();
     console.log(pur);
   };
 
   useEffect(() => {
-    // isEnough();
     loadItems();
     getBalance();
+    if (data && data.statusCode === 200) {
+      alert("구매가 완료되었습니다.");
+      window.location.reload();
+    } else if (data) {
+      alert("구매에 실패했습니다.");
+      console.log(data?.message, data?.statusCode);
+    }
   }, []);
+
   console.log(items);
+  console.log(data);
 
   return (
     <Modal isOpen={isOpen}>

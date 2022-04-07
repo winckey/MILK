@@ -22,7 +22,7 @@ export default function Layout({ children, seoTitle, canGoBack }: LayoutProps) {
         <>
           <Header />
 
-          <div className="min-h-screen w-full pt-[80px] bg-lightBg">
+          <div className="min-h-screen w-full pt-[80px]  bg-lightBg">
             {children}
           </div>
           <Footer />

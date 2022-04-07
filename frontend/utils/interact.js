@@ -48,7 +48,7 @@ export const connectWallet = async () => {
 
 export const marketContract = async (signer) => {
   const contract = new ethers.Contract(
-    Marketplace.networks["3"].address,
+    Marketplace.networks["42"].address,
     Marketplace.abi,
     signer
   );
@@ -57,7 +57,7 @@ export const marketContract = async (signer) => {
 
 export const nftContract = async (signer) => {
   const contract = new ethers.Contract(
-    NFT.networks["3"].address,
+    NFT.networks["42"].address,
     NFT.abi,
     signer
   );
@@ -147,8 +147,58 @@ export const loadNFTItems = async () => {
       description: metadata.description,
       edition: metadata.edition,
       product: metadata.product,
-      nickname: metadata.nickname,
+      brandName: metadata.brandName,
     });
+    // console.log(item);
+  }
+
+  // console.log(nft.address);
+  // console.log(items);
+  // return items;
+  return items;
+};
+
+export const loadRealizedItems = async (userName, signer) => {
+  const marketplace = await marketContract(signer);
+  const nft = await nftContract(signer);
+  const itemCounts = await nft.tokenCount();
+  console.log(itemCounts);
+  const response = await connectWallet();
+  const address = response?.address;
+  // console.log(response.address);
+
+  let items = [];
+  for (let i = 1; i <= itemCounts; i++) {
+    const uri = await nft.tokenURI(i);
+    const res = await fetch(uri);
+    const metadata = await res.json();
+    const data = await nft.ownerOf(i);
+    const isRealized = await nft.isRealization(i);
+    console.log(address);
+    console.log(data);
+    console.log(isRealized);
+    console.log(userName === metadata.brandName);
+
+    if (isRealized && userName === metadata.brandName) {
+      // console.log(metadata);
+      // console.error("★★★★★★★★★★★★★★");
+      // console.log(address);
+      // console.log(data);
+      // console.error("★★★★★★★★★★★★★★");
+      // console.log(metadata);
+      // console.log(nft.ownerOf(i));
+      items.push({
+        nftId: i.toString(),
+        address: data,
+        image: metadata.image,
+        name: metadata.name,
+        description: metadata.description,
+        edition: metadata.edition,
+        product: metadata.product,
+        brandName: metadata.brandName,
+      });
+      console.log(`${i}번째 푸시`);
+    }
     // console.log(item);
   }
 
@@ -168,6 +218,19 @@ export const findItemId = async (nftId, signer) => {
   if (itemId) {
     return itemId;
   }
+};
+
+export const realizeItem = async (nftId, signer) => {
+  const nft = await nftContract(signer);
+  const marketplace = await marketContract(signer);
+  const real = await (
+    await nft.Realization(marketplace.address, Number(nftId))
+  ).wait();
+  return real;
+  // await real;
+  // if (real) {
+  //   window.location.reload();
+  // }
 };
 
 export const isRealizedItem = async (nftId, signer) => {
@@ -202,7 +265,7 @@ export const findNFT = async (nftId) => {
         description: items[i].description.toString(),
         edition: items[i].edition,
         product: items[i].product,
-        nickname: items[i].nickname,
+        brandName: items[i].brandName,
       };
       // console.log(item);
       return item;
@@ -229,10 +292,12 @@ export const purchaseMarketItem = async (itemId, signer) => {
   const res = await (
     await marketplace.purchaseItem(item.itemId, { value: totalPrice })
   ).wait();
-  {
-    // res && (await marketplace.cancelItem(itemId)));
-    res && window.location.reload();
-  }
+  // await res;
+
+  // {
+  //   // res && (await marketplace.cancelItem(itemId)));
+  //   res && window.location.reload();
+  // }
 };
 
 export const sellMarketItem = async (nftId, price, signer) => {
@@ -245,14 +310,17 @@ export const sellMarketItem = async (nftId, price, signer) => {
   const approveItem = await (
     await nft.setApprovalForAll(marketplace.address, true)
   ).wait();
+  // await approveItem;
 
   const res = await (
     await marketplace.makeItem(nft.address, Number(nftId), listingPrice)
   ).wait();
-  {
-    res && window.location.reload();
-  }
-  console.log(res);
+  // await res;
+
+  // {
+  //   res && window.location.reload();
+  // }
+  // console.log(res);
 };
 
 export const getUserBalance = async () => {

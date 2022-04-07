@@ -1,4 +1,4 @@
-import { ProfileImg, Timer } from "@components/cloudflare";
+import { ProfileImg } from "@components/cloudflare";
 import { Layout } from "@components/ui/layout";
 import Message from "@components/ui/message";
 import useMutation from "@libs/client/useMutation";
@@ -10,6 +10,10 @@ import { useEffect, useState } from "react";
 import SockJS from "sockjs-client";
 import { over } from "stompjs";
 import useSWR from "swr";
+import Timer from "@components/ui/timer/index";
+import GlobalStyle from "@styles/GlobalStyle";
+import { getUserBalance } from "utils/interact";
+import { accessToken } from "@components/atoms/Auth";
 
 let stompClient: any = null;
 // 백에서 해당 룸 상세조회 api 만들면 추가해줘야함
@@ -23,7 +27,7 @@ interface IStreamResponse {
 interface RoomResponse {
   message: string;
   statusCode: number;
-  liveDtoList: {
+  liveNftResDto: {
     roomId: number;
     userId: number;
     nickname: string;
@@ -31,8 +35,13 @@ interface RoomResponse {
     roomName: string;
     startprice: number;
     cfUrl: string;
+    runtime: number;
     cfKey: string;
-  }[];
+    starttime: number;
+    imgUrl: string;
+    nftName: string;
+  };
+  maxCost: number;
 }
 
 const Stream: NextPage = () => {
@@ -43,40 +52,35 @@ const Stream: NextPage = () => {
   const { id } = router.query;
   const [alertPrice, setAlertPrice] = useState(false);
   const [alertUp, setAlertUp] = useState(false);
-  let time = 0.3;
+  const [remainTime, setRemainTime] = useState(0);
   // const [time, setTime]:number = useState(20);
   const [highest, setHighest] = useState(0);
   const [timer, setTimer] = useState(false);
-  const [ishost, setIsHost] = useState(false);
+  const [finish, setFinish] = useState(false);
   const [userData, setUserData] = useState({
     nickName: "",
-    receivername: "",
+
     connected: false,
     message: "",
     // 내 지갑에서 받아와야함
     myAsset: 0,
     // 응찰가
     money: 0,
+    proImg: "",
   });
   // 종료 오세허니한테 물어보기
-  // const [finishStream, { data, loading }] = useMutation<IStreamResponse>(
-  //   `/live?roomId=${router.query.id}`,
-  //   "PUT"
-  // );
-  // user 데이터 다 받아오면 소켓 연결합니다
+  const [finishStream, { data: mutatedData, loading }] =
+    useMutation<IStreamResponse>(`/live?roomId=${router.query.id}`, "PUT");
 
-  // useEffect(() => {
-  //   if (user && id) {
-  //     registerUser();
-  //     console.log(id);
-  //     console.log(user);
-  //   }
-  // }, [user]);
   const { data, mutate } = useSWR<RoomResponse>(
     router.query.id ? `${process.env.BASE_URL}/live/${router.query.id}` : null
   );
-  console.log(data);
 
+  console.log(data);
+  const myWallet = async () => {
+    return await getUserBalance();
+  };
+  console.log(myWallet);
   const connect = () => {
     let Sock = new SockJS(`https://j6e206.p.ssafy.io:8080/ws`);
     stompClient = over(Sock);
@@ -84,28 +88,22 @@ const Stream: NextPage = () => {
   };
 
   const onError = () => {
-    console.log("error가 무엇이냐");
+    null;
   };
 
   const onConnected = () => {
     setUserData({
       ...userData,
       nickName: user.nickname,
+      proImg: user.proImg,
       connected: true,
     });
 
-    // 그 방에 대한 정보 subscribe 할 수 있도록
-    // stompClient.subscribe(`/subscribe/chat/room/${router.query.id:룸아이디}`, onMessageRecived);
     stompClient.subscribe(`/subscribe/chat/room/${id}`, onMessageRecived);
   };
+
   const onMessageRecived = (response: any) => {
     const res = JSON.parse(response.body);
-    console.log("응답은", res);
-    if (res) {
-      console.log(res);
-    } else {
-      console.log("error");
-    }
 
     switch (res.status) {
       case "MESSAGE":
@@ -115,15 +113,12 @@ const Stream: NextPage = () => {
       case "AUCTION":
         let don = res.cost;
         setHighest(don);
-        console.log(don, "이다!");
         highMoney.push(res);
         setHighMoney([...highMoney]);
-        console.log("최고가 갱신!", highMoney);
-
         break;
     }
   };
-  // const 최고가 갱신될때마다 시간갱신 시간 다 끝나면 send 버튼 닫고 구매버튼 ㄱ
+
   const handleMoney = (e: any) => {
     const { value } = e.target;
     setUserData({ ...userData, money: value });
@@ -156,26 +151,29 @@ const Stream: NextPage = () => {
     } else if (
       stompClient &&
       data &&
-      data.liveDtoList[0].startprice >= userData.money
+      data.liveNftResDto.startprice >= userData.money
     ) {
-      console.log("시작가격보다 높게 응찰하세요");
       setAlertPrice(true);
-    } else if (stompClient) {
+    } else if (stompClient && userData.money <= 2100000000) {
       setAlertUp(false);
       setAlertPrice(false);
       const priceList = {
         senderName: userData.nickName,
-        cost: userData.money,
+        cost: Number(userData.money),
         roomId: id,
         status: "AUCTION",
       };
-      console.log("돈보낸디", priceList);
       stompClient.send("/publish/chat/auction", {}, JSON.stringify(priceList));
+      if (!data) return;
+      mutate(
+        {
+          ...data,
+          maxCost: userData.money,
+        },
+        false
+      );
       // 응찰가격 0으로 리셋
       setUserData({ ...userData, money: 0 });
-      // } else if (stompClient && userData.money <= highMoney) {
-      //   console.log("더 높은 금액을 입력하세요");
-      // }
     }
   };
 
@@ -190,86 +188,126 @@ const Stream: NextPage = () => {
   // user 데이터 다 받아오면 소켓 연결합니다
   useEffect(() => {
     if (user && id) {
-      console.log("성공", user);
-      console.log(user.nickname, "이다");
-      console.log(id);
-      // setUserData({
-      //   ...userData,
-      //   nickName: user.nickname,
-      // });
       registerUser();
     } else "오잉";
   }, [user, id]);
 
   useEffect(() => {
-    if (data && data?.statusCode === 200) {
-      // 최고금액 유저한테 구매 버튼 활성화
-      console.log("성공!");
+    if (data) {
+      let runtime = data?.liveNftResDto?.runtime * 60 * 1000;
+      // console.log(finish);
+      setRemainTime(
+        Math.round(
+          (runtime - (new Date().getTime() - data?.liveNftResDto?.starttime)) /
+            1000
+        )
+      );
     }
-  }, [data]);
+    if (data && data?.statusCode === 200 && finish) {
+      // db finish 정보 바꾸기
+
+      finishStream(mutatedData);
+    }
+  }, [data, finish]);
 
   return (
     // navbar 뒤로가기만 생성
     <Layout canGoBack seoTitle="라이브 경매">
-      <div className="flex justify-center flex-col  md:flex-row gap-x-4 min-h-screen px-5">
-        <Link href="/">
-          <a>홈</a>
-        </Link>
+      <GlobalStyle />
+
+      <div
+        className="absolute flex 
+       justify-center  mt-3 md:mt-4 text-3xl w-full font-semibold text-slate-800"
+      >
+        {remainTime ? (
+          <>
+            <span className="mr-2">남은 시간 </span>
+            <Timer setRemainTime={setRemainTime} time={remainTime} />
+          </>
+        ) : (
+          <div>경매가 끝났습니다</div>
+        )}
+      </div>
+      <div className="flex justify-center flex-col  md:flex-row gap-x-4 min-h-screen px-3">
         <div className="md:w-2/4 pt-5  ">
-          <div className="flex justify-evenly  md:justify-between px-4 pt-5 text-gray-900">
-            <div className="text-3xl font-bold ">
-              {" "}
-              {data?.liveDtoList[0]?.roomName}
+          <div className="flex justify-evenly  md:justify-between px-3 pt-3 ">
+            <div className=" justify-between mt-1 ">
+              {/* <Link href="/">
+                <a className="hover:cursor-pointer text-[30px]  hover:scale-105 font-[600] bg-clip-text text-transparent bg-gradient-to-r  from-gold to-lightGold">
+                  {data?.liveNftResDto.nickname}
+                </a>
+              </Link> */}
+              <Link href="/">
+                <a className=" text-[25px]   font-[600] bg-clip-text text-transparent bg-gradient-to-r  from-gold to-lightGold    px-1 ">
+                  &larr;HOME
+                </a>
+              </Link>
             </div>
             {/* 브랜드사 클릭하면 해당 상세페이지로 고? */}
           </div>
 
           <iframe
-            className="aspect-video  w-full border border-gold rounded-md  shadow-sm"
-            src={`https://iframe.videodelivery.net/${data?.liveDtoList[0].cfId}`}
+            className="aspect-video   w-full border border-gold rounded-md  shadow-sm"
+            src={`https://iframe.videodelivery.net/${data?.liveNftResDto?.cfId}`}
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
             allowFullScreen={true}
           ></iframe>
 
-          <div className="flex flex-col md:flex-row gap-x-2 ">
-            <div className=" border-2  basis-2/5 bg-lightGold justify-center p-2  flex items-center rounded-md ">
-              상품이미지
+          <div className="flex flex-col text-darkBg md:flex-row gap-x-2 ">
+            <div className=" border-2  basis-2/5 bg-white mt-2 justify-center p-2  flex items-center rounded-md ">
+              {data?.liveNftResDto?.imgUrl ? (
+                <img src={data?.liveNftResDto?.imgUrl} alt="#" />
+              ) : null}
             </div>
             <div className="space-y-1 ">
-              <span className="text-xl block font-semibold text-gray-900">
-                판매사 : {data?.liveDtoList[0].nickname}
+              <span className="text-[25px]   font-[600] bg-clip-text text-transparent bg-gradient-to-r  from-gold to-lightGold  mt-2  px-1 ">
+                {data?.liveNftResDto?.nickname}
               </span>
-              <span className="text-lg block font-semibold text-gray-900">
-                상품 이름 :
-              </span>
-              <span className="text-lg block font-semibold text-gray-900">
-                경매시작가 : {data?.liveDtoList[0]?.startprice}
-                <img
-                  className="w-5 h-5 inline-block object-contain"
-                  src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
-                  alt="ETH"
-                />
-              </span>
-              <span className="text-lg block font-semibold text-gray-900">
-                제품 정보 :{" "}
-              </span>
-              <div className=" border-2  rounded-md hover:border-2 hover:border-slate-300 p-1 bg-slate-200 text-xs">
-                {data?.liveDtoList[0].nickname === userData.nickName ? (
-                  <>
-                    <p>서버 {data.liveDtoList[0].cfUrl}</p>
-                    <p>방송열쇠 {data.liveDtoList[0].cfKey}</p>
-                  </>
-                ) : null}
+              <div className="flex justify-between">
+                <span className="text-lg  font-semibold ">
+                  {data?.liveNftResDto?.nftName}
+                </span>
+                <span className="text-lg  font-semibold ">
+                  {data?.liveNftResDto?.startprice}
+                  <img
+                    className="w-5 h-5 inline-block object-contain"
+                    src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg"
+                    alt="ETH"
+                  />
+                </span>
+              </div>
+
+              <div>
+                {data?.liveNftResDto?.nickname === userData.nickName ? (
+                  <div className=" border-2 h-[17vh] rounded-md hover:border-2 flex flex-col justify-center gap-y-2 hover:border-slate-300 p-1 bg-slate-200 text-xs">
+                    <p>
+                      <span className="font-bold">서버</span>{" "}
+                      {data.liveNftResDto?.cfUrl}
+                    </p>
+                    <p>
+                      <span className="font-bold">방송열쇠</span>
+                      {data.liveNftResDto?.cfKey}
+                    </p>
+                  </div>
+                ) : //   <div className=" border-2 h-[17vh] rounded-md hover:border-2 hover:border-slate-300 p-1 bg-slate-200 text-xs">
+
+                // </div>
+                null}
               </div>
             </div>
           </div>
         </div>
         {/* 경매열 */}
-        <div className="pt-5 md:mt-[55px]  md:w-[22vw] ">
+        <div className="pt-5 md:mt-[55px] md:w-[21vw] ">
           {/* 실시간 응찰 내역 */}
-          <div className="bg-lightGold h-[60vh] p-3 rounded-md  border-2  flex flex-col items-center border-lightBg space-y-3  overflow-y-scroll">
-            <span className="text-2xl  text-center font-bold text-gray-900">
+          <div
+            id="scrollBar"
+            className="bg-white h-[61vh] p-3 rounded-md  border-2  flex flex-col items-center  space-y-3  overflow-y-scroll"
+          >
+            <span className="text-xl   text-center font-bold text-darkBg">
               실시간 응찰
+              <hr className="" />
+              <hr />
             </span>
             {highMoney.map((val: any, i: number) => (
               <span key={i} className="text-gray-800 ">
@@ -291,7 +329,7 @@ const Stream: NextPage = () => {
             <span className="text-gray-800">
               최고가는{" "}
               <span className="font-extrabold text-black">
-                {highest}
+                {data?.maxCost}
 
                 <img
                   className="w-5 h-5 inline-block object-contain"
@@ -310,38 +348,50 @@ const Stream: NextPage = () => {
               ) : null}
               {alertUp ? <div>최고가보다 높은 금액을 응찰하세요</div> : null}
             </div>
-            <div className="flex justify-center  gap-x-2">
-              <input
-                type="text"
-                className="shadow-sm  rounded-md w-5/6 border-gray-300 focus:ring-gold focus:outline-none pr-12 focus:border-lightGold "
-                placeholder="응찰가를 입력하세요"
-                value={userData.money}
-                onChange={handleMoney}
-              />
-              <button
-                type="button"
-                className="focus:ring-2 focus:ring-offset-2 focus:ring-gold focus:duration-300   items-center flex  bg-gold rounded-full px-4 hover:bg-gold text-white"
-                onClick={sendPrice}
-              >
-                +
-              </button>
-            </div>
+            {remainTime > 0 ? (
+              <div className="flex justify-center  gap-x-2">
+                <input
+                  type="text"
+                  className="shadow-sm  rounded-md w-5/6 border-gray-300 focus:ring-gold focus:outline-none pr-12 focus:border-lightGold "
+                  placeholder="응찰가를 입력하세요"
+                  value={userData.money}
+                  onChange={handleMoney}
+                />
+                <button
+                  type="button"
+                  className="focus:ring-2 focus:ring-offset-2 focus:ring-gold focus:duration-300   items-center flex  bg-gold rounded-full px-4 hover:bg-gold text-white"
+                  onClick={sendPrice}
+                >
+                  +
+                </button>
+              </div>
+            ) : remainTime <= 0 &&
+              highMoney[highMoney.length - 1]?.senderName ===
+                userData.nickName ? (
+              <div className="btn hover:cursor-pointer font-bold text-xl text-white hover:duration-200 bg-gold p-2 rounded-md hover:scale-105">
+                구매하기
+              </div>
+            ) : (
+              <span className="font-semibold pb-2">경매가 종료되었습니다</span>
+            )}
           </div>
         </div>
         {/* 채팅 */}
-        <div className="pt-5 md:mt-[55px]  md:w-1/5 ">
+        <div className="pt-5 md:mt-[55px] md:w-[21vw] ">
           <div className="border-2 rounded-md">
-            <h2 className="text-2xl py-2 text-center font-bold bg-white  text-gray-900">
-              Live Chat
-            </h2>
-            <div className="py-10 pb-16 h-[72vh] overflow-y-scroll  bg-white px-4 space-y-4">
+            <h2 className="text-2xl py-2 text-center font-bold bg-white  text-gray-900"></h2>
+            <div
+              id="scrollBar"
+              className="py-10 pb-16 h-[77vh] overflow-y-scroll  bg-white px-4 space-y-4"
+            >
               {chats.map((chat: any, index: number) => (
                 <Message
                   key={index}
                   message={chat.message}
                   reversed={chat.senderName === userData.nickName}
                   nickName={chat.senderName}
-                  isHost={chat.senderName === data?.liveDtoList[0].nickname}
+                  isHost={chat.senderName === data?.liveNftResDto?.nickname}
+                  proImg={userData.proImg}
                 />
               ))}
             </div>
@@ -367,15 +417,6 @@ const Stream: NextPage = () => {
           </div>
         </div>
       </div>
-      {/* <Timer
-        time={time}
-        // finishStream={finishStream}
-        timer={timer}
-        setTimer={setTimer}
-      />
-      <button type="button" onClick={registerUser}>
-        타이머 시작하기
-      </button> */}
     </Layout>
   );
 };

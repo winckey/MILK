@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import useUser from "@libs/client/useUser";
 // hi
 
 function MyDropdown({ logout, role }: any) {
@@ -31,6 +32,7 @@ function MyDropdown({ logout, role }: any) {
             </a>
           </Link>
         </Menu.Item>
+        {/* 관리자만 보임 */}
         {role === "ROLE_ADMIN" ? (
           <Menu.Item>
             <Link href="/signup/partner">
@@ -39,16 +41,18 @@ function MyDropdown({ logout, role }: any) {
               </a>
             </Link>
           </Menu.Item>
-        ) : (
+        ) : null}
+        {/* 기업만 보임 */}
+        {role === "ROLE_ENTERPRISE" ? (
           <Menu.Item>
             <a
               className="px-4 py-2 hover:bg-gray-300 text-gray-500"
               href="/create"
             >
-              NFT생성
+              NFT 생성
             </a>
           </Menu.Item>
-        )}
+        ) : null}
         <Menu.Item>
           <a
             onClick={logout}
@@ -63,6 +67,7 @@ function MyDropdown({ logout, role }: any) {
 }
 
 export default function Header() {
+  const { user, isLoading } = useUser();
   const [TOKEN, setTOKEN] = useRecoilState(accessToken);
   const getRole = useRecoilValue(role);
   const [open, setOpen] = useState(false);
@@ -80,7 +85,7 @@ export default function Header() {
   const UserLinks = [
     { name: "개인관", link: "/individual" },
     { name: "명품관", link: "/brand" },
-    { name: "나의 전시관", link: "/exhibition/arts" },
+    { name: "나의 전시관", link: `/exhibition/${user?.nickname}` },
     { name: "라이브 경매", link: "/streams" },
   ];
 

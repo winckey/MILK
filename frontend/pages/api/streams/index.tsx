@@ -22,7 +22,7 @@ async function handler(
       }
     )
   ).json();
-  console.log(uid, streamKey, url);
+
   res.json({
     ok: true,
     uid,
