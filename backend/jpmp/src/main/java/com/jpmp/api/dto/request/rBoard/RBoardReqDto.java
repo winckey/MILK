@@ -15,11 +15,11 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class RBoardReqDto {
 
-    @NotBlank
+
     @ApiModelProperty(name = "변경 상태", example = "STATUS_ADM")
     private RBoardStatus rBoardStatus;
 
-    @NotBlank
+
     @ApiModelProperty(name = "실물화 글 id", example = "1")
     private Long rBoardId;
 

@@ -51,6 +51,8 @@ public class RBoardServiceImpl implements RBoardService {
     @Override
     public void changeEnterpriseRBoradStatus(User user, RBoardReqDto rBoardReqDto) {
 
+
+        System.out.println(rBoardReqDto.getRBoardId());
         RealizationBoard realizationBoard = rBoradRepository.findById(rBoardReqDto.getRBoardId()).get();
 
         realizationBoard.changeStatus(rBoardReqDto.getRBoardStatus());
