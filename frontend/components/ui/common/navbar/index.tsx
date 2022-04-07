@@ -85,7 +85,7 @@ export default function Header() {
   const UserLinks = [
     { name: "개인관", link: "/individual" },
     { name: "명품관", link: "/brand" },
-    { name: "나의 전시관", link: `/exhibition/${user.nickname}` },
+    { name: "나의 전시관", link: `/exhibition/${user?.nickname}` },
     { name: "라이브 경매", link: "/streams" },
   ];
 

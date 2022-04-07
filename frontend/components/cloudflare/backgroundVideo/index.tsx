@@ -93,7 +93,7 @@ export default function BackgroundVideo({
     <form onSubmit={handleSubmit(onValid)} className="mb-6 flex flex-col">
       <div className="flex flex-col">
         <div className="mb-2 flex flex-col">
-          <label className="font-semibold text-[#353840]">
+          <div className="font-semibold text-[#353840]">
             <div className="flex items-center">
               <div className="mr-1">배경 영상</div>
               <button>
@@ -109,7 +109,7 @@ export default function BackgroundVideo({
                 )}
               </button>
             </div>
-          </label>
+          </div>
         </div>
         <div className="max-w-[150px]">
           <div className="relative">
