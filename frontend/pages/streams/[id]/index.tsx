@@ -80,7 +80,6 @@ const Stream: NextPage = () => {
     const tmp = await getUserBalance();
     setWallet(tmp);
   };
-  console.log(myWallet);
   const connect = () => {
     let Sock = new SockJS(`https://j6e206.p.ssafy.io:8080/ws`);
     stompClient = over(Sock);

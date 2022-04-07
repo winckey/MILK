@@ -32,7 +32,6 @@ export default function TopCollectibles() {
   const { data } = useSWR<BrandResponse>(
     `${process.env.BASE_URL}/nft/search?sort=likeCount,desc`
   );
-  console.log(data);
 
   return (
     <div
@@ -46,15 +45,16 @@ export default function TopCollectibles() {
       </div>
 
       <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-x-6 mx-20">
-        {data?.nftDtoList.map((nft) => {
-          return (
-            <Link key={nft.nftId} href={`/product/${nft.nftId}`} passHref>
-              <a>
-                <NFTCard item={nft} />
-              </a>
-            </Link>
-          );
-        })}
+        {data &&
+          data?.nftDtoList.map((nft) => {
+            return (
+              <Link key={nft.nftId} href={`/product/${nft.nftId}`} passHref>
+                <a>
+                  <NFTCard item={nft} />
+                </a>
+              </Link>
+            );
+          })}
       </div>
       <ShowMore>
         <Link href="/brand">
