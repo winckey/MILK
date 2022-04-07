@@ -99,7 +99,7 @@ public class RBoardController {
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<BaseResponseBody> updateRBoradList(RBoardReqDto rBoardStatus) {
+    public ResponseEntity<BaseResponseBody> updateRBoradList(@Valid @RequestBody @ApiParam(value="수정 정보", required = true) RBoardReqDto rBoardStatus) {
 
         User user = userRepository.findByUsername(getUsername());
         rBoradService.changeEnterpriseRBoradStatus(user , rBoardStatus);
