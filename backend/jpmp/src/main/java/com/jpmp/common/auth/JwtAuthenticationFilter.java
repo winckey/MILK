@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //Spring Security 필터에서의 예외는 @ExceptionHandler로 잡히지 않는다.
             //(필터 단이 아닌 BadCredentialsException 은 잡힌다)
             //왜냐하면
-            //Spring Security는 Spring 이전에 Filter 처리가 되므로 DispatcherServlet 까지 가지 않기 때문이다. 아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ!!!!!!!! 개빡치네
+            //Spring Security는 Spring 이전에 Filter 처리가 되므로 DispatcherServlet 까지 가지 않기 때문이다.
             //Security에는 각종 Filter를 상속받고 Filter 처리를 직접 작성할 수 있는데
             //
             //여기서 catch 로 Exception 처리를 해줘야한다.
