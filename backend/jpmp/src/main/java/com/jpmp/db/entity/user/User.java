@@ -44,21 +44,13 @@ public class User  {
     @Column(nullable = false)
     private String password;
 
-
-
     private String phone;
 
-    
     //https://lng1982.tistory.com/279 Enumerated 좋지 못한 방법
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-
-
-
-
     private String description;
-
 
     private String address1;
 
@@ -66,8 +58,9 @@ public class User  {
 
     private String zipCode;
 
-
     private String profileImg;
+
+    private String walletAddress;
 
     private String backgroundfileImg;
 
@@ -104,6 +97,10 @@ public class User  {
         this.phone = userModifyReqDto.getPhone();
         this.zipCode = userModifyReqDto.getZipCode();
  
+    }
+
+    public void changeUserWallet(String walletAddress) {
+        this.walletAddress =walletAddress;
     }
 
     public void changeBackgroundfileImg(String backgroundfileImg) {

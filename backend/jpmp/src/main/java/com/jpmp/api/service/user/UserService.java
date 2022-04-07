@@ -5,6 +5,7 @@ import com.jpmp.api.dto.request.nft.NtfRequestReqDto;
 import com.jpmp.api.dto.request.user.UserLoginReqDto;
 import com.jpmp.api.dto.request.user.UserModifyReqDto;
 import com.jpmp.api.dto.request.user.UserRegisterReqDto;
+import com.jpmp.api.dto.request.user.UserWalletReqDto;
 import com.jpmp.db.entity.user.User;
 
 
@@ -25,4 +26,6 @@ public interface UserService {
     Boolean checkDuplicateNickname(String nickname);
 
     User createAdmin(UserRegisterReqDto registerInfo);
+
+    User modifyUserWallet(User userDetails, UserWalletReqDto userWalletReqDto);
 }

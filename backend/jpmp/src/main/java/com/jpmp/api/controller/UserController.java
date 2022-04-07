@@ -3,10 +3,7 @@ package com.jpmp.api.controller;
 
 import com.jpmp.api.dto.TokenDto;
 import com.jpmp.api.dto.request.nft.NFTLikeReqDto;
-import com.jpmp.api.dto.request.user.UserImgReqDto;
-import com.jpmp.api.dto.request.user.UserLoginReqDto;
-import com.jpmp.api.dto.request.user.UserModifyReqDto;
-import com.jpmp.api.dto.request.user.UserRegisterReqDto;
+import com.jpmp.api.dto.request.user.*;
 import com.jpmp.api.dto.response.BaseResponseBody;
 import com.jpmp.api.dto.response.user.EnterpriseListResDto;
 import com.jpmp.api.dto.response.user.UserLoginResDto;
@@ -186,7 +183,22 @@ public class UserController {
 
         return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
     }
+    @PutMapping("/wallet")
+    @ApiOperation(value = "지갑 수정")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공", response = UserResDto.class),
+            @ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+            @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+    })
+    public ResponseEntity<UserResDto> modifyUserWallet(@ApiIgnore Authentication authentication, @Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserWalletReqDto userWalletReqDto) {
 
+        User userDetails = userRepository.findByUsername( getUsername());
+
+        User result = userService.modifyUserWallet(userDetails, userWalletReqDto);
+
+        return ResponseEntity.status(200).body(UserResDto.of(200, "Success", result));
+    }
 
     @PutMapping("/pro")
     @ApiOperation(value = "회원 프로필이미지 수정")
