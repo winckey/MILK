@@ -5,6 +5,8 @@ import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import useSWR from "swr";
+import { Nft } from "@components/ui/common/item";
 // hi
 
 const CarouselEl = styled.article`
@@ -110,25 +112,36 @@ const Badge = styled.span<{ number: any }>`
 `;
 const Amount = styled.span``;
 
+const Brands = [{ name: "" }];
+
+interface IUser {
+  address1: string;
+  address2: string;
+  backgroundImg: string;
+  description: string;
+  email: string;
+  id: number;
+  nickname: string;
+  phone: string;
+  proImg: string;
+  userName: string;
+  zipCode: string;
+}
+interface BrandResponse {
+  message: string;
+  statusCode: number;
+  users: IUser[];
+}
 export default function Carousel() {
   const ItemContainerRef: any = useRef(null);
   // b => beginning | m => middle | e => end
   const [ScrollInd, setScrollInd]: any = useState("b");
-  // const [list, setList] = useState([]);
+  const [list, setList] = useState([]);
+  const { data } = useSWR<BrandResponse>(
+    `${process.env.BASE_URL}/user/enterprise`
+  );
+  console.log(data?.users);
 
-  // async function handler() {
-  //   const data = await (
-  //     await fetch(
-  //       `${process.env.BASE_URL}/nft/search?&ownerIsEnterprise=true&sort=likeCount,desc`
-  //     )
-  //   ).json();
-  //   setList(data.nftDtoList);
-  // }
-  // useEffect(() => {
-  //   handler();
-  // }, []);
-  // console.log(list);
-  // list map  돌리면서 브랜드명이랑 사진 가져오기
   return (
     <CarouselEl
       data-aos="fade-up"
@@ -173,22 +186,22 @@ export default function Carousel() {
           if (SL >= scrollWidth) setScrollInd("e");
         }}
       >
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
+        {data?.users.map((brand, i) => {
           return (
             <Link href="/profile" passHref key={i}>
               <a>
                 <Item>
                   <Avatar>
                     <Image
-                      src="/images/avatar/ugonzo.jpg"
+                      src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${brand.proImg}/avatar`}
                       height="120"
                       width="120"
                     />
                   </Avatar>
-                  <Name>Ugonzo Art</Name>
+                  <Name>{brand.nickname}</Name>
                   <BottomSection>
                     <Badge number={i} />
-                    <Amount>$400,000</Amount>
+                    <Amount>{brand.userName}</Amount>
                   </BottomSection>
                 </Item>
               </a>
