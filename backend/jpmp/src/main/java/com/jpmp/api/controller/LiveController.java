@@ -3,6 +3,7 @@ package com.jpmp.api.controller;
 import com.jpmp.api.dto.request.live.LiveDto;
 import com.jpmp.api.dto.response.BaseResponseBody;
 import com.jpmp.api.dto.response.live.LiveDetailResDto;
+import com.jpmp.api.dto.response.live.LiveNftResDto;
 import com.jpmp.api.dto.response.live.LiveResDto;
 import com.jpmp.api.dto.response.live.LiveListResDto;
 import com.jpmp.api.service.live.LiveService;
@@ -49,7 +50,7 @@ public class LiveController {
     })
     public ResponseEntity<LiveListResDto> getLiveList(){
 
-        List<LiveDto> liveList = liveService.getLiveList();
+        List<LiveNftResDto> liveList = liveService.getLiveList();
 
         return ResponseEntity.status(200).body(LiveListResDto.of(200, "Success", liveList));
     }
@@ -79,10 +80,10 @@ public class LiveController {
     })
     public ResponseEntity<LiveDetailResDto> getLive(@PathVariable int roomId){
 
-        LiveDto liveDto = liveService.getLive(roomId);
+        LiveNftResDto liveNftResDto = liveService.getLive(roomId);
         int maxcost = liveService.getmaxCost(roomId);
-        if(maxcost == 0) maxcost = liveDto.getStartprice();
+        if(maxcost == 0) maxcost = liveNftResDto.getStartprice();
 
-        return ResponseEntity.status(200).body(LiveDetailResDto.of(200, "Success", liveDto, maxcost));
+        return ResponseEntity.status(200).body(LiveDetailResDto.of(200, "Success", liveNftResDto, maxcost));
     }
 }
