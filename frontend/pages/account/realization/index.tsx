@@ -29,7 +29,7 @@ const Realization: NextPage = () => {
     tokenFetcher
   );
 
-  // console.log(data);
+  console.log(data);
 
   return (
     <Layout seoTitle="실물화 내역">

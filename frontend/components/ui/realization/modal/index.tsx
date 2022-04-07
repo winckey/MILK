@@ -49,7 +49,7 @@ export default function RealizationModal({
 
   // request
   const [requestRealization, { loading, data, error }] =
-    useMutation<IRealizationResponse>("/api/realization_board");
+    useMutation<IRealizationResponse>("/realization_board");
 
   // data 초기화
   useEffect(() => {
@@ -64,40 +64,32 @@ export default function RealizationModal({
   }, []);
 
   // form 제출 시 실행
-  const onValid = (formData: IRealizationForm) => {
+  const onValid = async () => {
     if (loading) return;
     // console.log(nftId);
-    if (window.confirm("해당 정보로 실물화 신청을 하시겠습니까?") == true) {
+    if (window.confirm("해당 정보로 실물화 신청을 하시겠습니까?") === true) {
       requestRealization({ nftId });
-      onRealization();
+      await onRealization();
     }
-  };
-
-  const [realize, setRealize] = useState<string>();
-
-  const marketplace = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const res = await marketContract(signer);
-    setRealize(res.address);
   };
 
   const onRealization = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const res = await realizeItem(nftId, signer);
+    // if (res) {
+    //   const res = onValid();
+    //   console.log(res);
+    // }
+
+    if (confirm("신청이 완료됐습니다!") === true) {
+      router.push(`/account/realization`);
+    }
   };
 
   // server 응답 받았을 때 실행
-  useEffect(() => {
-    if (data && data.statusCode === 200) {
-      alert(`신청이 완료되었습니다!`);
-      router.push(`/account/realization`); // 실물화 내역 페이지로 이동
-    }
-    marketplace();
-  }, [data, router]);
+  // useEffect(() => {}, [data, router]);
 
-  console.log(realize);
   // 취소 버튼
   const closeModal = () => {
     setIsOpen(false);
@@ -110,7 +102,7 @@ export default function RealizationModal({
         <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
           <div className="sm:flex sm:items-start">
             <form
-              onSubmit={handleSubmit(onValid)}
+              onSubmit={handleSubmit(() => onValid())}
               className="mt-3 sm:mt-0 sm:text-left"
             >
               <h3 className="mb-7 font-semibold text-xl">실물화 신청</h3>
@@ -217,7 +209,7 @@ export default function RealizationModal({
 
               <div className="flex">
                 <button
-                  // onClick={() => onRealization()}
+                  // onClick={onRealization}
                   className="rounded-[10px] font-semibold bg-lightGold hover:bg-gold px-5 py-3 border-[1px] border-lightGold text-white w-full mr-2"
                   // onClick={() => {
                   //   onSubmit(order, course);
