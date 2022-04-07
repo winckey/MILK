@@ -6,11 +6,13 @@ import com.jpmp.api.dto.request.nft.NFTReqDto;
 import com.jpmp.api.dto.request.nft.NFTSearchReqDto;
 import com.jpmp.api.dto.response.BaseResponseBody;
 import com.jpmp.api.dto.response.nft.NFTListResDto;
+import com.jpmp.api.dto.response.nft.NFTResDto;
 import com.jpmp.api.service.nft.NFTService;
 import com.jpmp.api.service.user.UserService;
 import com.jpmp.common.util.JwtTokenUtil;
 import com.jpmp.db.entity.nft.Nft;
 import com.jpmp.db.entity.user.User;
+import com.jpmp.db.repository.nft.NFTRepository;
 import com.jpmp.db.repository.user.UserRepository;
 import com.jpmp.exception.CustomException;
 import com.jpmp.exception.ErrorCode;
@@ -48,6 +50,7 @@ public class NFTController {
 
     private final NFTService nftService;
     private final UserRepository userRepository;
+    private final NFTRepository nftRepository;
     private final JwtTokenUtil jwtTokenUtil;
 
 
@@ -144,8 +147,6 @@ public class NFTController {
             return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
         }
     }
-
-
     @GetMapping("/like")
     @ApiOperation(value = "나의 좋아요 nft 조회", notes = "자신이 좋아요한 nft 조회")
     @ApiResponses({
@@ -163,6 +164,26 @@ public class NFTController {
             return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList, likeList));
         } else {
             return ResponseEntity.status(200).body(NFTListResDto.of(200, "Success", nftList));
+        }
+    }
+
+    @GetMapping("/info/{nftId}")
+    @ApiOperation(value = "상세 정보 조회", notes = "상세 정보 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 404, message = "사용자 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<NFTResDto> getNftInfo(@NotNull @PathVariable String nftId) {
+        User userDetails = userRepository.findByUsername(getUsername());
+
+        Nft nft = nftRepository.findByNftId(nftId).get();
+        if (userDetails != null) {
+            List<Nft> likeList = nftService.getNftLikeList(userDetails);
+            return ResponseEntity.status(200).body(NFTResDto.of(200, "Success", nft, likeList));
+        } else {
+            return ResponseEntity.status(200).body(NFTResDto.of(200, "Success", nft));
         }
     }
 
