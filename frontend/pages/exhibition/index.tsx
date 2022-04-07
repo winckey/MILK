@@ -16,14 +16,12 @@ import { Nft } from "@components/ui/common/item";
 const Exhibition: NextPage = () => {
   const TOKEN = useRecoilValue(accessToken);
   const [collectionList, setCollectionList] = useState<Nft[]>();
-  const [empty, setEmpty] = useState(false);
 
   // 해당 유저의 판매/보유 nft 리스트 가져오기
   const { data } = useSWR<OwnNftResponse>(
     [`${process.env.BASE_URL}/nft/user`, TOKEN],
     tokenFetcher
   );
-  console.log(data);
 
   // 가져온 리스트에서 보유중인 nft만 필터링
   useEffect(() => {
@@ -31,13 +29,17 @@ const Exhibition: NextPage = () => {
       let images: any = [];
       const tmp = data.nftDtoList.filter((nft) => nft.seleStatus === false);
       if (tmp) {
+        const image = tmp.map((item) => images.push(item.imgUrl));
+        setCollectionList(images);
       }
-      setCollectionList(tmp);
     }
   }, [data]);
-  console.log(collectionList);
 
-  return <div>{/* <Arts collectionList={collectionList} /> */}</div>;
+  return (
+    <div>
+      {collectionList ? <Arts collectionList={collectionList} /> : null}
+    </div>
+  );
 };
 
 export default Exhibition;
