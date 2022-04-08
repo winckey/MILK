@@ -24,7 +24,9 @@ export const connectWallet = async () => {
       };
     }
   } else {
-    alert("메타마스크를 깔아주세요~;");
+    alert(
+      "메타마스크 익스텐션이 설치되어 있지 않습니다. 메타마스크 사이트로 이동합니다."
+    );
     return {
       address: "",
       status: (
