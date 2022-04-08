@@ -63,7 +63,7 @@ const Search: NextPage = () => {
 
         <div className="flex w-full pt-5 flex-row gap-x-4">
           {/* 필터링 */}
-          <div className=" border rounded-lg  w-1/5 flex flex-col pt-2 pb-10 items-center bg-white  gap-y-7 mr-2">
+          <div className="  rounded-lg  w-1/5 flex flex-col pt-2 pb-10 items-center  gap-y-7 mr-2">
             <div className=" flex flex-col items-center w-5/6">
               <div className="font-semibold  text-lg pb-3 ">판매관</div>
               <div className="flex flex-row justify-between">
@@ -117,7 +117,7 @@ const Search: NextPage = () => {
             </div>
           </div>
           {/* 오른쪽 */}
-          <div className="  w-4/5 flex items-center flex-col bg-slate-100  ">
+          <div className="  w-4/5 h-[160vh] flex items-center flex-col bg-slate-100  ">
             {/* 정렬  */}
             <div className=" ml-4  h-16 self-end  mb-16">
               <div className="flex  gap-x-5 gap  transition text-gray-600 duration-200">
@@ -164,7 +164,7 @@ const Search: NextPage = () => {
               </div>
             </div>
             {/* 검색 결과 */}
-            <div className=" grid h-80 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 px-2 md">
+            <div className=" grid h-[150vh] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 px-2 md">
               {data && data?.nftDtoList?.length > 0
                 ? data.nftDtoList.map((nft) => (
                     <Item
