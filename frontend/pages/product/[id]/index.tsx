@@ -167,13 +167,13 @@ const Product: NextPage = () => {
   // }, []);
 
   // isRealized();
-  console.log(nftId);
+  // console.log(nftId);
   console.log(response);
-  console.log(isRealize);
-  console.log(sellerAddress);
-  console.log(marketItem);
-  console.log(price);
-  console.log(ethers.utils.formatEther(price));
+  // console.log(isRealize);
+  // console.log(sellerAddress);
+  // console.log(marketItem);
+  // console.log(price);
+  // console.log(ethers.utils.formatEther(price));
 
   return (
     <Layout seoTitle="제품명">
@@ -284,15 +284,29 @@ const Product: NextPage = () => {
                             <div className="text-[#8A939B] flex items-center">
                               <div className="w-full inline-flex items-center h-8">
                                 Created by
-                                <span className="ml-1 text-gold font-semibold overflow-hidden text-ellipsis">
-                                  {response?.name}
+                                <span
+                                  onClick={() =>
+                                    router.push(
+                                      `/profile/${response?.brandName}`
+                                    )
+                                  }
+                                  className="ml-1 text-gold font-semibold overflow-hidden text-ellipsis"
+                                >
+                                  {response?.brandName}
                                 </span>
                               </div>
                             </div>
-                            <div>
-                              <span className="text-sm text-ellipsis">
-                                {response?.description}
-                              </span>
+                            <div className="text-[#8A939B] flex items-center pt-4">
+                              <div className="w-full inline-flex items-center h-8">
+                                <div className="block">
+                                  <div className="w-[100px]">상품 설명</div>
+                                  <div>
+                                    <span className="text-sm text-ellipsis">
+                                      {response?.description}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -303,8 +317,13 @@ const Product: NextPage = () => {
                   <div className="ml-[-20px]">
                     <div className="mt-5 mx-5 mb-[15px]">
                       <div className="h-[46px] flex items-center">
-                        <span className="text-gold font-semibold overflow-hidden text-ellipsis cursor-pointer">
-                          {response?.name}
+                        <span
+                          onClick={() =>
+                            router.push(`/profile/${response?.brandName}`)
+                          }
+                          className="text-gold font-semibold overflow-hidden text-ellipsis cursor-pointer"
+                        >
+                          {response?.brandName}
                         </span>
                       </div>
                       <span className="text-3xl font-semibold max-w-full text-textBlack">
@@ -315,7 +334,12 @@ const Product: NextPage = () => {
                       <div className="mt-2 mb-2 mr-5 flex flex-col justify-center items-center">
                         <div className="text-[#8A939B] inline-flex items-center h-6 w-full text-[14.5px]">
                           Owned by
-                          <span className="ml-1 overflow-hidden text-ellipsis text-[#2081e2] cursor-pointer">
+                          <span
+                            onClick={() =>
+                              router.push(`/profile/${response?.brandName}`)
+                            }
+                            className="ml-1 overflow-hidden text-ellipsis text-[#2081e2] cursor-pointer"
+                          >
                             {response?.brandName}
                           </span>
                         </div>
