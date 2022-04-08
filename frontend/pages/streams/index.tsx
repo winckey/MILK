@@ -4,6 +4,7 @@ import { Layout } from "@components/ui/layout";
 import { useRouter } from "wouter";
 import Link from "next/link";
 import Item from "@components/ui/stream/card/index";
+import StreamCard from "@components/ui/stream/card/index";
 
 interface DataList {
   roomId: number;
@@ -13,17 +14,21 @@ interface DataList {
   roomName: string;
   runtime: number;
   finish: Boolean;
+  nftName: string;
+  nftId: any;
+  price: number;
+  imgUrl: string;
 }
 interface StreamsResponse {
   message: string;
   statusCode: number;
-  liveDtoList: DataList[];
+  liveNftResDtoList: DataList[];
 }
 
 const Streams: NextPage = () => {
   const router = useRouter();
   const { data } = useSWR<StreamsResponse>(`${process.env.BASE_URL}/live`);
-
+  console.log(data);
   return (
     <Layout seoTitle="개인관">
       <div className="pb-20">
@@ -67,21 +72,20 @@ const Streams: NextPage = () => {
           <div className="px-[52px]">
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 py-4">
               {data &&
-                data?.liveDtoList?.map((val) => (
+                data?.liveNftResDtoList?.map((val) => (
                   <Link key={val.cfId} href={`/streams/${val.roomId}`}>
-                    <div key={val.cfId}>방</div>
-                    {/* <Item
-                    key={val.cfId}
-                    enterprise={val.nickname}
-                    // imgUrl={val.}
-                    likeCount={val.nftId}
-                    nftId={val.}
-                    nftName={val.}
-                    price={val.}
-                    myLike={.}
-                    // 현재 최고가
-                   
-                  /> */}
+                    <StreamCard
+                      key={val.cfId}
+                      enterprise={val.nickname}
+                      imgUrl={val.imgUrl}
+                      nftName={val.nftName}
+                      nftId={val.nftId}
+                      price={val.price}
+                      runtime={val.runtime}
+                      roomName={val.roomName}
+                      roomId={val.roomId}
+                      // 현재 최고가
+                    />
                   </Link>
                 ))}
             </div>
