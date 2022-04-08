@@ -69,8 +69,6 @@
 
 - 가치 보존 (감가상각 X)
 
-  
-
 ## 1.3. 주요 서비스 화면
 
 ### 1.3.1. 메인페이지
@@ -82,8 +80,6 @@
 ### 1.3.3. 개인관
 
 ![개ㅔ인](README.asset/개ㅔ인.png)
-
-
 
 ### 1.3.4. 명품관
 
@@ -107,15 +103,17 @@
 
 ![판매2](README.asset/판매2.png)
 
-
-
 ### 1.3.6. 검색 필터링 페이지
 
 ![검색](README.asset/검색.png)
 
 ### 1.3.7. 나의 전시관
 
+추후 업로드 예정
+
 ### 1.3.8. 라이브 경매
+
+추후 업로드 예정
 
 ### 1.3.9. 개인 프로필 수정
 
@@ -129,9 +127,11 @@
 
 ### 1.3.11. 개인 프로필
 
+![개인프로필](README.asset/개인프로필.png)
+
 ### 1.3.12. 기업 프로필
 
-
+![기업프로](README.asset/기업프로.gif)
 
 # 2. 주요 기술 스택
 
@@ -145,16 +145,17 @@
 |          | Intellij          | Intellij IDE 2021-03-0 |                                        |
 |          | JPA               |                        |                                        |
 |          | Spring Security   |                        |                                        |
-| Front    | React             |                        |                                        |
-|          | Next.js           |                        |                                        |
-|          | Tailwind CSS      |                        |                                        |
-|          | Cloudflare        |                        |                                        |
-|          | Sock.js           |                        |                                        |
-|          | Recoil            |                        |                                        |
-|          | web3.js           |                        |                                        |
-|          | Three.js          |                        |                                        |
-|          | react-three-fiber |                        |                                        |
-|          | pm2               | 5.2.0                  |                                        |
+|          | lombok            |                        |                                        |
+| Front    | React             | 17.0.2                 | https://ko.reactjs.org/                |
+|          | Next.js           | 12.1.0                 | https://nextjs.org/                    |
+|          | Tailwind CSS      |                        | https://tailwindcss.com/               |
+|          | Cloudflare        |                        | https://www.cloudflare.com/ko-kr/      |
+|          | Sock.js           | 1.6.0                  |                                        |
+|          | Recoil            | 0.5.1                  | https://recoiljs.org/ko/               |
+|          | web3.js           | 1.7.1                  |                                        |
+|          | Three.js          | 0.138.3                |                                        |
+|          | react-three-fiber | 7.0.26                 |                                        |
+| Server   | pm2               | 5.2.0                  |                                        |
 |          | docker            | 20.x                   |                                        |
 |          | node              | 16.14.1                |                                        |
 |          | nginx             | 1.18                   |                                        |
@@ -200,7 +201,7 @@
 - 장원종
   - 프로젝트 세팅
     - Hook (useUser, useMutation)
-    - 개발 환경 구축 (_app, _document, _middleware 등)
+    - 개발 환경 구축 (\_app, \_document, \_middleware 등)
     - 컴포넌트, Layout 설계
   - 상태 관리
     - Recoil을 통해 access token 로그인 유지
@@ -354,7 +355,7 @@
 
 # 5. 서비스 배포 주소 및 테스트 계정
 
-- 배포주소  https://j6e206.p.ssafy.io/
+- 배포주소 https://j6e206.p.ssafy.io/
 - 테스트 계정
   - id : testSSAFY
   - pw : ssafy
