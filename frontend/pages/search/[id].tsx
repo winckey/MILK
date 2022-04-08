@@ -44,7 +44,7 @@ const Search: NextPage = () => {
 
   useEffect(() => {
     if (data && data?.statusCode === 404) {
-      alert("검색결과가 없습니다.");
+      alert("검색결과가 없습니다!");
     }
   }, [data, router]);
 
