@@ -52,16 +52,18 @@ const Search: NextPage = () => {
     <Layout seoTitle="검색 결과">
       <div className="flex flex-col  max-w-full mx-10 p-10 items-center ">
         {/* 검색결과 */}
-        <div className=" font-[550] text-[36px]">
+        <div className=" font-[550] text-gray-600 text-[26px] ">
           <span className="font-[600] text-[40px] bg-clip-text text-transparent bg-gradient-to-r from-gold to-lightGold mr-2">
             {id}
           </span>
           검색 결과
+          <div className="border-b-2 border-gray-400"></div>
+          <div className="border-b-2 mt-[1px] border-gray-400"></div>
         </div>
 
         <div className="flex w-full pt-5 flex-row gap-x-4">
           {/* 필터링 */}
-          <div className=" w-1/5 flex flex-col pt-2 pb-10 items-center bg-slate-100  gap-y-7 mr-2">
+          <div className=" border rounded-lg  w-1/5 flex flex-col pt-2 pb-10 items-center bg-white  gap-y-7 mr-2">
             <div className=" flex flex-col items-center w-5/6">
               <div className="font-semibold  text-lg pb-3 ">판매관</div>
               <div className="flex flex-row justify-between">
