@@ -12,7 +12,7 @@ import { over } from "stompjs";
 import useSWR from "swr";
 import Timer from "@components/ui/timer/index";
 import GlobalStyle from "@styles/GlobalStyle";
-import { getUserBalance } from "utils/interact";
+import { getUserBalance, purchaseMarketItem } from "utils/interact";
 import { accessToken } from "@components/atoms/Auth";
 
 let stompClient: any = null;
@@ -80,6 +80,7 @@ const Stream: NextPage = () => {
     const tmp = await getUserBalance();
     setWallet(tmp);
   };
+
   const connect = () => {
     let Sock = new SockJS(`https://j6e206.p.ssafy.io:8080/ws`);
     stompClient = over(Sock);
@@ -117,6 +118,8 @@ const Stream: NextPage = () => {
         break;
     }
   };
+
+  // const onPurchase = async () => {};
 
   const handleMoney = (e: any) => {
     const { value } = e.target;
@@ -363,7 +366,10 @@ const Stream: NextPage = () => {
             ) : remainTime <= 0 &&
               highMoney[highMoney.length - 1]?.senderName ===
                 userData.nickName ? (
-              <div className="btn hover:cursor-pointer font-bold text-xl text-white hover:duration-200 bg-gold p-2 rounded-md hover:scale-105">
+              <div
+                // onClick={() => onPurchase()}
+                className="btn hover:cursor-pointer font-bold text-xl text-white hover:duration-200 bg-gold p-2 rounded-md hover:scale-105"
+              >
                 구매하기
               </div>
             ) : (

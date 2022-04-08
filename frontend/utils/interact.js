@@ -254,7 +254,7 @@ export const findNFT = async (nftId) => {
         description: items[i].description.toString(),
         edition: items[i].edition,
         product: items[i].product,
-        nickname: items[i].nickname,
+        brandName: items[i].brandName,
       };
       // console.log(item);
       return item;
