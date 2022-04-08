@@ -74,7 +74,7 @@ export default function Item({
               {/* 이미지 */}
               <div className="h-[311px] rounded-t-[10px] relative">
                 <div className="w-full h-full">
-                  <div className="flex flex-col justify-center items-center bg-basicImage w-full h-full relative rounded-t-[10px]">
+                  <div className="flex flex-col justify-center items-center bg-white w-full h-full relative rounded-t-[10px]">
                     <div className="flex justify-center items-center h-full max-h-full max-w-full overflow-hidden relative">
                       <img
                         src={imgUrl}
