@@ -78,7 +78,7 @@ const Stream: NextPage = () => {
 
   const myWallet = async () => {
     const tmp = await getUserBalance();
-    setWallet(1004);
+    setWallet(tmp);
   };
 
   const connect = () => {
