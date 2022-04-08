@@ -129,20 +129,18 @@ export default function NFTCard({ item }: any) {
     likeCount,
   } = item;
   return (
-    <NFTCardEl className="hover:scale-[1.02] duration-300">
-      <Card>
+    <NFTCardEl className="hover:scale-[1.02] my-3 duration-300">
+      <Card className=" h-[80vh] justify-center flex flex-col items-center">
         <BadgeEl>{enterprise}</BadgeEl>
         <ItemImage>
-          <img src={imgUrl} alt="#" width="1024" height="1025" />
-          {/* <div className="w-[70vw] sm:w-[40vw] md:w-[20vw] h-60 flex justify-center">
-            사진
-          </div> */}
+          {imgUrl ? (
+            <img src={imgUrl} alt="#" width="1024" height="800" />
+          ) : (
+            <div className="w-[70vw] sm:w-[40vw] md:w-[20vw] h-60 flex justify-center"></div>
+          )}
         </ItemImage>
         <InfoSection>
           <TSection>
-            {/* <EditionEl>
-              {nftName} {nftName > 1 ? "Editions" : "Edition"} Minted
-            </EditionEl> */}
             <StockEl>
               <img
                 className="w-5 h-5 inline-block object-contain"
@@ -155,9 +153,7 @@ export default function NFTCard({ item }: any) {
           <ItemTitle>{nftName}</ItemTitle>
 
           <BottomSection>
-            <AvatarEl>
-              {/* <Image src={Avatar} width="50" height="50" /> */}
-            </AvatarEl>
+            <AvatarEl></AvatarEl>
             <LikesEl>
               <BsHeart /> {likeCount}
             </LikesEl>

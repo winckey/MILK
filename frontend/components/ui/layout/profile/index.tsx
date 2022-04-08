@@ -120,12 +120,12 @@ export default function ProfileLayout({ children }: LayoutProps) {
           {/* 프로필 */}
           <div>
             <div className="relative z-0">
-              <div className="h-[600px] overflow-hidden bg-black shadow-lg">
+              <div className="h-[600px] overflow-hidden bg-black shadow-lg shadow-black">
                 <div className="h-[600px] w-full max-h-full max-w-full">
                   {data?.user?.backgroundImg ? (
                     <iframe
                       className="w-full h-full aspect-video"
-                      src={`https://iframe.videodelivery.net/${data.user.backgroundImg}?autoplay=true`}
+                      src={`https://iframe.videodelivery.net/${data.user.backgroundImg}?autoplay=1&loop=1`}
                       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
                       allowFullScreen={true}
                     />
@@ -137,11 +137,11 @@ export default function ProfileLayout({ children }: LayoutProps) {
             <div className="flex flex-col items-center mb-5">
               <div className="relative -mt-16">
                 <div className="inline-flex items-center">
-                  <div className="h-[130px] w-[130px] bg-basicImage border-2 border-lightBg flex justify-center items-center max-w-full max-h-full overflow-hidden relative rounded-full cursor-pointer shadow-md">
+                  <div className="h-[130px] w-[130px] bg-basicImage border-2 border-lightBg flex justify-center items-center max-w-full max-h-full overflow-hidden relative rounded-full cursor-pointer shadow-md shadow-black">
                     {data?.user?.proImg ? (
                       <img
-                        src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${data?.user?.proImg}/avatar`}
-                        className="h-full w-full object-cover"
+                        src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${data?.user?.proImg}/public`}
+                        className="h-full w-full object-fill"
                       />
                     ) : null}
                   </div>

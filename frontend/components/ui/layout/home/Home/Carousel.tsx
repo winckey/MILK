@@ -66,6 +66,7 @@ const Item = styled.div`
   display: flex;
   /* cursor: pointer; */
   flex-direction: column;
+  height: 35vh;
   align-items: center;
   gap: 0.7rem;
   transition: background-color 0.2s ease-in-out;
@@ -86,11 +87,13 @@ const Avatar = styled.span`
 `;
 const Name = styled.h4`
   font-weight: 400;
+  color: white;
 `;
 const BottomSection = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: white;
 `;
 const Badge = styled.span<{ number: any }>`
   position: relative;
@@ -136,11 +139,10 @@ export default function Carousel() {
   const ItemContainerRef: any = useRef(null);
   // b => beginning | m => middle | e => end
   const [ScrollInd, setScrollInd]: any = useState("b");
-  const [list, setList] = useState([]);
+
   const { data } = useSWR<BrandResponse>(
     `${process.env.BASE_URL}/user/enterprise`
   );
-  console.log(data?.users);
 
   return (
     <CarouselEl
@@ -188,15 +190,17 @@ export default function Carousel() {
       >
         {data?.users.map((brand, i) => {
           return (
-            <Link href="/profile" passHref key={i}>
+            <Link href={`/profile/${brand.nickname}`} passHref key={i}>
               <a>
                 <Item>
                   <Avatar>
-                    <Image
-                      src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${brand.proImg}/avatar`}
-                      height="120"
-                      width="120"
-                    />
+                    {brand && brand.proImg ? (
+                      <Image
+                        src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${brand.proImg}/avatar`}
+                        height="120"
+                        width="120"
+                      />
+                    ) : null}
                   </Avatar>
                   <Name>{brand.nickname}</Name>
                   <BottomSection>

@@ -24,7 +24,9 @@ export const connectWallet = async () => {
       };
     }
   } else {
-    alert("메타마스크를 깔아주세요~;");
+    alert(
+      "메타마스크 익스텐션이 설치되어 있지 않습니다. 메타마스크 사이트로 이동합니다."
+    );
     return {
       address: "",
       status: (
@@ -220,19 +222,6 @@ export const findItemId = async (nftId, signer) => {
   }
 };
 
-export const realizeItem = async (nftId, signer) => {
-  const nft = await nftContract(signer);
-  const marketplace = await marketContract(signer);
-  const real = await (
-    await nft.Realization(marketplace.address, Number(nftId))
-  ).wait();
-  return real;
-  // await real;
-  // if (real) {
-  //   window.location.reload();
-  // }
-};
-
 export const isRealizedItem = async (nftId, signer) => {
   const res = await nftContract(signer);
   const tokenId = Number(nftId);
@@ -273,6 +262,15 @@ export const findNFT = async (nftId) => {
   }
 };
 
+export const realizeItem = async (nftId, signer) => {
+  const nft = await nftContract(signer);
+  const marketplace = await marketContract(signer);
+  const real = await (
+    await nft.Realization(marketplace.address, Number(nftId))
+  ).wait();
+  return real;
+};
+
 export const findMarketNFT = async (itemId, signer) => {
   const marketplace = await marketContract(signer);
   const item = await marketplace.items(itemId);
@@ -290,14 +288,14 @@ export const purchaseMarketItem = async (itemId, signer) => {
   console.log(item.seller);
   console.log(item.itemId);
   const res = await (
-    await marketplace.purchaseItem(item.itemId, { value: totalPrice })
+    await marketplace.purchaseItem(nft.address, item.itemId, {
+      value: totalPrice,
+    })
   ).wait();
-  // await res;
-
-  // {
-  //   // res && (await marketplace.cancelItem(itemId)));
-  //   res && window.location.reload();
-  // }
+  {
+    // res && (await marketplace.cancelItem(itemId)));
+    res && window.location.reload();
+  }
 };
 
 export const sellMarketItem = async (nftId, price, signer) => {
@@ -310,17 +308,14 @@ export const sellMarketItem = async (nftId, price, signer) => {
   const approveItem = await (
     await nft.setApprovalForAll(marketplace.address, true)
   ).wait();
-  // await approveItem;
 
   const res = await (
     await marketplace.makeItem(nft.address, Number(nftId), listingPrice)
   ).wait();
-  // await res;
-
-  // {
-  //   res && window.location.reload();
-  // }
-  // console.log(res);
+  {
+    res && window.location.reload();
+  }
+  console.log(res);
 };
 
 export const getUserBalance = async () => {

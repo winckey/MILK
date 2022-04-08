@@ -2,10 +2,11 @@ import { IoClose, IoMenu } from "react-icons/io5";
 import SearchBar from "./SearchBar";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { accessToken, role } from "@components/atoms/Auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { connectWallet } from "utils/interact";
 // hi
 
 function MyDropdown({ logout, role }: any) {
@@ -58,6 +59,14 @@ function MyDropdown({ logout, role }: any) {
             className="px-4 py-2 cursor-pointer hover:bg-gray-300 text-gray-500"
           >
             로그아웃
+          </a>
+        </Menu.Item>
+        <Menu.Item>
+          <a
+            onClick={() => connectWallet()}
+            className="px-4 py-2 cursor-pointer hover:bg-gray-300 text-gray-500"
+          >
+            지갑 연결하기
           </a>
         </Menu.Item>
       </Menu.Items>

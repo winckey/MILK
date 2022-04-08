@@ -3,6 +3,8 @@ import { AccountLayout } from "@components/ui/layout";
 import Layout from "@components/ui/layout/base";
 import useUser, { tokenFetcher } from "@libs/client/useUser";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import useSWR from "swr";
 
@@ -23,11 +25,17 @@ interface RealizationListResponse {
 const Realization: NextPage = () => {
   const { user, isLoading } = useUser();
   const TOKEN = useRecoilValue(accessToken);
+  const router = useRouter();
 
   const { data } = useSWR<RealizationListResponse>(
     [`${process.env.BASE_URL}/realization_board/user`, TOKEN],
     tokenFetcher
   );
+  useEffect(() => {
+    if (user && user.userRole === "ROLE_ENTERPRISE") {
+      router.push(`/account/realization/${user.userName}`);
+    }
+  }, []);
 
   console.log(data);
 
