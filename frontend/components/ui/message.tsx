@@ -28,15 +28,6 @@ export default function Message({
       )}
     >
       <span>{nickName}</span>
-      {proImg ? (
-        <img
-          src={`https://imagedelivery.net/VMYwPRIpsXwlX0kB6AjPIA/${proImg}/avatar`}
-          alt="#"
-          className="w-10 h-10"
-        />
-      ) : (
-        <div className="w-8 h-8 rounded-full bg-lightGold" />
-      )}
 
       <div className="w-1/2 text-sm text-stone-600 p-2 border border-stone-300 rounder-md">
         <p>{message}</p>
