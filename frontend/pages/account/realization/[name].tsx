@@ -91,9 +91,6 @@ const Realization: NextPage = () => {
   };
 
   useEffect(() => {
-    if (user && user.userRole === "ROLE_ENTERPRISE") {
-      router.replace(`/account/realization/${user.userName}`);
-    }
     if (brandName && userName && userName === brandName) {
       if (user?.userRole && user?.userRole !== "ROLE_ENTERPRISE") {
         alert("명품사 전용 페이지 입니다. 명품사 아이디로 로그인해주세요.");
