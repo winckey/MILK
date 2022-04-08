@@ -49,6 +49,19 @@ const GlobalStyle = createGlobalStyle`
   body::-webkit-scrollbar-thumb:hover {
     background: rgb(43, 43, 43);
   }
+
+  #scrollBar::-webkit-scrollbar {
+    width: 5px;
+  }
+  #scrollBar::-webkit-scrollbar-thumb {
+    background: #DAC2A9;
+    border-radius: 20px;
+  }
+  #scrollBar::-webkit-scrollbar-thumb:hover {
+    background: rgb(43, 43, 43);
+  }
+ 
+
 `;
 
 export default GlobalStyle;

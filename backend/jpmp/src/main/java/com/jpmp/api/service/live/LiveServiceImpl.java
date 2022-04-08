@@ -2,6 +2,7 @@ package com.jpmp.api.service.live;
 
 import com.jpmp.api.dao.LiveDao;
 import com.jpmp.api.dto.request.live.LiveDto;
+import com.jpmp.api.dto.response.live.LiveNftResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class LiveServiceImpl implements LiveService{
     }
 
     @Override
-    public List<LiveDto> getLiveList() {
+    public List<LiveNftResDto> getLiveList() {
         return liveDao.getLiveList();
     }
 
@@ -28,7 +29,12 @@ public class LiveServiceImpl implements LiveService{
     }
 
     @Override
-    public LiveDto getLive(int roomId) {
+    public LiveNftResDto getLive(int roomId) {
         return liveDao.getLive(roomId);
+    }
+
+    @Override
+    public int getmaxCost(int roomId) {
+        return liveDao.getmaxCost(roomId);
     }
 }

@@ -6,52 +6,13 @@ import {
   nftContract,
   loadMarketItems,
   getUserBalance,
+  findItemId,
 } from "../../../../utils/interact";
 import { ethers } from "ethers";
-
-// const defaultOrder = {
-//   price: "",
-//   email: "",
-//   confirmationEmail: "",
-// };
-
-// const _createFormState = (isDisabled = false, message = "") => ({
-//   isDisabled,
-//   message,
-// });
-
-// const createFormState = (
-//   { price, email, confirmationEmail },
-//   hasAgreedTOS,
-//   isNewPurchase
-// ) => {
-//   if (!price || Number(price) <= 0) {
-//     return _createFormState(true, "Price is not valid.");
-//   }
-
-//   if (isNewPurchase) {
-//     if (confirmationEmail.length === 0 || email.length === 0) {
-//       return _createFormState(true);
-//     } else if (email !== confirmationEmail) {
-//       return _createFormState(true, "Email are not matching.");
-//     }
-//   }
-
-//   if (!hasAgreedTOS) {
-//     return _createFormState(
-//       true,
-//       "You need to agree with terms of service in order to submit the form"
-//     );
-//   }
-
-//   return _createFormState();
-// };
+import useMutation from "@libs/client/useMutation";
+import useUser from "@libs/client/useUser";
 
 declare let window: any;
-
-interface RealizationModalProps {
-  onClose: Function;
-}
 
 interface Iresponse {
   response:
@@ -63,12 +24,18 @@ interface Iresponse {
         description: any;
         edition: any;
         product: any;
-        nickname: any;
+        brandName: any;
       }
     | undefined;
   onClose: Function;
   ethUSD: number;
   exchange: number;
+  price: number;
+}
+
+interface INftResponse {
+  message: string;
+  statusCode: number;
 }
 
 export default function OrderModal({
@@ -76,73 +43,68 @@ export default function OrderModal({
   onClose,
   ethUSD,
   exchange,
+  price,
 }: Iresponse) {
+  const { user } = useUser();
   const [isOpen, setIsOpen] = useState(true);
-  // console.log(response);
-  // const [order, setOrder] = useState(defaultOrder);
-  // const [enablePrice, setEnablePrice] = useState(false);
-  // const [hasAgreedTOS, setHasAgreedTOS] = useState(false);
-
-  // useEffect(() => {
-  //   if (!!course) {
-  //     setIsOpen(true);
-  //     setOrder({
-  //       ...defaultOrder,
-  //       price: eth.perItem,
-  //     });
-  //   }
-  // }, [course]);
   const [enough, setEnough] = useState(true);
   const [items, setItems] = useState({});
   const [balance, setBalance] = useState<string | undefined>("");
+  const [purchase, setPurchase] = useState();
+
+  const [updateNFT, { loading, data, error }] = useMutation<INftResponse>(
+    "/nft",
+    "PUT"
+  );
+  console.log(user);
+
   const getBalance = async () => {
     const res = await getUserBalance();
     setBalance(res);
   };
   console.log(balance);
-  // const price = response?.price;
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  console.log(provider);
-  const signer = provider.getSigner();
+
+  const onValid = async () => {
+    if (loading) return;
+    if (window.confirm("해당 상품을 구매하시겠습니까?") === true) {
+      updateNFT({ nftId });
+    }
+  };
+
   const nftId = response?.nftId;
   const closeModal = () => {
     setIsOpen(false);
-    // setOrder(defaultOrder);
-    // setEnablePrice(false);
-    // setHasAgreedTOS(false);
     onClose();
   };
-
-  // const formState = createFormState(order, hasAgreedTOS, isNewPurchase);
-
-  // const isEnough = () => {
-  //   if (!price || !balance) {
-  //     window.location.reload();
-  //     return null;
-  //   }
-  //   if (balance >= price) {
-  //     setEnough(true);
-  //   } else {
-  //     setEnough(false);
-  //   }
-  // };
 
   const loadItems = async () => {
     const res = await loadMarketItems();
     setItems(res);
   };
 
-  // const onPurchase = async () => {
-
-  //   await purchaseMarketItem();
-  // };
+  const onPurchase = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const itemId = await findItemId(nftId, signer);
+    const pur = await purchaseMarketItem(itemId, signer);
+    onValid();
+    console.log(pur);
+  };
 
   useEffect(() => {
-    // isEnough();
     loadItems();
     getBalance();
+    if (data && data.statusCode === 200) {
+      alert("구매가 완료되었습니다.");
+      window.location.reload();
+    } else if (data) {
+      alert("구매에 실패했습니다.");
+      console.log(data?.message, data?.statusCode);
+    }
   }, []);
+
   console.log(items);
+  console.log(data);
 
   return (
     <Modal isOpen={isOpen}>
@@ -197,10 +159,16 @@ export default function OrderModal({
                         />
                       </div>
                       <div className="ml-1 w-full overflow-hidden text-ellipsis flex items-end">
-                        {/* {response?.price?.toFixed(2)} */}
+                        {Number(ethers.utils.formatEther(price))}
                         <div className="text-[15px] ml-1 mb-1 font-normal">
                           <span className="text-textGray overflow-hidden text-ellipsis w-full">
-                            Eth (₩ {Math.round(ethUSD * exchange)}원)
+                            Eth (₩{" "}
+                            {Math.round(
+                              Number(ethers.utils.formatEther(price)) *
+                                ethUSD *
+                                exchange
+                            )}
+                            원)
                           </span>
                         </div>
                       </div>
@@ -258,6 +226,7 @@ export default function OrderModal({
         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex">
           {enough ? (
             <button
+              onClick={() => onPurchase()}
               // onClick={onClick}
               className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white"
               // disabled={formState.isDisabled}
@@ -269,6 +238,7 @@ export default function OrderModal({
             </button>
           ) : (
             <button
+              onClick={() => onPurchase()}
               className="w-full flex justify-center items-center my-4 py-2 px-4 border-gold rounded-md shadow-sm bg-white text-sm font-bold bg-gradient-to-r from-gold to-lightGold text-white focus:bg-gradient-to-r focus:from-gold focus:to-lightGold focus:text-white cursor-not-allowed"
               // disabled={formState.isDisabled}
               // onClick={() => {

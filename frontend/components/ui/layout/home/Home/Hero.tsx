@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Button from "../styled/Button.styled";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import useSWR from "swr";
 
 // hi
 
@@ -18,11 +19,6 @@ const Title = styled.h1`
   @media ${Devices.Laptop} {
     font-size: 2.7rem;
   }
-`;
-const Heading = styled.span``;
-const Sub = styled.span`
-  font-size: 1.1rem;
-  display: block;
 `;
 
 const Slider = styled.div`
@@ -143,7 +139,20 @@ const Items = [
     ImageSrc: "/images/slider/4.jpg",
   },
 ];
-
+interface DataList {
+  roomId: number;
+  userId: number;
+  nickname: string;
+  cfId: string;
+  roomName: string;
+  runtime: number;
+  finish: Boolean;
+}
+interface StreamsResponse {
+  message: string;
+  statusCode: number;
+  liveDtoList: DataList[];
+}
 export default function Hero() {
   const [Index, setIndex] = useState(0);
   const [Slides, setSlides] = useState(Items);
@@ -151,6 +160,7 @@ export default function Hero() {
   useEffect(() => {
     AOS.init();
   });
+  const { data } = useSWR<StreamsResponse>(`${process.env.BASE_URL}/live`);
 
   return (
     <div
@@ -160,18 +170,20 @@ export default function Hero() {
       data-aos-duration="1000"
     >
       <Title>
-        <Heading
+        <span
           data-aos="zoom-y-out"
           className="bg-clip-text text-transparent font-extrabold bg-gradient-to-r from-gold to-lightGold"
         >
           Melt In Luxury Collection
-        </Heading>
-        <Sub>Buy, sell, and showcase NFTs</Sub>
+        </span>
+        <div className="text-lightBg text-2xl">
+          Buy, sell, and showcase NFTs
+        </div>
       </Title>
       <Slider>
         <InfoContainer>
           {/* <Button round>{CurSlide.Badge}</Button> */}
-          <Button round>{CurSlide.Badge}</Button>
+
           <MiddleSection>
             <BsChevronLeft
               onClick={() => {
@@ -185,15 +197,7 @@ export default function Hero() {
                 setCurSlide(Slides[Slides.length - 1]);
               }}
             />
-            <div>
-              <Date>{CurSlide.Date}</Date>
-              <STitle>{CurSlide.Title}</STitle>
-              <Link passHref href="#">
-                <a>
-                  <Author>{CurSlide.Author}</Author>
-                </a>
-              </Link>
-            </div>
+
             <BsChevronRight
               onClick={() => {
                 const indx = Index + 1;
@@ -207,12 +211,14 @@ export default function Hero() {
               }}
             />
           </MiddleSection>
-          <Button round>Live 참여</Button>
         </InfoContainer>
         <Lines>
-          {Slides.map((s) => {
-            return <Line key={s.Id} active={s.Id === CurSlide.Id} />;
-          })}
+          {data &&
+            data?.liveDtoList?.slice(0, 3).map((stream, index) => {
+              return (
+                <Line key={stream.roomId} active={index === CurSlide.Id} />
+              );
+            })}
         </Lines>
         <ImgContainer>
           <Img>

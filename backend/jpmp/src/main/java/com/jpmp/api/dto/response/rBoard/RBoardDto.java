@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 public class RBoardDto {
 
 
+    private Long id;
+
     private RBoardStatus status;
 
     private String nftName;
@@ -31,6 +33,7 @@ public class RBoardDto {
     public static RBoardDto of(RealizationBoard realizationBoard) {
 
         return RBoardDto.builder()
+                .id(realizationBoard.getId())
                 .status(realizationBoard.getStatus())
                 .nftName(realizationBoard.getNft().getNftName())
                 .consumer(realizationBoard.getConsumer().getRealname())

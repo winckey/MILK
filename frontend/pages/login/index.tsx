@@ -93,14 +93,14 @@ export default function Login() {
               <div className="text-white font-bold pb-10 lg:text-xl">
                 On the Worlds Best & Largest NFT MarketPlace
               </div>
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <div className="w-[150px] h-[200px] lg:w-[200px] bg-blue-500">
                   <h1>박스 1</h1>
                 </div>
                 <div className="w-[150px] h-[200px] lg:w-[200px] bg-blue-500">
                   <h1>박스 2</h1>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="px-16 w-[50%]">
@@ -134,7 +134,7 @@ export default function Login() {
                       {...register("email", {
                         required: "이메일을 입력해 주세요.",
                       })}
-                      type="email"
+                      type="text"
                       className="appearance-none  my-1.5 rounded-md focus:outline-none focus:ring-gold focus:border-gold flex-shrink flex-grow leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
                       placeholder="이메일"
                     />

@@ -6,74 +6,72 @@ import { useState, Fragment, useEffect } from "react";
 import { useRouter } from "next/router";
 import useMutation from "@libs/client/useMutation";
 import useSWR from "swr";
+import { Item } from "@components/ui/common";
+import { Nft } from "@components/ui/common/item";
+import { useRecoilValue } from "recoil";
+import { accessToken } from "@components/atoms/Auth";
+import { tokenFetcher } from "@libs/client/useUser";
+import RangeSlider from "@components/ui/common/rangebar";
+import Pagination from "@mui/material/Pagination";
 
-interface nftDtoList {
-  nftId: string;
-  nftName: string;
-  price: string;
-  imgUrl: null;
-  realStatus: boolean;
-  seleStatus: boolean;
-  owner: string;
-  enterprise: string;
-}
-
-interface INftResponse {
+interface SearchResponse {
   message: string;
   statusCode: number;
-  nftDtoList: nftDtoList[];
+  nftDtoList: Nft[];
+  total: number;
 }
 
 const Search: NextPage = () => {
+  const TOKEN = useRecoilValue(accessToken);
   const [sortSelected, setSortSelected] = useState("");
   const [roomSelected, setRoomSelected] = useState("");
-  const [selectedPrice, setSelectedPrice] = useState([0, 99999]);
-  const [priceRange, setPriceRange] = useState(9999);
+  const [start, setStart] = useState(0);
+  const [last, setLast] = useState(10000);
+  const [page, setPage] = useState(1);
   const router = useRouter();
   const { id } = router.query;
-  console.log(id);
-  const [list, setList] = useState([]);
 
   // 해당 변수들(필터링, 검색키워드, 정렬) 파라미터 적용하여 변화감지할때마다 api 요청
-  async function handler() {
-    const data = await (
-      await fetch(
-        `${process.env.BASE_URL}/nft/search?enterprise=${id}&ownerIsEnterprise=${roomSelected}&sort=${sortSelected}`
-      )
-    ).json();
-    console.log(data.statusCode);
-    if (data.statusCode === 404) {
-      alert("검색결과가 없습니다!");
-    } else {
-      setList(data.nftDtoList);
-    }
-  }
+  const { data } = useSWR<SearchResponse>(
+    id
+      ? [
+          `${process.env.BASE_URL}/nft/search?keyword=${id}&max=${last}&min=${start}&pageNumber=${page}&ownerIsEnterprise=${roomSelected}&sort=${sortSelected}`,
+          TOKEN,
+        ]
+      : null,
+    tokenFetcher
+  );
 
-  console.log(list);
   useEffect(() => {
-    handler();
-  }, [id, sortSelected, roomSelected, selectedPrice]);
-  // ;
-
-  // 해당 결과가 없으면 보여줄 것
-  //  !updatedList.length ? setResultsFound(false) : setResultsFound(true);
+    if (data && data?.statusCode === 404) {
+      alert("검색결과가 없습니다!");
+    }
+  }, [data, router]);
 
   return (
     <Layout seoTitle="검색 결과">
-      <div className="flex flex-col min-h-screen max-w-full mx-10 p-10 items-center ">
+      <div className="flex flex-col  max-w-full mx-10 p-10 items-center ">
         {/* 검색결과 */}
-        <div className=" font-medium text-5xl">{id} 검색 결과</div>
-        <div className="flex w-full pt-5 flex-row">
+        <div className=" font-[550] text-gray-600 text-[26px] ">
+          <span className="font-[600] text-[40px] bg-clip-text text-transparent bg-gradient-to-r from-gold to-lightGold mr-2">
+            {id}
+          </span>
+          검색 결과
+          <div className="border-b-2 border-gray-400"></div>
+          <div className="border-b-2 mt-[1px] border-gray-400"></div>
+        </div>
+
+        <div className="flex w-full pt-5 flex-row gap-x-4">
           {/* 필터링 */}
-          <div className=" w-1/5 flex flex-col pt-2 pb-10 items-center bg-slate-100  gap-y-7">
+          <div className="  rounded-lg  w-1/5 flex flex-col pt-2 pb-10 items-center  gap-y-7 mr-2">
             <div className=" flex flex-col items-center w-5/6">
               <div className="font-semibold  text-lg pb-3 ">판매관</div>
               <div className="flex flex-row justify-between">
                 <div className="  mx-auto">
                   <div className="flex space-x-6">
                     <div
-                      className={`cursor-pointer btn border-2 p-2 px-3 rounded-md hover:bg-gold ${
-                        roomSelected === "false" ? "bg-gold" : null
+                      className={`cursor-pointer btn border-2 p-2 px-3 rounded-md text-gray-600 font-semibold hover:text-white hover:bg-lightGold  ${
+                        roomSelected === "false" ? "bg-lightGold" : null
                       }  `}
                       onClick={() => setRoomSelected("false")}
                     >
@@ -81,8 +79,8 @@ const Search: NextPage = () => {
                     </div>
 
                     <div
-                      className={`cursor-pointer btn border-2 p-2 px-3 rounded-md hover:bg-gold ${
-                        roomSelected === "true" ? "bg-gold" : null
+                      className={`cursor-pointer btn border-2 p-2 px-3 rounded-md  text-gray-600 font-semibold hover:text-white hover:bg-lightGold ${
+                        roomSelected === "true" ? "bg-lightGold" : null
                       }  `}
                       onClick={() => setRoomSelected("true")}
                     >
@@ -92,14 +90,37 @@ const Search: NextPage = () => {
                 </div>
               </div>
             </div>
-
-            <div className="font-semibold  text-lg pb-3">가격 범위</div>
+            <div className="flex flex-col mr-3 items-center">
+              <div className="font-semibold flex flex-col md:flex-row text-lg pb-3">
+                <span>가격</span> <span>범위</span>
+              </div>
+              <div className="flex flex-col md:flex-row ">
+                <span className="mt-2 text-gray-600 font-semibold">최소가</span>
+                <input
+                  type="text"
+                  value={start}
+                  className="shadow-sm md:ml-2 mb-2 w-24 md:w-48 rounded-md  border-gray-300 focus:ring-gold focus:outline-none pr-12 focus:border-lightGold "
+                  placeholder="가격을 입력해주세요"
+                  onChange={(e: any) => setStart(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col md:flex-row ">
+                <span className="mt-2 text-gray-600 font-semibold">최대가</span>
+                <input
+                  type="text"
+                  value={last}
+                  className="shadow-sm md:ml-2 w-24 rounded-md md:w-48 border-gray-300 focus:ring-gold focus:outline-none pr-12 focus:border-lightGold "
+                  placeholder="가격을 입력해주세요"
+                  onChange={(e: any) => setLast(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
           {/* 오른쪽 */}
-          <div className="  w-4/5 flex flex-col bg-slate-100  h-screen">
+          <div className="  w-4/5 h-[160vh] flex items-center flex-col bg-slate-100  ">
             {/* 정렬  */}
-            <div className="   self-end mr-20 mb-16">
-              <div className="flex gap-x-5 gap  transition text-gray-600 duration-200">
+            <div className=" ml-4  h-16 self-end  mb-16">
+              <div className="flex  gap-x-5 gap  transition text-gray-600 duration-200">
                 <button
                   className={`font-semibold hover:border-b-2 cursor-pointer  ${
                     sortSelected === "id,desc" ? "border-b-2 border-gold" : null
@@ -143,9 +164,29 @@ const Search: NextPage = () => {
               </div>
             </div>
             {/* 검색 결과 */}
-            <div className="border-2 h-screen flex flex-wrap px-5">
-              {" "}
-              조회 결과
+            <div className=" grid h-[150vh] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 px-2 md">
+              {data && data?.nftDtoList?.length > 0
+                ? data.nftDtoList.map((nft) => (
+                    <Item
+                      key={nft.nftId}
+                      enterprise={nft.enterprise}
+                      imgUrl={nft.imgUrl}
+                      likeCount={nft.likeCount}
+                      nftId={nft.nftId}
+                      nftName={nft.nftName}
+                      price={nft.price}
+                      myLike={nft.myLike}
+                    />
+                  ))
+                : null}
+            </div>
+            <div className="h-4 mr-10 ">
+              <Pagination
+                page={page}
+                onChange={(e, value) => setPage(value)}
+                count={data?.total}
+                shape="rounded"
+              />
             </div>
           </div>
         </div>

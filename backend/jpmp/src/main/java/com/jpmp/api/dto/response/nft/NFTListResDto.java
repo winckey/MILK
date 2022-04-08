@@ -15,6 +15,7 @@ import java.util.List;
 public class NFTListResDto extends BaseResponseBody {
 
     private List<NFTDto> nftDtoList;
+    private int total;
 
     public static NFTListResDto of(Integer statusCode, String message, List<Nft> nftList) {
         NFTListResDto res = new NFTListResDto();
@@ -26,10 +27,55 @@ public class NFTListResDto extends BaseResponseBody {
         return res;
     }
 
+    public static NFTListResDto of(Integer statusCode, String message, List<Nft> nftList, List<Nft> likeList) {
+        NFTListResDto res = new NFTListResDto();
+        res.setStatusCode(statusCode);
+        res.setMessage(message);
+
+
+        res.setNftDtos(nftList, likeList);
+
+        return res;
+    }
+
+    public static NFTListResDto of(Integer statusCode, String message, List<Nft> nftList, int total) {
+        NFTListResDto res = new NFTListResDto();
+        res.setStatusCode(statusCode);
+        res.setMessage(message);
+
+        res.setTotal(total);
+        res.setNftDtos(nftList);
+        return res;
+    }
+
+    public static NFTListResDto of(Integer statusCode, String message, List<Nft> nftList, List<Nft> likeList, int total) {
+        NFTListResDto res = new NFTListResDto();
+        res.setStatusCode(statusCode);
+        res.setMessage(message);
+
+        res.setTotal(total);
+        res.setNftDtos(nftList, likeList);
+
+        return res;
+    }
+
     public void setNftDtos(List<Nft> nftList) {
         nftDtoList = new ArrayList<>();
-        for (int i =0 ; i < nftList.size() ; i ++){
+        for (int i = 0; i < nftList.size(); i++) {
             nftDtoList.add(NFTDto.of(nftList.get(i)));
+        }
+    }
+
+
+    public void setNftDtos(List<Nft> nftList, List<Nft> likeList) {
+        nftDtoList = new ArrayList<>();
+        for (int i = 0; i < nftList.size(); i++) {
+            if (likeList.contains(nftList.get(i)))
+                nftDtoList.add(NFTDto.of(nftList.get(i), true));
+            else {
+                nftDtoList.add(NFTDto.of(nftList.get(i)));
+            }
+
         }
     }
 }

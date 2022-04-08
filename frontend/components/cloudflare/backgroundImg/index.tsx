@@ -19,6 +19,7 @@ interface IEditBackgroundImgResponse {
 
 export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
   // console.log(backgroundImg, userId);
+  const [onValidLoading, setOnValidLoading] = useState(false);
 
   // input 값 받아옴
   const {
@@ -67,6 +68,7 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
         formData.backgroundImg.length > 0
         // backgroundImg
       ) {
+        setOnValidLoading(true);
         const { uploadURL } = await (await fetch(`/api/files`)).json();
         const form = new FormData();
         form.append("file", formData.backgroundImg[0], userId + "");
@@ -81,6 +83,7 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
         editBackgroundImg({
           imgUrl: id,
         });
+        setOnValidLoading(false);
       }
     }
   };
@@ -89,21 +92,23 @@ export default function BackgroundImg({ backgroundImg, userId }: IUserProps) {
     <form onSubmit={handleSubmit(onValid)} className="mb-6 flex flex-col">
       <div className="flex flex-col">
         <div className="mb-2 flex flex-col">
-          <label className="font-semibold text-[#353840]">
+          <div className="font-semibold text-[#353840]">
             <div className="flex items-center">
               <div className="mr-1">배경 사진</div>
               <button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 "
-                  viewBox="0 0 20 20"
-                  fill="#C19A77"
-                >
-                  <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
-                </svg>
+                {onValidLoading ? null : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 "
+                    viewBox="0 0 20 20"
+                    fill="#C19A77"
+                  >
+                    <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
+                  </svg>
+                )}
               </button>
             </div>
-          </label>
+          </div>
         </div>
         <div className="max-w-[150px]">
           <div className="relative">

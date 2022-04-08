@@ -7,13 +7,17 @@ import com.jpmp.db.entity.nft.QNft;
 import com.jpmp.db.entity.nft.QNftUserLike;
 import com.jpmp.db.entity.user.QUser;
 import com.jpmp.db.entity.user.User;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,9 +46,22 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
-    public List<Nft> findByNFTSearchDto(NFTSearchReqDto reqDto, Pageable pageable) {
+    public Page<Nft> findByNFTSearchDto(NFTSearchReqDto reqDto, Pageable pageable) {
 
-        JPAQuery<Nft> query = queryFactory
+        List<Nft> nftList = queryFactory
+                .select(qnft)
+                .from(qnft)
+                .where(eqNntName(reqDto.getKeyword()),
+                        eqEnterprise(reqDto.getEnterprise()),
+                        eqSeleOwner(reqDto.getOwnerIsEnterprise()),
+                        qnft.price.between(reqDto.getMin(), reqDto.getMax()),
+                        qnft.seleStatus.eq(true)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPQLQuery<Nft> count = queryFactory
                 .select(qnft)
                 .from(qnft)
                 .where(eqNntName(reqDto.getKeyword()),
@@ -54,27 +71,37 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
                         qnft.seleStatus.eq(true)
                 );
 
+        return PageableExecutionUtils.getPage( nftList, pageable , count::fetchCount);
 
-
-
-
-        return getQuerydsl().applyPagination(pageable ,query).fetch();
     }
 
     @Override
     public List<Nft> findByCoustomUserLikes(User userDetails) {
-        return   queryFactory
+        return queryFactory
                 .select(qnft)
                 .from(qnft)
                 .where(qnft.in(
                         JPAExpressions
-                        .select(qNftUserLike.nft)
-                        .from(qNftUserLike)
-                        .where(qNftUserLike.user.eq(userDetails)))
+                                .select(qNftUserLike.nft)
+                                .from(qNftUserLike)
+                                .where(qNftUserLike.user.eq(userDetails)))
                 ).fetch();
 
 
         // 클래스 이름 컨벤션에 맞게 짜기 // q클래스는 무조건 썻으면 사용해야함
+    }
+
+    @Override
+    public List<Tuple> findByNft(User userDetails) {
+        return queryFactory
+                .select(qnft , qNftUserLike)
+                .from(qnft)
+                .leftJoin(qNftUserLike)
+                .where(qNftUserLike.user.eq(userDetails))
+                .fetchJoin()
+                .on(qnft.eq(qNftUserLike.nft))
+                .fetch();
+
     }
 
 
@@ -93,7 +120,7 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
 
 
     private BooleanExpression eqNntName(String name) {
-        System.out.println("nftquery  name : " +name);
+        System.out.println("nftquery  name : " + name);
         if ((name).equals("")) {
             return null;
         }
@@ -101,7 +128,7 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     private BooleanExpression eqEnterprise(User enterprise) {
-        System.out.println("nftquery  enterprise: " +enterprise);
+        System.out.println("nftquery  enterprise: " + enterprise);
         if ((enterprise == null)) {
             return null;
         }
@@ -109,7 +136,7 @@ public class NFTQueryRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     private BooleanExpression eqSeleOwner(Boolean seleOwner) {
-        System.out.println("nftquery  seleOwner: " +seleOwner);
+        System.out.println("nftquery  seleOwner: " + seleOwner);
         if ((seleOwner == null)) {
             return null;
         }

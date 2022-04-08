@@ -6,17 +6,22 @@ import useSWR from "swr";
 import { Item } from "@components/ui/common";
 import { useRouter } from "next/router";
 import { OwnNftResponse } from ".";
+import { useRecoilValue } from "recoil";
+import { accessToken } from "@components/atoms/Auth";
+import { tokenFetcher } from "@libs/client/useUser";
 
 const ProfileFavorite: NextPage = () => {
   const router = useRouter();
 
+  const TOKEN = useRecoilValue(accessToken);
+
   // 해당 nickname을 가진 유저의 관심 nft 리스트 가져오기
   const { data } = useSWR<OwnNftResponse>(
     router.query.nickname
-      ? `${process.env.BASE_URL}/nft/like/${router.query.nickname}`
-      : null
+      ? [`${process.env.BASE_URL}/nft/like/${router.query.nickname}`, TOKEN]
+      : null,
+    tokenFetcher
   );
-  console.log(data);
 
   return (
     <Layout seoTitle="프로필">
@@ -35,6 +40,7 @@ const ProfileFavorite: NextPage = () => {
                       nftId={nft.nftId}
                       nftName={nft.nftName}
                       price={nft.price}
+                      myLike={nft.myLike}
                     />
                   ))}
                 </div>

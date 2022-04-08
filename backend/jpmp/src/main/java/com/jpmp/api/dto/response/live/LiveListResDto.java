@@ -16,33 +16,21 @@ import java.util.List;
 @ToString
 public class LiveListResDto extends BaseResponseBody {
 
-    private List<LiveDto> LiveDtoList;
+    private List<LiveNftResDto> liveNftResDtoList;
 
-    public static LiveListResDto of(Integer statusCode, String message, List<LiveDto> liveList) {
+    public static LiveListResDto of(Integer statusCode, String message, List<LiveNftResDto> liveList) {
         LiveListResDto res = new LiveListResDto();
         res.setStatusCode(statusCode);
         res.setMessage(message);
-        res.setLiveDtoList(liveList);
+        res.setLiveNftResDtoList(liveList);
         return res;
     }
 
-    public static LiveListResDto of(Integer statusCode, String message, LiveDto liveDto) {
-        LiveListResDto res = new LiveListResDto();
-        res.setStatusCode(statusCode);
-        res.setMessage(message);
-        res.setLiveDto(liveDto);
-        return res;
-    }
-
-    public void setLiveDtoList(List<LiveDto> liveList) {
-        LiveDtoList = new ArrayList<>();
+    public void setLiveNftResDtoList(List<LiveNftResDto> liveList) {
+        liveNftResDtoList = new ArrayList<>();
         for (int i =0 ; i < liveList.size() ; i ++){
-            LiveDtoList.add(liveList.get(i));
+            liveNftResDtoList.add(liveList.get(i));
         }
     }
 
-    public void setLiveDto(LiveDto liveDto) {
-        LiveDtoList = new ArrayList<>();
-        LiveDtoList.add(liveDto);
-    }
 }

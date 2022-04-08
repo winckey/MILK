@@ -47,7 +47,10 @@ public class NFTDto {
     @ApiModelProperty(example = "전달 xxxxxx")
     private String enterprise;
 
-    public static NFTDto of(Nft nft) {
+    @ApiModelProperty(example = "전달 xxxxxx")
+    private Boolean myLike;
+
+    public static NFTDto of(Nft nft , Boolean like) {
 
         return NFTDto.builder()
                 .nftId(nft.getNftId())
@@ -58,6 +61,24 @@ public class NFTDto {
                 .owner(nft.getOwner().getNickname())
                 .enterprise(nft.getEnterprise().getNickname())
                 .likeCount(nft.getLikeCount())
+                .myLike(like)
+                .imgUrl(nft.getImgUrl())
+                .build();
+    }
+
+    public static NFTDto of(Nft nft ) {
+
+        return NFTDto.builder()
+                .nftId(nft.getNftId())
+                .nftName(nft.getNftName())
+                .price(nft.getPrice())
+                .realStatus(nft.getRealizationStatus())
+                .seleStatus(nft.getSeleStatus())
+                .owner(nft.getOwner().getNickname())
+                .enterprise(nft.getEnterprise().getNickname())
+                .likeCount(nft.getLikeCount())
+                .myLike(false)
+                .imgUrl(nft.getImgUrl())
                 .build();
     }
 }

@@ -26,6 +26,7 @@ public class UserInfoDto {
     private String address1;
     private String address2;
     private String zipCode;
+    private String wallet;
     private UserRole userRole;
 
 
@@ -43,6 +44,7 @@ public class UserInfoDto {
         userInfoDto.setAddress2(user.getAddress2());
         userInfoDto.setZipCode(user.getZipCode());
         userInfoDto.setUserRole(user.getUserRole());
+        userInfoDto.setWallet(user.getWalletAddress());
         return userInfoDto;
     }
 }

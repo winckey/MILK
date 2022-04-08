@@ -5,52 +5,12 @@ import {
   marketContract,
   nftContract,
   loadMarketItems,
+  sellMarketItem,
 } from "../../../../utils/interact";
 import { ethers } from "ethers";
-
-// const defaultOrder = {
-//   price: "",
-//   email: "",
-//   confirmationEmail: "",
-// };
-
-// const _createFormState = (isDisabled = false, message = "") => ({
-//   isDisabled,
-//   message,
-// });
-
-// const createFormState = (
-//   { price, email, confirmationEmail },
-//   hasAgreedTOS,
-//   isNewPurchase
-// ) => {
-//   if (!price || Number(price) <= 0) {
-//     return _createFormState(true, "Price is not valid.");
-//   }
-
-//   if (isNewPurchase) {
-//     if (confirmationEmail.length === 0 || email.length === 0) {
-//       return _createFormState(true);
-//     } else if (email !== confirmationEmail) {
-//       return _createFormState(true, "Email are not matching.");
-//     }
-//   }
-
-//   if (!hasAgreedTOS) {
-//     return _createFormState(
-//       true,
-//       "You need to agree with terms of service in order to submit the form"
-//     );
-//   }
-
-//   return _createFormState();
-// };
+import useMutation from "@libs/client/useMutation";
 
 declare let window: any;
-
-interface RealizationModalProps {
-  onClose: Function;
-}
 
 interface Iresponse {
   response:
@@ -62,48 +22,39 @@ interface Iresponse {
         description: any;
         edition: any;
         product: any;
-        nickname: any;
+        brandName: any;
       }
     | undefined;
   onClose: Function;
 }
 
+interface ISellResponse {
+  message: string;
+  statusCode: number;
+}
+
 export default function SellModal({ response, onClose }: Iresponse) {
   const [isOpen, setIsOpen] = useState(true);
-  // console.log(response);
-  // const [order, setOrder] = useState(defaultOrder);
-  // const [enablePrice, setEnablePrice] = useState(false);
-  // const [hasAgreedTOS, setHasAgreedTOS] = useState(false);
-
-  // useEffect(() => {
-  //   if (!!course) {
-  //     setIsOpen(true);
-  //     setOrder({
-  //       ...defaultOrder,
-  //       price: eth.perItem,
-  //     });
-  //   }
-  // }, [course]);
   const [price, setPrice] = useState("");
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
   const nftId = response?.nftId;
+  const [uploadSell, { loading, data, error }] = useMutation<ISellResponse>(
+    "/nft/sell",
+    "PUT"
+  );
 
   const onSell = async () => {
-    const res1 = await marketContract(signer);
-    const res2 = await nftContract(signer);
-    await (await res1.makeItem(res2.address, nftId, price)).wait();
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    await sellMarketItem(nftId, price, signer);
+    uploadSell({ nftId });
   };
 
   const closeModal = () => {
     setIsOpen(false);
-    // setOrder(defaultOrder);
-    // setEnablePrice(false);
-    // setHasAgreedTOS(false);
     onClose();
   };
 
-  // const formState = createFormState(order, hasAgreedTOS, isNewPurchase);
+  console.log(data);
 
   return (
     <Modal isOpen={isOpen}>
@@ -118,7 +69,7 @@ export default function SellModal({ response, onClose }: Iresponse) {
                     className="mb-7 text-lg font-bold leading-6 text-gray-900"
                     id="modal-title"
                   >
-                    구매하기
+                    판매하기
                   </h3>
                 </div>
 

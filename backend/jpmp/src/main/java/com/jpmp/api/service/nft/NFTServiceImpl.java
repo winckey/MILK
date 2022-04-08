@@ -7,7 +7,9 @@ import com.jpmp.db.entity.nft.Nft;
 import com.jpmp.db.entity.user.User;
 import com.jpmp.db.repository.nft.NFTQueryRepository;
 import com.jpmp.db.repository.nft.NFTRepository;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,9 +54,15 @@ public class NFTServiceImpl implements NFTService {
     @Override
     public List<Nft> getNftList(User userDetails) {
         System.out.println("nft controller  40 : " + userDetails.getNftList().size());
-
         return userDetails.getNftList();
     }
+
+    @Override
+    public List<Tuple> getNftMyList(User userDetails) {
+        System.out.println("nft controller  40 : " + userDetails.getNftList().size());
+        return nftQueryRepository.findByNft(userDetails);
+    }
+
 
     @Override
     public List<Nft> getNftLikeList(User userDetails) {
@@ -62,7 +70,7 @@ public class NFTServiceImpl implements NFTService {
     }
 
     @Override
-    public List<Nft> getNftList(NFTSearchReqDto nftSearchReqDto, Pageable pageable) {
+    public Page<Nft> getNftList(NFTSearchReqDto nftSearchReqDto, Pageable pageable) {
         return nftQueryRepository.findByNFTSearchDto(nftSearchReqDto , pageable);
     }
 

@@ -1,14 +1,18 @@
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { BackgroundImg, ProfileImg } from "@components/cloudflare";
+import {
+  BackgroundImg,
+  BackgroundVideo,
+  ProfileImg,
+} from "@components/cloudflare";
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { Layout, AccountLayout } from "@components/ui/layout";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-interface IUser {
+export interface User {
   address1: string;
   address2: string;
   backgroundImg: string;
@@ -20,12 +24,13 @@ interface IUser {
   proImg: string;
   userName: string;
   zipCode: string;
+  userRole: string;
 }
 
 interface IEditProfileResponse {
   message: string;
   statusCode: number;
-  user: IUser;
+  user: User;
 }
 
 interface IEditProfileForm {
@@ -40,7 +45,6 @@ interface IEditProfileForm {
 }
 
 const EditProfile: NextPage = () => {
-  const router = useRouter();
   const { user, isLoading } = useUser();
   // console.log(user);
 
@@ -181,9 +185,9 @@ const EditProfile: NextPage = () => {
                           {...register("nickname", {
                             required: "필수 정보입니다.",
                             pattern: {
-                              value: /^[가-힣a-zA-Z0-9]{2,10}$/,
+                              value: /^[가-힣a-zA-Z0-9\s]{2,20}$/,
                               message:
-                                "2~10자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
+                                "2~20자의 한글, 영문 대 소문자, 숫자만 사용 가능합니다.",
                             },
                             validate: {
                               checkNickname: async (value) =>
@@ -268,14 +272,13 @@ const EditProfile: NextPage = () => {
                   <div className="mb-6 flex flex-col">
                     <div className="flex flex-col">
                       <div className="mb-2">
-                        <label className="font-semibold">휴대전화</label>
+                        <label className="font-semibold">전화번호</label>
                       </div>
                       <div className="bg-white rounded-[10px] border w-full p-3 cursor-text focus-within:shadow-md focus-within:border-lightGold focus-within:ring-1 focus-within:ring-lightGold">
                         <input
                           {...register("phone", {
-                            required: "필수 정보입니다.",
                             pattern: {
-                              value: /^\d{3}-\d{3,4}-\d{4}$/,
+                              value: /^\d{2,3}-\d{3,4}-\d{4}$/ || "",
                               message: "전화번호 양식을 지켜주세요.",
                             },
                           })}
@@ -291,7 +294,7 @@ const EditProfile: NextPage = () => {
                   {/* form button */}
                   <div className="my-[30px]">
                     <button className="font-semibold px-5 py-3 rounded-[10px] bg-lightGold border border-lightGold text-white hover:bg-gold hover:shadow-md focus:bg-gold focus:outline-none">
-                      저장
+                      {loading ? <span>수정중</span> : "저장"}
                     </button>
                   </div>
                 </form>
@@ -300,10 +303,17 @@ const EditProfile: NextPage = () => {
                   {/* 프로필 사진 */}
                   <ProfileImg proImg={user?.proImg} userId={user?.id} />
                   {/* 배경 사진 */}
-                  <BackgroundImg
-                    backgroundImg={user?.backgroundImg}
-                    userId={user?.id}
-                  />
+                  {user?.userRole === "ROLE_ENTERPRISE" ? (
+                    <BackgroundVideo
+                      backgroundVideo={user?.backgroundImg}
+                      userId={user?.id}
+                    />
+                  ) : (
+                    <BackgroundImg
+                      backgroundImg={user?.backgroundImg}
+                      userId={user?.id}
+                    />
+                  )}
                 </div>
               </div>
             </div>

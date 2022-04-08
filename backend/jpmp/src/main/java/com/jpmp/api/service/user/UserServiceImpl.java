@@ -4,6 +4,7 @@ import com.jpmp.api.dto.TokenDto;
 import com.jpmp.api.dto.request.user.UserLoginReqDto;
 import com.jpmp.api.dto.request.user.UserModifyReqDto;
 import com.jpmp.api.dto.request.user.UserRegisterReqDto;
+import com.jpmp.api.dto.request.user.UserWalletReqDto;
 import com.jpmp.common.auth.JwtExpirationEnums;
 import com.jpmp.common.util.JwtTokenUtil;
 import com.jpmp.common.util.RefreshToken;
@@ -51,6 +52,9 @@ public class UserServiceImpl implements UserService {
         registerRequestDto.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
         return userRepository.save(User.ofAdmin(registerRequestDto));
     }
+
+
+
     @Override
     public User getUserByEmail(String email) {
 
@@ -86,7 +90,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return user;
     }
-
+    @Override
+    public User modifyUserWallet(User userDetails, UserWalletReqDto userWalletReqDto) {
+        userDetails.changeUserWallet(userWalletReqDto.getWallet());// 이거 동적으로는 안되나?
+        userRepository.save(userDetails);
+        return userDetails;
+    }
     @Override// 이거 왜 drity check 안댐?
     public User modifyProImgUser(User user, String proFileImg) {
         user.changeProfileImg(proFileImg);
@@ -121,6 +130,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User deleteUserNftLike(User userDetails, String nftId) {
         Nft nft = nftRepository.findByNftId(nftId).get();//예외처리
+        nft.deleteLike();
+        nftRepository.save(nft);
         nftLikeRepository.deleteByUserAndNft(userDetails , nft);
         return userDetails;
     }
