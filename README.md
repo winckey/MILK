@@ -357,9 +357,8 @@
 
 - 배포주소 https://j6e206.p.ssafy.io/
 - 테스트 계정
-  - id : testSSAFY
-  - pw : ssafy
-  - 테스트 계정은 아래와 같이 만들었습니다.
+  [기업 test id] test@ent test [개인 test id] test@con test
+
 
 # 6. 협업Tool 링크
 
