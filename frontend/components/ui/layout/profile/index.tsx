@@ -105,8 +105,6 @@ export default function ProfileLayout({ children }: LayoutProps) {
       : null
   );
 
-  console.log(data);
-
   // 해당 nickname을 가진 유저의 판매/보유 nft 리스트 가져오기
   useEffect(() => {
     if (data && data?.status === 404) {
